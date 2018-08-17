@@ -25,8 +25,10 @@ CREATE TABLE IF NOT EXISTS `bills` (
   `payDate` date NOT NULL,
   `amount` double NOT NULL,
   `currency` varchar(50) NOT NULL,
-  `phoneNumber` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`)
+  `phoneNumber` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `phoneNumber` (`phoneNumber`),
+  CONSTRAINT `FK_bills_subscribers` FOREIGN KEY (`phoneNumber`) REFERENCES `subscribers` (`phoneNumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Dumping data for table puppies.bills: ~0 rows (approximately)
@@ -40,7 +42,9 @@ CREATE TABLE IF NOT EXISTS `subscribers` (
   `lastName` varchar(50) NOT NULL,
   `EGN` int(11) NOT NULL,
   `userName` varchar(50) NOT NULL,
-  PRIMARY KEY (`phoneNumber`)
+  PRIMARY KEY (`phoneNumber`),
+  KEY `userName` (`userName`),
+  CONSTRAINT `FK_subscribers_users` FOREIGN KEY (`userName`) REFERENCES `users` (`userName`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Dumping data for table puppies.subscribers: ~0 rows (approximately)
