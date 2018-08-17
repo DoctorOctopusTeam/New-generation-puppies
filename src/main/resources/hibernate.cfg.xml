@@ -18,11 +18,11 @@
         </property>
 
         <property name = "hibernate.connection.username">
-            root
+            rootuser
         </property>
 
         <property name = "hibernate.connection.password">
-
+            rootuser
         </property>
 
 
