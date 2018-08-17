@@ -69,7 +69,7 @@ public class NewMain {
 //            ses.save(bill);
 //
 //        }
-
+    //aaaa
         Bill bill = ses.get(Bill.class, 3);
         Subscriber subscriber = ses.get(Subscriber.class, 878002);
         User user = ses.get(User.class, "Ktb-10");
