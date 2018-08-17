@@ -20,6 +20,7 @@ public class Subscriber {
     @Column(name = "EGN")
     private int egn;
 
+
     @ManyToOne
     @JoinColumn(name = "userName")
     private User user;
