@@ -3,22 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
-
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
 </head>
 <body>
 <h1>Login Page</h1>
 
-<form method="post">
-    <div class="form-group">
-        <label class="form-control-label" for="inputUsername">Username</label>
-        <input type="text" class="form-control" id="inputUsername" name="username"/>
-    </div>
-    <div class="form-group">
-        <label class="form-control-label" for="inputPassword">Pssword</label>
-        <input type="text" class="form-control" id="inputPassword" name="password"/>
-    </div>
-    <input type="submit" class="btn bnt-primary" value="Login" />
+<i th:if="${param.error}" class="error">Wrong username or password</i>
+
+<i th:if="${param.logout}">You have been logged out.</i>
+
+<form th:action="@{/authenticateUser}" method="post">
+    <p>
+        User name: <input type="text" id="username" name="username" />
+    </p>
+    <p>
+        Password: <input type="password" id="password" name="password" />
+    </p>
+    <input type="submit" value="Login" />
 </form>
 
+<p>
+    <a th:href="@{/register}">Register New User</a>
+</p>
 </body>
 </html>
