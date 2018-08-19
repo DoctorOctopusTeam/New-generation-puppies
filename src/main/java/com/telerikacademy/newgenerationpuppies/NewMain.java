@@ -69,22 +69,22 @@ public class NewMain {
 //            ses.save(bill);
 //
 //        }
-    //aaaa
-        Bill bill = ses.get(Bill.class, 3);
-        Subscriber subscriber = ses.get(Subscriber.class, 878002);
-        User user = ses.get(User.class, "Ktb-10");
 
-        System.out.println();
-        System.out.println();
-        System.out.println("This bill is to be paid at bank " + bill.getSubscriber().getUser().getUserName());
-        System.out.println("This subscriber's bill N3 has servise " + subscriber.getBills().get(3).getService());
-        System.out.println("This user's subscriber N10 is " + user.getSubscribers().get(10).getFirstName());
-
-
-
-        ses.getTransaction().commit();
-        ses.close();
-
-    }
+//        Bill bill = ses.get(Bill.class, 3);
+//        Subscriber subscriber = ses.get(Subscriber.class, 878002);
+//        User user = ses.get(User.class, "Ktb-10");
+//
+//        System.out.println();
+//        System.out.println();
+//        System.out.println("This bill is to be paid at bank " + bill.getSubscriber().getUser().getUserName());
+//        System.out.println("This subscriber's bill N3 has servise " + subscriber.getBills().get(3).getService());
+//        System.out.println("This user's subscriber N10 is " + user.getSubscribers().get(10).getFirstName());
+//
+//
+//
+//        ses.getTransaction().commit();
+//        ses.close();
+//
+  }
 }
 

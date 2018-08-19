@@ -1,82 +1,79 @@
 package com.telerikacademy.newgenerationpuppies.models;
 
+import org.hibernate.annotations.FilterJoinTables;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User {
-
+public class User implements UserDetails {
 
     @Id
-    @Column(name = "userName")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @Column(name = "user_name")
     private String userName;
 
     @Column(name = "password")
-    private  String password;
+    private String password;
 
-    @Column(name = "details")
-    private String details;
+    private boolean isAccountNonExpired;
 
-    @Column(name = "EIK")
-    private int EIK;
+    private boolean isAccountNonLocked;
 
-    @Column(name = "role")
-    private String role;
+    private boolean isCredentialsNonExpired;
 
-    @OneToMany(mappedBy = "user")
-    private List<Subscriber> subscribers;
+    private boolean isEnabled;
 
-    public User(){
+    @ManyToMany
+    @JoinTable(name="user_roles",
+    joinColumns = @JoinColumn(name = "user_id"),
+    inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> authorities;
+
+
+    public User() {
 
     }
 
-    public String getUserName() {
-        return userName;
+    @Override
+    public Set<Role> getAuthorities() {
+        return authorities;
     }
 
     public String getPassword() {
+
         return password;
     }
 
-    public String getDetails() {
-        return details;
+    @Override
+    public String getUsername() {
+        return userName;
     }
 
-    public int getEIK() {
-        return EIK;
+    @Override
+    public boolean isAccountNonExpired() {
+        return isAccountNonExpired;
     }
 
-    public String getRole() {
-        return role;
+    @Override
+    public boolean isAccountNonLocked() {
+        return isAccountNonLocked;
     }
 
-    public List<Subscriber> getSubscribers() {
-        return subscribers;
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return isCredentialsNonExpired;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setDetails(String details) {
-        this.details = details;
-    }
-
-    public void setEIK(int EIK) {
-        this.EIK = EIK;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public void setSubscribers(List<Subscriber> subscribers) {
-        this.subscribers = subscribers;
+    @Override
+    public boolean isEnabled() {
+        return isEnabled;
     }
 }
-
