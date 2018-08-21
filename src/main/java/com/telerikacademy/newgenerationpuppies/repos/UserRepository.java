@@ -46,5 +46,11 @@ public class UserRepository {
         session.getTransaction().commit();
         session.close();
     }
+    public User giveUserKtb10(){
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        User u = session.get(User.class, "IvanBank");
+        return u;
+    }
 
 }

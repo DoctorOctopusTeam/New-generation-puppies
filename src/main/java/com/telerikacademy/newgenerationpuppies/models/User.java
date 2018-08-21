@@ -15,6 +15,9 @@ public class User {
     @Column(name = "password")
     private  String password;
 
+    @Column(name = "enabled")
+    private int enabled;
+
     @Column(name = "details")
     private String details;
 
@@ -77,6 +80,14 @@ public class User {
 
     public void setSubscribers(List<Subscriber> subscribers) {
         this.subscribers = subscribers;
+    }
+
+    public int getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(int enabled) {
+        this.enabled = enabled;
     }
 }
 

@@ -31,4 +31,9 @@ public class UserController {
         userRepository.saveUser(user);
     }
 
+    @GetMapping("/success")
+    public User returnUser(){
+        return userRepository.giveUserKtb10();
+    }
+
 }
