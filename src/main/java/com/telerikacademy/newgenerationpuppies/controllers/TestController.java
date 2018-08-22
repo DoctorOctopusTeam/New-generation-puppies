@@ -26,4 +26,10 @@ public class TestController {
         return "OK! " + r.getUserPrincipal().getName()+ r.getUserPrincipal();
     }
 
+    @GetMapping("/three")
+    public String testThree(HttpServletRequest r){
+
+        return "OK! " + r.getUserPrincipal().getName()+ r.getUserPrincipal();
+    }
+
 }
