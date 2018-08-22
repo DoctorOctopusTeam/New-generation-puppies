@@ -1,5 +1,6 @@
 package com.telerikacademy.newgenerationpuppies.repos;
 
+import com.telerikacademy.newgenerationpuppies.models.Authority;
 import com.telerikacademy.newgenerationpuppies.models.Bill;
 import com.telerikacademy.newgenerationpuppies.models.Subscriber;
 import com.telerikacademy.newgenerationpuppies.models.User;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+
 @Repository
 public class UserRepositoryImpl implements UserRepository {
 
@@ -18,7 +20,9 @@ public class UserRepositoryImpl implements UserRepository {
             .addAnnotatedClass(User.class)
             .addAnnotatedClass(Subscriber.class)
             .addAnnotatedClass(Bill.class)
+            .addAnnotatedClass(Authority.class)
             .buildSessionFactory();
+
 
     @Override
     public List<User> returnUsers(){
@@ -45,6 +49,12 @@ public class UserRepositoryImpl implements UserRepository {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         session.save(user);
+
+        Authority authority = new Authority();
+        authority.setAuthority("ROLE_USER");
+        authority.setUserName(user.getUserName());
+        session.save(authority);
+
         session.getTransaction().commit();
         session.close();
     }

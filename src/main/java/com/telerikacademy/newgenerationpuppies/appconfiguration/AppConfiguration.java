@@ -1,6 +1,8 @@
 package com.telerikacademy.newgenerationpuppies.appconfiguration;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
+import com.telerikacademy.newgenerationpuppies.repos.UserRepository;
+import com.telerikacademy.newgenerationpuppies.repos.UserRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,6 +47,7 @@ public class AppConfiguration {
         jdbcUserDetailsManager.setDataSource(securityDataSource());
         return jdbcUserDetailsManager;
     }
+
 
 
 

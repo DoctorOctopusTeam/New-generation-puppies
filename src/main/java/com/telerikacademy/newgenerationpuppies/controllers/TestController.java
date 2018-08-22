@@ -6,15 +6,24 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/test")
 public class TestController {
 
 
     @GetMapping("/one")
-    @PreAuthorize("hasRole('USER')")
-    public String test(){
-        return "OK!";
+    @PreAuthorize(value = "hasAuthority('ROLE_USER')")
+    public String test(HttpServletRequest r){
+
+        return "OK! " + r.getUserPrincipal().getName() + r.getUserPrincipal();
+    }
+
+    @GetMapping("/two")
+    public String testTwo(HttpServletRequest r){
+
+        return "OK! " + r.getUserPrincipal().getName()+ r.getUserPrincipal();
     }
 
 }

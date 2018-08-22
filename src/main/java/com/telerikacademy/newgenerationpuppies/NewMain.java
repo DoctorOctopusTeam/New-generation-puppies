@@ -83,14 +83,14 @@ public class NewMain {
 //        System.out.println("This user's subscriber N10 is " + user.getSubscribers().get(10).getFirstName());
 
         User testUser1 = ses.get(User.class, "BurkanBank");
-        User testUser2 = ses.get(User.class, "IvanBank");
+        Authority authority = ses.get(Authority.class, "IvanBank");
 
         System.out.println();
         for (int i = 0; i < 30; i++){
             System.out.println();
         }
-        System.out.println(testUser1.getAuthority().getAuthority() +"-------");
-
+        System.out.println(testUser1.getAuthority().getAuthority() + "----------------");
+        System.out.println(authority.getUser().getUserName()+ "---------------------");
         ses.getTransaction().commit();
         ses.close();
 

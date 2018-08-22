@@ -30,7 +30,8 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Subscriber> subscribers;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne
+    @JoinColumn(name = "userName")
     private Authority authority;
 
     public User(){
@@ -89,9 +90,9 @@ public class User {
         return authority;
     }
 
-//    public void setAuthority(Authority authority) {
-//        this.authority = authority;
-//    }
+    public void setAuthority(Authority authority) {
+        this.authority = authority;
+    }
 
     public int getEnabled() {
         return enabled;
