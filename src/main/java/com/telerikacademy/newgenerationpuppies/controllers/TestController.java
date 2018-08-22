@@ -14,7 +14,7 @@ public class TestController {
 
 
     @GetMapping("/one")
-    @PreAuthorize(value = "hasAuthority('ROLE_USER')")
+    @PreAuthorize(value = "hasAuthority('ROLE_ADMIN')")
     public String test(HttpServletRequest r){
 
         return "OK! " + r.getUserPrincipal().getName() + r.getUserPrincipal();
