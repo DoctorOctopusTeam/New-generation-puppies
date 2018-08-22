@@ -16,8 +16,8 @@ public class UserController {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserController(){
-        userRepository = new UserRepository();
+    public UserController(UserRepository userRepository){
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/users")

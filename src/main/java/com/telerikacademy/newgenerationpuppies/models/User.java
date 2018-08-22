@@ -30,6 +30,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Subscriber> subscribers;
 
+    @OneToOne(mappedBy = "user")
+    private Authority authority;
+
     public User(){
 
     }
@@ -81,6 +84,14 @@ public class User {
     public void setSubscribers(List<Subscriber> subscribers) {
         this.subscribers = subscribers;
     }
+
+    public Authority getAuthority() {
+        return authority;
+    }
+
+//    public void setAuthority(Authority authority) {
+//        this.authority = authority;
+//    }
 
     public int getEnabled() {
         return enabled;

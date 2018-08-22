@@ -1,5 +1,6 @@
 package com.telerikacademy.newgenerationpuppies;
 
+import com.telerikacademy.newgenerationpuppies.models.Authority;
 import com.telerikacademy.newgenerationpuppies.models.Bill;
 import com.telerikacademy.newgenerationpuppies.models.Subscriber;
 import com.telerikacademy.newgenerationpuppies.models.User;
@@ -20,6 +21,7 @@ public class NewMain {
                 .addAnnotatedClass(Subscriber.class)
                 .addAnnotatedClass(User.class)
                 .addAnnotatedClass(Bill.class)
+                .addAnnotatedClass(Authority.class)
                 .buildSessionFactory();
         Session ses = fak.openSession();
         ses.beginTransaction();
@@ -70,17 +72,24 @@ public class NewMain {
 //
 //        }
 
-        Bill bill = ses.get(Bill.class, 3);
-        Subscriber subscriber = ses.get(Subscriber.class, 878002);
-        User user = ses.get(User.class, "Ktb-10");
+//        Bill bill = ses.get(Bill.class, 3);
+//        Subscriber subscriber = ses.get(Subscriber.class, 878002);
+//        User user = ses.get(User.class, "Ktb-10");
+//
+//        System.out.println();
+//        System.out.println();
+//        System.out.println("This bill is to be paid at bank " + bill.getSubscriber().getUser().getUserName());
+//        System.out.println("This subscriber's bill N3 has servise " + subscriber.getBills().get(3).getService());
+//        System.out.println("This user's subscriber N10 is " + user.getSubscribers().get(10).getFirstName());
+
+        User testUser1 = ses.get(User.class, "BurkanBank");
+        User testUser2 = ses.get(User.class, "IvanBank");
 
         System.out.println();
-        System.out.println();
-        System.out.println("This bill is to be paid at bank " + bill.getSubscriber().getUser().getUserName());
-        System.out.println("This subscriber's bill N3 has servise " + subscriber.getBills().get(3).getService());
-        System.out.println("This user's subscriber N10 is " + user.getSubscribers().get(10).getFirstName());
-
-
+        for (int i = 0; i < 30; i++){
+            System.out.println();
+        }
+        System.out.println(testUser1.getAuthority().getAuthority() +"-------");
 
         ses.getTransaction().commit();
         ses.close();

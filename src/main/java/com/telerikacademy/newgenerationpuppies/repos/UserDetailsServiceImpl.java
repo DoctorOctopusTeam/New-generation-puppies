@@ -19,7 +19,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if(user1 == null){
             throw new UsernameNotFoundException(username);
         }
-        //return new User(user1.getUserName(), user1.getPassword(), emptyList());
         return new
                 org.springframework.security.core.userdetails.User(
                 user1.getUserName(), user1.getPassword(), emptyList());
