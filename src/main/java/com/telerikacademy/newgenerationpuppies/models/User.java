@@ -1,5 +1,6 @@
 package com.telerikacademy.newgenerationpuppies.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -30,12 +31,16 @@ public class User {
     private String role;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
-    @JsonIgnoreProperties({"bills","user"})
+    //@JsonIgnoreProperties({"bills","user"})
+    //@JsonIgnore
     private List<Subscriber> subscribers;
 
     @OneToOne
     @JoinColumn(name = "userName")
     private Authority authority;
+
+    @Column(name = "email")
+    private String email;
 
     public User(){
 
@@ -103,6 +108,14 @@ public class User {
 
     public void setEnabled(int enabled) {
         this.enabled = enabled;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
 

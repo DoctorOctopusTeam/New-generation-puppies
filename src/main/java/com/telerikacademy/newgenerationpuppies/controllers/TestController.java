@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/test")
@@ -47,8 +48,14 @@ public class TestController {
     }
 
     @GetMapping
-    public User returnModel(){
-        return userRepositoryImpl.test();
+    public String returnModel(HttpServletRequest httpServletRequest){
+
+        return userRepositoryImpl.test(httpServletRequest);
+    }
+
+    @GetMapping("/h")
+    public List<Map<String, String>> history(HttpServletRequest httpServletRequest){
+        return userRepositoryImpl.history(httpServletRequest);
     }
 
 }

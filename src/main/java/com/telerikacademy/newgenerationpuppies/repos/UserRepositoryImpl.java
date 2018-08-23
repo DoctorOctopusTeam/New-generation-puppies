@@ -1,5 +1,8 @@
 package com.telerikacademy.newgenerationpuppies.repos;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.telerikacademy.newgenerationpuppies.models.Authority;
 import com.telerikacademy.newgenerationpuppies.models.Bill;
 import com.telerikacademy.newgenerationpuppies.models.Subscriber;
@@ -10,8 +13,9 @@ import org.hibernate.cfg.Configuration;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Date;
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.*;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
@@ -83,14 +87,44 @@ public class UserRepositoryImpl implements UserRepository {
         return bill;
     }
 
-    public User test(){
+    public String test(HttpServletRequest httpServletRequest) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
+        String str = httpServletRequest.getUserPrincipal().getName();
+        String token = httpServletRequest.getHeader("Authorization");
+        String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
+                .build()
+                .verify(token.replace("Bearer ", ""))
+                .getSubject();
         //List<Authority> authority = session.createQuery("from Authority where user='IvanBank'").list();
-        User user = session.get(User.class, "Ktb-10");
+        //User user = session.get(User.class, "Ktb-10");
         session.getTransaction().commit();
         session.close();
-        return user;
+        return nameOfBank;
+    }
+
+    public List<Map<String, String>> history(HttpServletRequest request){
+        List<Map<String, String>> list = new ArrayList<>();
+        String token = request.getHeader("Authorization");
+        String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
+                .build()
+                .verify(token.replace("Bearer ", ""))
+                .getSubject();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        List<Bill> payedBills =
+                session.createQuery("from Bill b " +
+                        "where b.payDate != null " +
+                        "and b.subscriber.user.userName = :x ")
+                        .setParameter("x", nameOfBank).list();
+        for (int i = 0; i < payedBills.size(); i++){
+            list.add(new HashMap<String, String>());
+            list.get(i).put("valutata", payedBills.get(i).getCurrency());
+            list.get(i).put("uslugata", payedBills.get(i).getService());
+            list.get(i).put("dali e platena maika mu da eba", payedBills.get(i).getPayDate().toString());
+            list.get(i).put("suma", String.valueOf(payedBills.get(i).getAmount()));
+        }
+        return list;
     }
 
 }

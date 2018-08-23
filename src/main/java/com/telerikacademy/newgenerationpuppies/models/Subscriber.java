@@ -1,6 +1,7 @@
 package com.telerikacademy.newgenerationpuppies.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -26,11 +27,11 @@ public class Subscriber {
 
     @ManyToOne
     @JoinColumn(name = "userName")
-    @JsonIgnoreProperties({"subscribers"})
+    //@JsonIgnoreProperties({"subscribers"})
     private User user;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "subscriber")
-    @JsonIgnoreProperties("subscriber")
+    //@JsonIgnoreProperties("subscriber")
     private List<Bill> bills;
 
     public Subscriber(){
