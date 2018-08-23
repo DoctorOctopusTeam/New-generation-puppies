@@ -124,7 +124,7 @@ public class UserRepositoryImpl implements UserRepository {
         return hash;
     }
 
-
+    //gets top 10 payed bills from the logged in bank, based on the date ot payment in descending order
     @Override
     public List<Bill> getAllPayments(HttpServletRequest httpServletRequest) {
         Session session = sessionFactory.openSession();
@@ -137,7 +137,10 @@ public class UserRepositoryImpl implements UserRepository {
                 .verify(token.replace("Bearer ", ""))
                 .getSubject();
 
-        list = session.createQuery("from Bill b where b.payDate != null ").setMaxResults(10).list();
+        list = session.createQuery("from Bill b where b.payDate != null AND " +
+                "b.subscriber.user.userName =:nameOfBank order by payDate desc ")
+                .setParameter("nameOfBank", nameOfBank)
+                .setMaxResults(10).list();
         return list;
     }
 }
