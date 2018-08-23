@@ -127,7 +127,7 @@ public class UserRepositoryImpl implements UserRepository {
         return hash;
     }
 
-    //gets top 10 payed bills from the logged in bank, based on the date ot payment in descending order
+    //gets top 10 payed bills from ALL subscribers of the logged in bank, based on the date ot payment in descending order
     @Override
     public List<Bill> getAllPayments(HttpServletRequest httpServletRequest) {
         Session session = sessionFactory.openSession();
