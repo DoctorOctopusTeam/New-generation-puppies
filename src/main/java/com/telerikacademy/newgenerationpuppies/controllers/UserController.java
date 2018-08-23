@@ -17,6 +17,7 @@ public class UserController {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public UserController(UserRepository userRepository){
+
         this.userRepository = userRepository;
     }
 

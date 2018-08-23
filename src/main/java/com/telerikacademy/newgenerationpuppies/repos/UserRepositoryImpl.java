@@ -10,6 +10,7 @@ import org.hibernate.cfg.Configuration;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -64,7 +65,32 @@ public class UserRepositoryImpl implements UserRepository {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         User u = session.get(User.class, "IvanBank");
+        session.getTransaction().commit();
+        session.close();
         return u;
+    }
+
+    @Override
+    public Bill payBill(int id) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Bill bill = session.get(Bill.class, id);
+        //bill.setPayDate(null);
+        bill.setPayDate(new Date());
+        session.update(bill);
+        session.getTransaction().commit();
+        session.close();
+        return bill;
+    }
+
+    public User test(){
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        //List<Authority> authority = session.createQuery("from Authority where user='IvanBank'").list();
+        User user = session.get(User.class, "Ktb-10");
+        session.getTransaction().commit();
+        session.close();
+        return user;
     }
 
 }

@@ -30,12 +30,11 @@ public class User {
     private String role;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
-    @JsonIgnoreProperties("user")
+    @JsonIgnoreProperties({"bills","user"})
     private List<Subscriber> subscribers;
 
     @OneToOne
     @JoinColumn(name = "userName")
-    @JsonIgnoreProperties("user")
     private Authority authority;
 
     public User(){

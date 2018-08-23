@@ -6,6 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "authorities")
+@JsonIgnoreProperties({"user"})
 public class Authority {
 
     @Id

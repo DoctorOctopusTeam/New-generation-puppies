@@ -89,6 +89,8 @@ public class NewMain {
         for (int i = 0; i < 30; i++){
             System.out.println();
         }
+
+        System.out.println(ses.get(Bill.class, 3).getPayDate().toString());
         System.out.println(testUser1.getAuthority().getAuthority() + "----------------");
         System.out.println(authority.getUser().getUserName()+ "---------------------");
         ses.getTransaction().commit();

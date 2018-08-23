@@ -1,18 +1,26 @@
 package com.telerikacademy.newgenerationpuppies.controllers;
 
+import com.telerikacademy.newgenerationpuppies.models.Authority;
+import com.telerikacademy.newgenerationpuppies.models.Bill;
+import com.telerikacademy.newgenerationpuppies.models.Subscriber;
+import com.telerikacademy.newgenerationpuppies.models.User;
+import com.telerikacademy.newgenerationpuppies.repos.UserRepository;
+import com.telerikacademy.newgenerationpuppies.repos.UserRepositoryImpl;
+import org.hibernate.Session;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequestMapping("/test")
 public class TestController {
+    private UserRepositoryImpl userRepositoryImpl;
 
-
+    public TestController(UserRepositoryImpl userRepository){
+        this.userRepositoryImpl = userRepository;
+    }
     @GetMapping("/one")
     @PreAuthorize(value = "hasAuthority('ROLE_ADMIN')")
     public String test(HttpServletRequest r){
@@ -30,6 +38,17 @@ public class TestController {
     public String testThree(HttpServletRequest r){
 
         return "OK! " + r.getUserPrincipal().getName()+ r.getUserPrincipal();
+    }
+    //--------------------------------------------------
+
+    @PutMapping("/paybill/{id}")
+    public Bill payBill(@PathVariable int id){
+        return userRepositoryImpl.payBill(id);
+    }
+
+    @GetMapping
+    public User returnModel(){
+        return userRepositoryImpl.test();
     }
 
 }

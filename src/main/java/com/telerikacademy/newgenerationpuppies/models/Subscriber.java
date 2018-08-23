@@ -8,6 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "subscribers")
+//@JsonIgnoreProperties({"user", "bills"})
 public class Subscriber {
     @Id
     @Column(name = "phoneNumber")
@@ -25,6 +26,7 @@ public class Subscriber {
 
     @ManyToOne
     @JoinColumn(name = "userName")
+    @JsonIgnoreProperties({"subscribers"})
     private User user;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "subscriber")
