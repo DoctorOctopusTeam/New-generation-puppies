@@ -96,7 +96,9 @@ public class UserRepositoryImpl implements UserRepository {
         session.close();
         return user;
     }
-
+    //gets info about a particular subscriber - client of the logged in bank, based on his phone number passed in the URL
+    //the parameter int phoneNumber is passed via PostMan as parameter, not as JS object
+    //URL - localhost:8080/api/user/info/{phoneNumber}
     @Override
     public HashMap<String, String> getSubscriberInfo(int phoneNumber, HttpServletRequest httpServletRequest) {
         Session session = sessionFactory.openSession();
@@ -111,13 +113,14 @@ public class UserRepositoryImpl implements UserRepository {
 
         Subscriber subscriber = session.get(Subscriber.class, phoneNumber);
         if(!subscriber.getUser().getUserName().equals(nameOfBank)){
-            System.out.println(nameOfBank);
-            System.out.println(subscriber.getUser().getUserName());
             session.getTransaction().commit();
             session.close();
             return null;
         } else{
-            hash.put("username", subscriber.getFirstName());
+            hash.put("First name", subscriber.getFirstName());
+            hash.put("Last name", subscriber.getLastName());
+            hash.put("EGN", String.valueOf(subscriber.getEgn()));
+            hash.put("Phone number", String.valueOf(subscriber.getPhoneNumber()));
         }
         session.getTransaction().commit();
         session.close();

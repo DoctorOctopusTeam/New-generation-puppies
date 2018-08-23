@@ -43,6 +43,7 @@ public class UserController {
         return userRepository.giveUserKtb10();
     }
 
+    //done
     @GetMapping("/user/info/{phoneNumber}")
     public HashMap<String, String> getInfoSubscriber(@PathVariable int phoneNumber, HttpServletRequest httpServletRequest) {
         return userRepository.getSubscriberInfo(phoneNumber, httpServletRequest);
