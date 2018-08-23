@@ -124,6 +124,7 @@ public class UserRepositoryImpl implements UserRepository {
         return hash;
     }
 
+
     @Override
     public List<Bill> getAllPayments(HttpServletRequest httpServletRequest) {
         Session session = sessionFactory.openSession();
