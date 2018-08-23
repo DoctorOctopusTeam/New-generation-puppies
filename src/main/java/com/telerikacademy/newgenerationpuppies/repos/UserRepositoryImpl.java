@@ -29,73 +29,76 @@ public class UserRepositoryImpl implements UserRepository {
             .buildSessionFactory();
 
 
-    @Override
-    public List<User> returnUsers(){
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        List<User> list = session.createQuery("from User ").list();
-        session.getTransaction().commit();
-        session.close();
-        return list;
-    }
+//    @Override
+//    public List<User> returnUsers(){
+//        Session session = sessionFactory.openSession();
+//        session.beginTransaction();
+//        List<User> list = session.createQuery("from User ").list();
+//        session.getTransaction().commit();
+//        session.close();
+//        return list;
+//    }
+//
+//    @Override
+//    public User findByUsername(String username){
+//        Session session = sessionFactory.openSession();
+//        session.beginTransaction();
+//        User user = session.get(User.class, username);
+//        session.getTransaction().commit();
+//        session.close();
+//        return user;
+//    }
+//
+//    @Override
+//    public void saveUser(User user){
+//        Session session = sessionFactory.openSession();
+//        session.beginTransaction();
+//        session.save(user);
+//
+//        Authority authority = new Authority();
+//        authority.setAuthority(user.getRole());
+//        authority.setUserName(user.getUserName());
+//        session.save(authority);
+//
+//        session.getTransaction().commit();
+//        session.close();
+//    }
+//
+//    @Override
+//    public User giveUserKtb10(){
+//        Session session = sessionFactory.openSession();
+//        session.beginTransaction();
+//        User u = session.get(User.class, "IvanBank");
+//        session.getTransaction().commit();
+//        session.close();
+//        return u;
+//    }
+//
+//    @Override
+//    public Bill payBill(int id) {
+//        Session session = sessionFactory.openSession();
+//        session.beginTransaction();
+//        Bill bill = session.get(Bill.class, id);
+//        //bill.setPayDate(null);
+//        bill.setPayDate(new Date());
+//        session.update(bill);
+//        session.getTransaction().commit();
+//        session.close();
+//        return bill;
+//    }
+//    @Override
+//    public User test(){
+//        Session session = sessionFactory.openSession();
+//        session.beginTransaction();
+//        //List<Authority> authority = session.createQuery("from Authority where user='IvanBank'").list();
+//        User user = session.get(User.class, "Ktb-10");
+//        session.getTransaction().commit();
+//        session.close();
+//        return user;
+//    }
 
-    @Override
-    public User findByUsername(String username){
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        User user = session.get(User.class, username);
-        session.getTransaction().commit();
-        session.close();
-        return user;
-    }
+    //START
 
-    @Override
-    public void saveUser(User user){
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        session.save(user);
-
-        Authority authority = new Authority();
-        authority.setAuthority(user.getRole());
-        authority.setUserName(user.getUserName());
-        session.save(authority);
-
-        session.getTransaction().commit();
-        session.close();
-    }
-
-    @Override
-    public User giveUserKtb10(){
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        User u = session.get(User.class, "IvanBank");
-        session.getTransaction().commit();
-        session.close();
-        return u;
-    }
-
-    @Override
-    public Bill payBill(int id) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        Bill bill = session.get(Bill.class, id);
-        //bill.setPayDate(null);
-        bill.setPayDate(new Date());
-        session.update(bill);
-        session.getTransaction().commit();
-        session.close();
-        return bill;
-    }
-    @Override
-    public User test(){
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        //List<Authority> authority = session.createQuery("from Authority where user='IvanBank'").list();
-        User user = session.get(User.class, "Ktb-10");
-        session.getTransaction().commit();
-        session.close();
-        return user;
-    }
     //gets info about a particular subscriber - client of the logged in bank, based on his phone number passed in the URL
     //the parameter int phoneNumber is passed via PostMan as parameter, not as JS object
     //URL - localhost:8080/api/user/info/{phoneNumber}
@@ -128,6 +131,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     //gets top 10 payed bills from ALL subscribers of the logged in bank, based on the date ot payment in descending order
+    // URL - localhost:8080/user/payments
     @Override
     public List<Bill> getAllPayments(HttpServletRequest httpServletRequest) {
         Session session = sessionFactory.openSession();

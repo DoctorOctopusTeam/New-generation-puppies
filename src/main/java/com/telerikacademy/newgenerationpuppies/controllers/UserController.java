@@ -22,37 +22,56 @@ public class UserController {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public UserController(UserRepository userRepository){
-
         this.userRepository = userRepository;
     }
 
-    @GetMapping("/users")
-    public List<User> testMethod(){
-        return userRepository.returnUsers();
-    }
+//    @GetMapping("/users")
+//    public List<User> testMethod(){
+//        return userRepository.returnUsers();
+//    }
 
-    @PostMapping("/register")
-    public void registerUser(@RequestBody User user){
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+//    @PostMapping("/register")
+//    public void registerUser(@RequestBody User user){
+//        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+//
+//        userRepository.saveUser(user);
+//    }
 
-        userRepository.saveUser(user);
-    }
+//    @GetMapping("/success")
+//    public User returnUser(){
+//        return userRepository.giveUserKtb10();
+//    }
 
-    @GetMapping("/success")
-    public User returnUser(){
-        return userRepository.giveUserKtb10();
-    }
-
-    //done
+    //DONE
+    //The client must be able to see personal details of a subscriber
     @GetMapping("/user/info/{phoneNumber}")
     public HashMap<String, String> getInfoSubscriber(@PathVariable int phoneNumber, HttpServletRequest httpServletRequest) {
         return userRepository.getSubscriberInfo(phoneNumber, httpServletRequest);
     }
 
+    //DONE
+    //A client should be able to see a history of the payments for its subscribers sorted descending by the date of payment
     @GetMapping("user/payments")
     public List<Bill> getAllPayments(HttpServletRequest httpServletRequest){
-
         return userRepository.getAllPayments(httpServletRequest);
+    }
+
+    //A client should be able to see the average and max amount of money payed for a subscriber for a defined period of time
+    @GetMapping("user/reports/{phoneNumber}")
+    public String getAverageMaxPayedFromSubscriber(@PathVariable int phoneNumber, HttpServletRequest httpServletRequest){
+        return null;
+    }
+
+    //A client should be able to see a list of the services the client has paid for
+    @GetMapping("user/services/{phoneNumber}")
+    public List<String> usedServicesFromSubsciber(@PathVariable int phoneNumber, HttpServletRequest httpServletRequest){
+        return null;
+    }
+
+    //Clients must have access to bill payment module where they can pay a particular bill (or selected list of bills) for their subscribers
+    @PutMapping("user/pay")
+    public Bill payBill(){
+        return null;
     }
 
 }
