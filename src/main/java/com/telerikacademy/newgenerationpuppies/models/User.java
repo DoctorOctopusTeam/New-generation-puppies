@@ -1,79 +1,119 @@
 package com.telerikacademy.newgenerationpuppies.models;
 
-import org.hibernate.annotations.FilterJoinTables;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User implements UserDetails {
+public class User {
+
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
-    @Column(name = "user_name")
+    @Column(name = "userName")
     private String userName;
 
     @Column(name = "password")
-    private String password;
+    private  String password;
 
-    private boolean isAccountNonExpired;
+    @Column(name = "enabled")
+    private int enabled;
 
-    private boolean isAccountNonLocked;
+    @Column(name = "details")
+    private String details;
 
-    private boolean isCredentialsNonExpired;
+    @Column(name = "EIK")
+    private int EIK;
 
-    private boolean isEnabled;
+    @Column(name = "role")
+    private String role;
 
-    @ManyToMany
-    @JoinTable(name="user_roles",
-    joinColumns = @JoinColumn(name = "user_id"),
-    inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> authorities;
+    @Column(name = "email")
+    private String email;
 
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+    @JsonIgnoreProperties({"bills","user"})
+    private List<Subscriber> subscribers;
 
-    public User() {
+    @OneToOne
+    @JoinColumn(name = "userName")
+    private Authority authority;
+
+    public User(){
 
     }
 
-    @Override
-    public Set<Role> getAuthorities() {
-        return authorities;
-    }
-
-    public String getPassword() {
-
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
+    public String getUserName() {
         return userName;
     }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return isAccountNonExpired;
+    public String getPassword() {
+        return password;
     }
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return isAccountNonLocked;
+    public String getDetails() {
+        return details;
     }
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return isCredentialsNonExpired;
+    public int getEIK() {
+        return EIK;
     }
 
-    @Override
-    public boolean isEnabled() {
-        return isEnabled;
+    public String getRole() {
+        return role;
+    }
+
+    public List<Subscriber> getSubscribers() {
+        return subscribers;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
+    }
+
+    public void setEIK(int EIK) {
+        this.EIK = EIK;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public void setSubscribers(List<Subscriber> subscribers) {
+        this.subscribers = subscribers;
+    }
+
+    public Authority getAuthority() {
+        return authority;
+    }
+
+    public void setAuthority(Authority authority) {
+        this.authority = authority;
+    }
+
+    public int getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(int enabled) {
+        this.enabled = enabled;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
+

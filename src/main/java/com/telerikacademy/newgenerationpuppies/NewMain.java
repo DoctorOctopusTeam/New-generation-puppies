@@ -1,5 +1,6 @@
 package com.telerikacademy.newgenerationpuppies;
 
+import com.telerikacademy.newgenerationpuppies.models.Authority;
 import com.telerikacademy.newgenerationpuppies.models.Bill;
 import com.telerikacademy.newgenerationpuppies.models.Subscriber;
 import com.telerikacademy.newgenerationpuppies.models.User;
@@ -20,6 +21,7 @@ public class NewMain {
                 .addAnnotatedClass(Subscriber.class)
                 .addAnnotatedClass(User.class)
                 .addAnnotatedClass(Bill.class)
+                .addAnnotatedClass(Authority.class)
                 .buildSessionFactory();
         Session ses = fak.openSession();
         ses.beginTransaction();
@@ -50,25 +52,20 @@ public class NewMain {
         //POPULATE BILLS
         //--------------------------------------
 
-//        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-//        Subscriber subscriber =ses.get(Subscriber.class,878002);
+        //SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Subscriber subscriber =ses.get(Subscriber.class,878004);
 
-//        for (int i = 1; i <= 5; i++){
-//            Bill bill = new Bill();
-//            bill.setService("Telefon + " + i);
-////            try {
-////                bill.setStartDate(dateFormat.parse("17/07/1987"));
-////            } catch (ParseException e) {
-////                e.printStackTrace();
-////            }
-//            bill.setStartDate(new Date());
-//            bill.setEndDate(new Date());
-//            bill.setAmount(1000D + i + 200);
-//            bill.setCurrency("BGN");
-//            bill.setSubscriber(subscriber);
-//            ses.save(bill);
-//
-//        }
+        for (int i = 1; i <= 5; i++){
+            Bill bill = new Bill();
+            bill.setService("Telefon + " + i);
+            bill.setStartDate(new Date());
+            bill.setEndDate(new Date());
+            bill.setAmount(1000D + i + 200);
+            bill.setCurrency("BGN");
+            bill.setSubscriber(subscriber);
+            ses.save(bill);
+
+        }
 
 //        Bill bill = ses.get(Bill.class, 3);
 //        Subscriber subscriber = ses.get(Subscriber.class, 878002);
@@ -79,12 +76,21 @@ public class NewMain {
 //        System.out.println("This bill is to be paid at bank " + bill.getSubscriber().getUser().getUserName());
 //        System.out.println("This subscriber's bill N3 has servise " + subscriber.getBills().get(3).getService());
 //        System.out.println("This user's subscriber N10 is " + user.getSubscribers().get(10).getFirstName());
+
+//        User testUser1 = ses.get(User.class, "BurkanBank");
+//        Authority authority = ses.get(Authority.class, "IvanBank");
 //
+//        System.out.println();
+//        for (int i = 0; i < 30; i++){
+//            System.out.println();
+//        }
 //
-//
-//        ses.getTransaction().commit();
-//        ses.close();
-//
-  }
+//        System.out.println(ses.get(Bill.class, 3).getPayDate().toString());
+//        System.out.println(testUser1.getAuthority().getAuthority() + "----------------");
+//        System.out.println(authority.getUser().getUserName()+ "---------------------");
+        ses.getTransaction().commit();
+        ses.close();
+
+    }
 }
 

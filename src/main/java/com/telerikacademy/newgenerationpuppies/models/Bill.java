@@ -1,11 +1,14 @@
 package com.telerikacademy.newgenerationpuppies.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Table(name = "bills")
-public class Bill {
+public class  Bill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -31,6 +34,8 @@ public class Bill {
 
     @ManyToOne
     @JoinColumn(name = "phoneNumber")
+    @JsonIgnoreProperties({"user", "bills"})
+
     private Subscriber subscriber;
 
     public Bill(){

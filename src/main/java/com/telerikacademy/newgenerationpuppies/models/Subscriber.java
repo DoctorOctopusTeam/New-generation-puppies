@@ -1,11 +1,14 @@
 package com.telerikacademy.newgenerationpuppies.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name = "subscribers")
+//@JsonIgnoreProperties({"user", "bills"})
 public class Subscriber {
     @Id
     @Column(name = "phoneNumber")
@@ -23,9 +26,11 @@ public class Subscriber {
 
     @ManyToOne
     @JoinColumn(name = "userName")
+    @JsonIgnoreProperties({"subscribers"})
     private User user;
 
-    @OneToMany(mappedBy = "subscriber")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "subscriber")
+    @JsonIgnoreProperties("subscriber")
     private List<Bill> bills;
 
     public Subscriber(){
