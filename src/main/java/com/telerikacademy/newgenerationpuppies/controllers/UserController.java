@@ -26,12 +26,7 @@ public class UserController {
         return userRepository.returnUsers();
     }
 
-    @PostMapping("/register")
-    public void registerUser(@RequestBody User user){
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 
-        userRepository.saveUser(user);
-    }
 
     @GetMapping("/success")
     public User returnUser(){

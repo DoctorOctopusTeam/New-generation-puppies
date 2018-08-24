@@ -47,6 +47,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
             return;
         }
 
+
         UsernamePasswordAuthenticationToken authentication = getAuthentication(req);
 
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));

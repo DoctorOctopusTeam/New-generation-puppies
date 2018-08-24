@@ -3,6 +3,7 @@ package com.telerikacademy.newgenerationpuppies.repos;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.telerikacademy.newgenerationpuppies.dtomodels.DTOUser;
 import com.telerikacademy.newgenerationpuppies.models.Authority;
 import com.telerikacademy.newgenerationpuppies.models.Bill;
 import com.telerikacademy.newgenerationpuppies.models.Subscriber;
@@ -10,8 +11,10 @@ import com.telerikacademy.newgenerationpuppies.models.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestParam;
+
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -38,6 +41,24 @@ public class UserRepositoryImpl implements UserRepository {
         session.close();
         return list;
     }
+//---------------------
+    public Object listUser(){
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+
+        //List<User> list = session.createQuery("from User u where u.userName='Ktb-10' ").list();
+        //List<Subscriber> list = session.createQuery("from Subscriber s where s.phoneNumber = 878002 ").list();
+        //List<Bill> list = session.createQuery("from Bill b where b.id=6 ").list();
+        //List<Authority> list = session.createQuery("from Authority a where a.userName='FIB' ").list();
+
+        //List<User> list = session.createQuery("from User u ").list();
+        //List<Subscriber> list = session.createQuery("from Subscriber ").list();
+        //List<Bill> list = session.createQuery("from Bill ").list();
+        List<Authority> list = session.createQuery("from Authority ").list();
+        session.getTransaction().commit();
+        session.close();
+        return list;//.get(0);
+    }
 
     @Override
     public User findByUsername(String username){
@@ -49,19 +70,9 @@ public class UserRepositoryImpl implements UserRepository {
         return user;
     }
 
-    @Override
-    public void saveUser(User user){
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        session.save(user);
+    //@Override
+    public void saveUser(User user, String authorityRole){
 
-        Authority authority = new Authority();
-        authority.setAuthority("ROLE_USER");
-        authority.setUserName(user.getUserName());
-        session.save(authority);
-
-        session.getTransaction().commit();
-        session.close();
     }
 
     @Override
@@ -100,7 +111,7 @@ public class UserRepositoryImpl implements UserRepository {
         //User user = session.get(User.class, "Ktb-10");
         session.getTransaction().commit();
         session.close();
-        return nameOfBank;
+        return nameOfBank + httpServletRequest.isUserInRole("ROLE_ADMIN");
     }
 
     public List<Map<String, String>> history(HttpServletRequest request){
@@ -126,5 +137,7 @@ public class UserRepositoryImpl implements UserRepository {
         }
         return list;
     }
+
+
 
 }

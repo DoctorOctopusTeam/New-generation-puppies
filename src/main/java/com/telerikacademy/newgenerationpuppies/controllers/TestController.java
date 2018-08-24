@@ -1,5 +1,6 @@
 package com.telerikacademy.newgenerationpuppies.controllers;
 
+import com.telerikacademy.newgenerationpuppies.dtomodels.DTOUser;
 import com.telerikacademy.newgenerationpuppies.models.Authority;
 import com.telerikacademy.newgenerationpuppies.models.Bill;
 import com.telerikacademy.newgenerationpuppies.models.Subscriber;
@@ -9,6 +10,7 @@ import com.telerikacademy.newgenerationpuppies.repos.UserRepositoryImpl;
 import org.hibernate.Session;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.BeanUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -23,10 +25,11 @@ public class TestController {
         this.userRepositoryImpl = userRepository;
     }
     @GetMapping("/one")
-    @PreAuthorize(value = "hasAuthority('ROLE_ADMIN')")
+    //@PreAuthorize(value = "hasAuthority('ROLE_ADMIN')")
     public String test(HttpServletRequest r){
 
-        return "OK! " + r.getUserPrincipal().getName() + r.getUserPrincipal();
+        //return "OK! " + r.getUserPrincipal().getName() + r.getUserPrincipal();
+        return userRepositoryImpl.test(r);
     }
 
     @GetMapping("/two")
@@ -56,6 +59,16 @@ public class TestController {
     @GetMapping("/h")
     public List<Map<String, String>> history(HttpServletRequest httpServletRequest){
         return userRepositoryImpl.history(httpServletRequest);
+    }
+
+    @GetMapping("/listusers")
+    public List<User> listUsers(){
+        return userRepositoryImpl.returnUsers();
+    }
+
+    @GetMapping("/listentity")
+    public Object listEntity(){
+        return userRepositoryImpl.listUser();
     }
 
 }

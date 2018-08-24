@@ -1,5 +1,6 @@
 package com.telerikacademy.newgenerationpuppies.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -31,9 +32,10 @@ public class  Bill {
     @Column(name = "currency")
     private String currency;
 
+
     @ManyToOne
     @JoinColumn(name = "phoneNumber")
-    //@JsonIgnoreProperties({"user", "bills"})
+    @JsonIgnoreProperties({"bills"})
     private Subscriber subscriber;
 
     public Bill(){

@@ -7,13 +7,11 @@ import java.util.List;
 
 public interface UserRepository {
 
-    public List<User> returnUsers();
+    List<User> returnUsers();
 
-    public User findByUsername(String username);
+    User findByUsername(String username);
 
-    public void saveUser(User user);
+    User giveUserKtb10();
 
-    public User giveUserKtb10();
-
-    public Bill payBill(int id);
+    Bill payBill(int id);
 }

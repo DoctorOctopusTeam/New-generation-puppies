@@ -39,33 +39,29 @@ public class NewMain {
 //        }
         //POPULATE SUBSCRIBRES
         //------------------------------------------------
-//        User user = ses.get(User.class, "Ktb-10");
-//
+//        User user = ses.get(User.class, "Ktb-1");
+////
 //        for (int i = 1; i <=100; i++){
 //            Subscriber subscriber = new Subscriber(
-//                    878000 + i,
+//                    898000 + i,
 //                    "Delian" + i,
 //                    "Peevski" + i,
-//                    800000 + i, user);
+//                    900000 + i,
+//                    user);
 //            ses.save(subscriber);
 //        }
         //POPULATE BILLS
         //--------------------------------------
 
 //        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-//        Subscriber subscriber =ses.get(Subscriber.class,878002);
-
+//        Subscriber subscriber =ses.get(Subscriber.class,898001);
+//
 //        for (int i = 1; i <= 5; i++){
 //            Bill bill = new Bill();
-//            bill.setService("Telefon + " + i);
-////            try {
-////                bill.setStartDate(dateFormat.parse("17/07/1987"));
-////            } catch (ParseException e) {
-////                e.printStackTrace();
-////            }
+//            bill.setService("Internet + " + i);
 //            bill.setStartDate(new Date());
 //            bill.setEndDate(new Date());
-//            bill.setAmount(1000D + i + 200);
+//            bill.setAmount(100D + i + 200);
 //            bill.setCurrency("BGN");
 //            bill.setSubscriber(subscriber);
 //            ses.save(bill);
@@ -82,17 +78,24 @@ public class NewMain {
 //        System.out.println("This subscriber's bill N3 has servise " + subscriber.getBills().get(3).getService());
 //        System.out.println("This user's subscriber N10 is " + user.getSubscribers().get(10).getFirstName());
 
-        User testUser1 = ses.get(User.class, "BurkanBank");
-        Authority authority = ses.get(Authority.class, "IvanBank");
+        User testUser1 = ses.get(User.class, "Ktb-10");
+        //Authority authority = ses.get(Authority.class, "IvanBank");
+        User testUser2 = ses.get(User.class, "Ktb-1");
 
-        System.out.println();
+        List<Subscriber>list = ses.createQuery("from Subscriber where user='Ktb-10'").list();
+        List<Subscriber>list1 = ses.createQuery("from Subscriber where user='Ktb-1'").list();
+
         for (int i = 0; i < 30; i++){
             System.out.println();
         }
+        System.out.println();
+        for (int i = 0; i < testUser2.getSubscribers().size(); i++){
+            System.out.println(testUser1.getSubscribers().get(i).getPhoneNumber());
+        }
 
-        System.out.println(ses.get(Bill.class, 3).getPayDate().toString());
-        System.out.println(testUser1.getAuthority().getAuthority() + "----------------");
-        System.out.println(authority.getUser().getUserName()+ "---------------------");
+//        System.out.println(ses.get(Bill.class, 3).getPayDate().toString());
+//        System.out.println(testUser1.getAuthority().getAuthority() + "----------------");
+//        System.out.println(authority.getUser().getUserName()+ "---------------------");
         ses.getTransaction().commit();
         ses.close();
 
