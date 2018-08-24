@@ -41,14 +41,14 @@ public class TestController {
     }
     //--------------------------------------------------
 
-    @PutMapping("/paybill/{id}")
-    public Bill payBill(@PathVariable int id){
-        return userRepository.payBill(id);
-    }
-
-    @GetMapping
-    public User returnModel(){
-        return userRepository.test();
-    }
+//    @PutMapping("/paybill/{id}")
+//    public Bill payBill(@PathVariable int id){
+//        return userRepository.payBill(id);
+//    }
+//
+//    @GetMapping
+//    public User returnModel(){
+//        return userRepository.test();
+//    }
 
 }

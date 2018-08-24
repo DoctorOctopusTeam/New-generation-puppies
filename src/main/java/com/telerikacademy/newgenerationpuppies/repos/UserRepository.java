@@ -9,19 +9,23 @@ import java.util.List;
 
 public interface UserRepository {
 
-    public List<User> returnUsers();
-
-    public User findByUsername(String username);
-
-    public void saveUser(User user);
-
-    public User giveUserKtb10();
-
-    public Bill payBill(int id);
-
-    public User test();
+//    public List<User> returnUsers();
+//
+//    public User findByUsername(String username);
+//
+//    public void saveUser(User user);
+//
+//    public User giveUserKtb10();
+//
+//    public Bill payBill(int id);
+//
+//    public User test();
 
     HashMap<String, String> getSubscriberInfo(int phoneNumber, HttpServletRequest httpServletRequest);
 
     List<Bill> getAllPayments(HttpServletRequest httpServletRequest);
+
+    public String getMaxPayedFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest);
+
+    public String getAveragePayedFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest);
 }

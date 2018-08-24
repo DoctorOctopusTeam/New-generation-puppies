@@ -4,6 +4,7 @@ import com.telerikacademy.newgenerationpuppies.models.Bill;
 import com.telerikacademy.newgenerationpuppies.models.Subscriber;
 import com.telerikacademy.newgenerationpuppies.models.User;
 import com.telerikacademy.newgenerationpuppies.repos.UserRepository;
+import com.telerikacademy.newgenerationpuppies.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -17,13 +18,12 @@ import java.util.List;
 @RequestMapping("/api")
 public class UserController {
 
-    private UserRepository userRepository;
+    @Autowired
+    private UserService userService;
+
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserController(UserRepository userRepository){
-        this.userRepository = userRepository;
-    }
 
 //    @GetMapping("/users")
 //    public List<User> testMethod(){
@@ -46,25 +46,31 @@ public class UserController {
     //The client must be able to see personal details of a subscriber
     @GetMapping("/user/info/{phoneNumber}")
     public HashMap<String, String> getInfoSubscriber(@PathVariable int phoneNumber, HttpServletRequest httpServletRequest) {
-        return userRepository.getSubscriberInfo(phoneNumber, httpServletRequest);
+        return userService.getSubscriberInfo(phoneNumber, httpServletRequest);
     }
 
     //DONE
     //A client should be able to see a history of the payments for its subscribers sorted descending by the date of payment
     @GetMapping("user/payments")
     public List<Bill> getAllPayments(HttpServletRequest httpServletRequest){
-        return userRepository.getAllPayments(httpServletRequest);
+        return userService.getAllPayments(httpServletRequest);
     }
 
-    //A client should be able to see the average and max amount of money payed for a subscriber for a defined period of time
-    @GetMapping("user/reports/{phoneNumber}")
-    public String getAverageMaxPayedFromSubscriber(@PathVariable int phoneNumber, HttpServletRequest httpServletRequest){
-        return null;
+    //A client should be able to see the average and MAX amount of money payed for a subscriber for a defined period of time
+    @GetMapping("user/reports/max/{phoneNumber}")
+    public String getMaxPayedFromSubscriber(@PathVariable int phoneNumber, HttpServletRequest httpServletRequest){
+        return userService.getMaxPayedFromSubscriber(phoneNumber, httpServletRequest);
+    }
+
+    //A client should be able to see the AVERAGE and max amount of money payed for a subscriber for a defined period of time
+    @GetMapping("user/reports/average/{phoneNumber}")
+    public String getAveragePayedFromSubscriber(@PathVariable int phoneNumber, HttpServletRequest httpServletRequest){
+        return userService.getAveragePayedFromSubscriber(phoneNumber, httpServletRequest);
     }
 
     //A client should be able to see a list of the services the client has paid for
     @GetMapping("user/services/{phoneNumber}")
-    public List<String> usedServicesFromSubsciber(@PathVariable int phoneNumber, HttpServletRequest httpServletRequest){
+    public List<String> usedServicesFromSubscriber(@PathVariable int phoneNumber, HttpServletRequest httpServletRequest){
         return null;
     }
 

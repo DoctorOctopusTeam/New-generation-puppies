@@ -131,7 +131,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     //gets top 10 payed bills from ALL subscribers of the logged in bank, based on the date ot payment in descending order
-    // URL - localhost:8080/user/payments
+    // URL - localhost:8080/api/user/payments
     @Override
     public List<Bill> getAllPayments(HttpServletRequest httpServletRequest) {
         Session session = sessionFactory.openSession();
@@ -149,5 +149,17 @@ public class UserRepositoryImpl implements UserRepository {
                 .setParameter("nameOfBank", nameOfBank)
                 .setMaxResults(10).list();
         return list;
+    }
+
+    //gets the maximum sum payed from a subscriber for e defined period ot time
+    //URL - localhost:8080/api/user/reports/max/{phoneNumber}
+    @Override
+    public String getMaxPayedFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest) {
+        return null;
+    }
+
+    @Override
+    public String getAveragePayedFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest) {
+        return null;
     }
 }
