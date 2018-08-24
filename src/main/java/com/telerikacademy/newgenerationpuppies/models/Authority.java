@@ -1,5 +1,6 @@
 package com.telerikacademy.newgenerationpuppies.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -17,6 +18,7 @@ public class Authority {
     private String authority;
 
     @OneToOne(mappedBy = "authority")
+    @JsonIgnore
     private User user;
 
     public Authority(){
