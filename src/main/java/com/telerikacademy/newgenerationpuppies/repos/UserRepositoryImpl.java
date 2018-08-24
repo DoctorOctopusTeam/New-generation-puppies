@@ -9,6 +9,7 @@ import com.telerikacademy.newgenerationpuppies.models.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,7 +30,7 @@ public class UserRepositoryImpl implements UserRepository {
             .buildSessionFactory();
 
 
-//    @Override
+    //    @Override
 //    public List<User> returnUsers(){
 //        Session session = sessionFactory.openSession();
 //        session.beginTransaction();
@@ -39,15 +40,15 @@ public class UserRepositoryImpl implements UserRepository {
 //        return list;
 //    }
 //
-//    @Override
-//    public User findByUsername(String username){
-//        Session session = sessionFactory.openSession();
-//        session.beginTransaction();
-//        User user = session.get(User.class, username);
-//        session.getTransaction().commit();
-//        session.close();
-//        return user;
-//    }
+    @Override
+    public User findByUsername(String username) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        User user = session.get(User.class, username);
+        session.getTransaction().commit();
+        session.close();
+        return user;
+    }
 //
 //    @Override
 //    public void saveUser(User user){
@@ -115,11 +116,11 @@ public class UserRepositoryImpl implements UserRepository {
                 .getSubject();
 
         Subscriber subscriber = session.get(Subscriber.class, phoneNumber);
-        if(!subscriber.getUser().getUserName().equals(nameOfBank)){
+        if (!subscriber.getUser().getUserName().equals(nameOfBank)) {
             session.getTransaction().commit();
             session.close();
             return null;
-        } else{
+        } else {
             hash.put("First name", subscriber.getFirstName());
             hash.put("Last name", subscriber.getLastName());
             hash.put("EGN", String.valueOf(subscriber.getEgn()));
@@ -148,18 +149,88 @@ public class UserRepositoryImpl implements UserRepository {
                 "b.subscriber.user.userName =:nameOfBank order by payDate desc ")
                 .setParameter("nameOfBank", nameOfBank)
                 .setMaxResults(10).list();
+        session.getTransaction().commit();
+        session.close();
         return list;
     }
 
     //gets the maximum sum payed from a subscriber for e defined period ot time
     //URL - localhost:8080/api/user/reports/max/{phoneNumber}
     @Override
-    public String getMaxPayedFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest) {
-        return null;
+    public Bill getMaxPayedFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        List<Bill> bills = new ArrayList<>();
+
+        String token = httpServletRequest.getHeader("Authorization");
+        String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
+                .build()
+                .verify(token.replace("Bearer ", ""))
+                .getSubject();
+
+        bills = session.createQuery("from Bill b where b.payDate != null AND " +
+                "b.subscriber.user.userName =:nameOfBank AND b.subscriber.phoneNumber =:phoneNumber order by b.amount desc")
+                .setParameter("nameOfBank", nameOfBank)
+                .setParameter("phoneNumber", phoneNumber).list();
+        session.getTransaction().commit();
+        session.close();
+        if (bills.size() == 0) {
+            return null;
+        } else {
+
+            return bills.get(0);
+        }
     }
 
+    //gets the average sum payed from a customer for a defined period ot time
+    //URL - localhost:8080/api/user/reports/average/{phoneNumber}
     @Override
-    public String getAveragePayedFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest) {
-        return null;
+    public HashMap<String, Double> getAveragePayedFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Double averageSum = 0d;
+        HashMap<String, Double> hash = new HashMap<>();
+
+        String token = httpServletRequest.getHeader("Authorization");
+        String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
+                .build()
+                .verify(token.replace("Bearer ", ""))
+                .getSubject();
+
+        Query query = session.createQuery("select round(avg(b.amount), 2) from Bill b where b.payDate != null AND " +
+                "b.subscriber.user.userName =:nameOfBank AND b.subscriber.phoneNumber =:phoneNumber")
+                .setParameter("nameOfBank", nameOfBank)
+                .setParameter("phoneNumber", phoneNumber);
+
+        averageSum = (Double) query.getSingleResult();
+        session.getTransaction().commit();
+        session.close();
+        hash.put("Average sum", averageSum);
+        return hash;
+    }
+
+    //gets the top ten subscribers based on the payed sums for services
+    //URL - localhost:8080/api/user/reports/10biggest-amounts
+    @Override
+    public List<Subscriber> getBiggestAmountsPayedBySubscribers(HttpServletRequest httpServletRequest) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        List<Subscriber> list = new ArrayList<>();
+
+        String token = httpServletRequest.getHeader("Authorization");
+        String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
+                .build()
+                .verify(token.replace("Bearer ", ""))
+                .getSubject();
+
+        Query query = session.createQuery("select from Bill b where b.payDate != null AND " +
+                "b.subscriber.user.userName =:nameOfBank AND b.subscriber.phoneNumber =:phoneNumber")
+                .setParameter("nameOfBank", nameOfBank);
+
+
+        session.getTransaction().commit();
+        session.close();
+
+        return list;
     }
 }

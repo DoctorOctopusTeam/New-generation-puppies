@@ -57,14 +57,16 @@ public class UserController {
     }
 
     //A client should be able to see the average and MAX amount of money payed for a subscriber for a defined period of time
+    //TODO - define the time period
     @GetMapping("user/reports/max/{phoneNumber}")
-    public String getMaxPayedFromSubscriber(@PathVariable int phoneNumber, HttpServletRequest httpServletRequest){
+    public Bill getMaxPayedFromSubscriber(@PathVariable int phoneNumber, HttpServletRequest httpServletRequest){
         return userService.getMaxPayedFromSubscriber(phoneNumber, httpServletRequest);
     }
 
     //A client should be able to see the AVERAGE and max amount of money payed for a subscriber for a defined period of time
+    //TODO - define the time period
     @GetMapping("user/reports/average/{phoneNumber}")
-    public String getAveragePayedFromSubscriber(@PathVariable int phoneNumber, HttpServletRequest httpServletRequest){
+    public HashMap<String, Double> getAveragePayedFromSubscriber(@PathVariable int phoneNumber, HttpServletRequest httpServletRequest){
         return userService.getAveragePayedFromSubscriber(phoneNumber, httpServletRequest);
     }
 
@@ -74,10 +76,17 @@ public class UserController {
         return null;
     }
 
-    //Clients must have access to bill payment module where they can pay a particular bill (or selected list of bills) for their subscribers
+    //Clients must have access to bill payment module where they can pay a particular bill (or selected list of bills)
+    // for their subscribers
     @PutMapping("user/pay")
     public Bill payBill(){
         return null;
+    }
+
+    //Client can see report - Top 10 subscribers with the biggest amount of money payed.
+    @GetMapping("user/reports/10biggest-amounts")
+    public List<Subscriber> getBiggestAmountsPayedBySubscribers(HttpServletRequest httpServletRequest){
+        return userService.getBiggestAmountsPayedBySubscribers(httpServletRequest);
     }
 
 }
