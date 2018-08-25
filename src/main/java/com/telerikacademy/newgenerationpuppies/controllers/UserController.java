@@ -59,15 +59,15 @@ public class UserController {
     //A client should be able to see the average and MAX amount of money paid for a subscriber for a defined period of time
     //TODO - define the time period
     @GetMapping("user/reports/max/{phoneNumber}")
-    public Bill getMaxPayedFromSubscriber(@PathVariable int phoneNumber, HttpServletRequest httpServletRequest){
-        return userService.getMaxPayedFromSubscriber(phoneNumber, httpServletRequest);
+    public Bill getMaxPaidFromSubscriber(@PathVariable int phoneNumber, HttpServletRequest httpServletRequest){
+        return userService.getMaxPaidFromSubscriber(phoneNumber, httpServletRequest);
     }
 
     //A client should be able to see the AVERAGE and max amount of money payed for a subscriber for a defined period of time
     //TODO - define the time period
     @GetMapping("user/reports/average/{phoneNumber}")
-    public HashMap<String, Double> getAveragePayedFromSubscriber(@PathVariable int phoneNumber, HttpServletRequest httpServletRequest){
-        return userService.getAveragePayedFromSubscriber(phoneNumber, httpServletRequest);
+    public HashMap<String, Double> getAveragePaidFromSubscriber(@PathVariable int phoneNumber, HttpServletRequest httpServletRequest){
+        return userService.getAveragePaidFromSubscriber(phoneNumber, httpServletRequest);
     }
 
     //A client should be able to see a list of the services the client( I think subscriber) has paid for
@@ -85,8 +85,8 @@ public class UserController {
 
     //Client can see report - Top 10 subscribers with the biggest amount of money paid.
     @GetMapping("user/reports/10biggest-amounts")
-    public List<Subscriber> getBiggestAmountsPayedBySubscribers(HttpServletRequest httpServletRequest){
-        return userService.getBiggestAmountsPayedBySubscribers(httpServletRequest);
+    public List<Subscriber> getBiggestAmountsPaidBySubscribers(HttpServletRequest httpServletRequest){
+        return userService.getBiggestAmountsPaidBySubscribers(httpServletRequest);
     }
 
 }

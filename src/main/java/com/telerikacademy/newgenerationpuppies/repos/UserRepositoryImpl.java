@@ -103,6 +103,7 @@ public class UserRepositoryImpl implements UserRepository {
     //gets info about a particular subscriber - client of the logged in bank, based on his phone number passed in the URL
     //the parameter int phoneNumber is passed via PostMan as parameter, not as JS object
     //URL - localhost:8080/api/user/info/{phoneNumber}
+    //DONE
     @Override
     public HashMap<String, String> getSubscriberInfo(int phoneNumber, HttpServletRequest httpServletRequest) {
         Session session = sessionFactory.openSession();
@@ -133,6 +134,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     //gets top 10 paid bills from ALL subscribers of the logged in bank, based on the date ot payment in descending order
     // URL - localhost:8080/api/user/payments
+    //DONE
     @Override
     public List<Bill> getAllPayments(HttpServletRequest httpServletRequest) {
         Session session = sessionFactory.openSession();
@@ -146,7 +148,7 @@ public class UserRepositoryImpl implements UserRepository {
                 .getSubject();
 
         list = session.createQuery("from Bill b where b.payDate != null AND " +
-                "b.subscriber.user.userName =:nameOfBank order by payDate desc ")
+                "b.subscriber.user.userName =:nameOfBank order by payDate asc ")
                 .setParameter("nameOfBank", nameOfBank)
                 .setMaxResults(10).list();
         session.getTransaction().commit();
@@ -156,6 +158,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     //gets the maximum sum paid from a subscriber for e defined period ot time
     //URL - localhost:8080/api/user/reports/max/{phoneNumber}
+    //DONE
     @Override
     public Bill getMaxPaidFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest) {
         Session session = sessionFactory.openSession();
@@ -217,23 +220,18 @@ public class UserRepositoryImpl implements UserRepository {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         List<Subscriber> list = new ArrayList<>();
-
+        HashMap<String, Double> hash = new HashMap<>();
         String token = httpServletRequest.getHeader("Authorization");
         String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
                 .build()
                 .verify(token.replace("Bearer ", ""))
                 .getSubject();
 
-
-
-
-        list = session.createQuery("select b.subscriber.phoneNumber, s.firstName, s.lastName, sum(b.amount) from Subscriber s" +
+        list = session.createQuery("select s.firstName, s.lastName, b.subscriber.phoneNumber, sum(b.amount) from Subscriber s" +
                 " inner join Bill b on s.phoneNumber=b.subscriber.phoneNumber where" +
                 " b.payDate != null AND b.subscriber.user.userName =:nameOfBank" +
                 " group by b.subscriber.phoneNumber, s.firstName, s.lastName" +
                 " order by sum(b.amount) desc ").setParameter("nameOfBank", nameOfBank).setMaxResults(10).list();
-
-
 
 
         session.getTransaction().commit();

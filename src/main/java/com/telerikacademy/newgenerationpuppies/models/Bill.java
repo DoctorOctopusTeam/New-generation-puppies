@@ -34,7 +34,7 @@ public class  Bill {
 
     @ManyToOne
     @JoinColumn(name = "phoneNumber")
-    @JsonIgnoreProperties({"bills"})
+    @JsonIgnoreProperties({"bills", "user"})
     private Subscriber subscriber;
 
     public Bill(){
