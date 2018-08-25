@@ -78,9 +78,10 @@ public class UserController {
 
     //Clients must have access to bill payment module where they can pay a particular bill (or selected list of bills)
     // for their subscribers
-    @PutMapping("user/pay")
-    public Bill payBill(){
-        return null;
+    //DONE
+    @PutMapping("user/pay/{id}")
+    public Bill payBill(@PathVariable int id, HttpServletRequest httpServletRequest){
+        return userService.payBill(id, httpServletRequest);
     }
 
     //Client can see report - Top 10 subscribers with the biggest amount of money paid.

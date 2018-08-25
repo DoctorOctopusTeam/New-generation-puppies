@@ -75,18 +75,7 @@ public class UserRepositoryImpl implements UserRepository {
 //        return u;
 //    }
 //
-//    @Override
-//    public Bill payBill(int id) {
-//        Session session = sessionFactory.openSession();
-//        session.beginTransaction();
-//        Bill bill = session.get(Bill.class, id);
-//        //bill.setPayDate(null);
-//        bill.setPayDate(new Date());
-//        session.update(bill);
-//        session.getTransaction().commit();
-//        session.close();
-//        return bill;
-//    }
+//
 //    @Override
 //    public User test(){
 //        Session session = sessionFactory.openSession();
@@ -238,5 +227,30 @@ public class UserRepositoryImpl implements UserRepository {
         session.close();
 
         return list;
+    }
+    //user pays a particular subscriber's bill chosen by the bill's id
+    //URL - localhost:8080/api/user/pay/{id}
+    //DONE
+    @Override
+    public Bill payBill(int id, HttpServletRequest httpServletRequest) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Bill bill = new Bill();
+        String token = httpServletRequest.getHeader("Authorization");
+        String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
+                .build()
+                .verify(token.replace("Bearer ", ""))
+                .getSubject();
+        Query query = session.createQuery("from Bill b where b.id=:id AND b.subscriber.user.userName =:nameOfBank")
+                .setParameter("id", id)
+                .setParameter("nameOfBank", nameOfBank);
+
+        bill = (Bill)query.getSingleResult();
+
+        bill.setPayDate(new Date());
+        session.update(bill);
+        session.getTransaction().commit();
+        session.close();
+        return bill;
     }
 }

@@ -70,4 +70,9 @@ public class UserServiceImpl implements UserService {
     public List<Subscriber> getBiggestAmountsPaidBySubscribers(HttpServletRequest httpServletRequest) {
         return userRepository.getBiggestAmountsPaidBySubscribers(httpServletRequest);
     }
+
+    @Override
+    public Bill payBill(int id, HttpServletRequest httpServletRequest) {
+        return userRepository.payBill(id, httpServletRequest);
+    }
 }
