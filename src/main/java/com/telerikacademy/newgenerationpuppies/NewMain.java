@@ -92,7 +92,7 @@ public class NewMain {
         for (int i = 0; i < testUser2.getSubscribers().size(); i++){
             System.out.println(testUser1.getSubscribers().get(i).getPhoneNumber());
         }
-        User user = ses.get(User.class,"Ktb-20");
+        User user = ses.get(User.class,"BurkanBank");
         user.setPassword("novaparola");
 
 //        System.out.println(ses.get(Bill.class, 3).getPayDate().toString());

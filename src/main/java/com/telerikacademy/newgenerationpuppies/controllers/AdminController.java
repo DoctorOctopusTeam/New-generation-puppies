@@ -63,7 +63,7 @@ public class AdminController {
             return "There is a mismatch between the password and the repeat password fields!";
         }
         String newEncryptedPassword = bCryptPasswordEncoder.encode(newPassword);
-        return adminRepository.changePassword(user, newEncryptedPassword);
+        return adminRepository.changePassword(newEncryptedPassword, nameOfBank);
 
     }
 

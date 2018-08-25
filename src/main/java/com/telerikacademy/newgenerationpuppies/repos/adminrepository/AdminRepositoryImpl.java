@@ -36,14 +36,14 @@ public class AdminRepositoryImpl implements AdminRepository {
     }
 
     @Override
-    public String changePassword(User user, String newPassword) {
+    public String changePassword(String newPassword, String name) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        String oldPass = user.getPassword();
+        User user = session.get(User.class, name);
         user.setPassword(newPassword);
         session.getTransaction().commit();
         session.close();
-        return null;
+        return "Ok";
     }
 
     @Override
