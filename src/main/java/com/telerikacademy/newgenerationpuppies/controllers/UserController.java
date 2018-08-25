@@ -85,7 +85,7 @@ public class UserController {
 
     //Client can see report - Top 10 subscribers with the biggest amount of money paid.
     @GetMapping("user/reports/10biggest-amounts")
-    public HashMap<Subscriber, Double> getBiggestAmountsPayedBySubscribers(HttpServletRequest httpServletRequest){
+    public List<Subscriber> getBiggestAmountsPayedBySubscribers(HttpServletRequest httpServletRequest){
         return userService.getBiggestAmountsPayedBySubscribers(httpServletRequest);
     }
 

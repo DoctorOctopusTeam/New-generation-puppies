@@ -57,17 +57,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Bill getMaxPayedFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest) {
-        return userRepository.getMaxPayedFromSubscriber(phoneNumber, httpServletRequest);
+    public Bill getMaxPaidFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest) {
+        return userRepository.getMaxPaidFromSubscriber(phoneNumber, httpServletRequest);
     }
 
     @Override
-    public HashMap<String, Double> getAveragePayedFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest) {
-        return userRepository.getAveragePayedFromSubscriber(phoneNumber, httpServletRequest);
+    public HashMap<String, Double> getAveragePaidFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest) {
+        return userRepository.getAveragePaidFromSubscriber(phoneNumber, httpServletRequest);
     }
 
     @Override
-    public HashMap<Subscriber, Double> getBiggestAmountsPayedBySubscribers(HttpServletRequest httpServletRequest) {
-        return userRepository.getBiggestAmountsPayedBySubscribers(httpServletRequest);
+    public List<Subscriber> getBiggestAmountsPaidBySubscribers(HttpServletRequest httpServletRequest) {
+        return userRepository.getBiggestAmountsPaidBySubscribers(httpServletRequest);
     }
 }

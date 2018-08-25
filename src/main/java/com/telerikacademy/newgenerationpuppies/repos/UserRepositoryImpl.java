@@ -157,7 +157,7 @@ public class UserRepositoryImpl implements UserRepository {
     //gets the maximum sum paid from a subscriber for e defined period ot time
     //URL - localhost:8080/api/user/reports/max/{phoneNumber}
     @Override
-    public Bill getMaxPayedFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest) {
+    public Bill getMaxPaidFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         List<Bill> bills = new ArrayList<>();
@@ -184,8 +184,9 @@ public class UserRepositoryImpl implements UserRepository {
 
     //gets the average sum paid from a customer for a defined period ot time
     //URL - localhost:8080/api/user/reports/average/{phoneNumber}
+    //DONE
     @Override
-    public HashMap<String, Double> getAveragePayedFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest) {
+    public HashMap<String, Double> getAveragePaidFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Double averageSum = 0d;
@@ -212,10 +213,10 @@ public class UserRepositoryImpl implements UserRepository {
     //gets the top ten subscribers based on the paid sums for services
     //URL - localhost:8080/api/user/reports/10biggest-amounts
     @Override
-    public HashMap<Subscriber, Double> getBiggestAmountsPayedBySubscribers(HttpServletRequest httpServletRequest) {
+    public List<Subscriber> getBiggestAmountsPaidBySubscribers(HttpServletRequest httpServletRequest) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        HashMap<Subscriber, Double> list = new HashMap<>();
+        List<Subscriber> list = new ArrayList<>();
 
         String token = httpServletRequest.getHeader("Authorization");
         String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
@@ -223,9 +224,16 @@ public class UserRepositoryImpl implements UserRepository {
                 .verify(token.replace("Bearer ", ""))
                 .getSubject();
 
-        Query query = session.createQuery("select sum(b.amount) from Bill b where b.subscriber.phoneNumber");
-        double a = (double)query.getSingleResult();
-        System.out.println(a);
+
+
+
+        list = session.createQuery("select b.subscriber.phoneNumber, s.firstName, s.lastName, sum(b.amount) from Subscriber s" +
+                " inner join Bill b on s.phoneNumber=b.subscriber.phoneNumber where" +
+                " b.payDate != null AND b.subscriber.user.userName =:nameOfBank" +
+                " group by b.subscriber.phoneNumber, s.firstName, s.lastName" +
+                " order by sum(b.amount) desc ").setParameter("nameOfBank", nameOfBank).setMaxResults(10).list();
+
+
 
 
         session.getTransaction().commit();
