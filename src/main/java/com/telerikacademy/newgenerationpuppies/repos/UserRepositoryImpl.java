@@ -2,8 +2,7 @@ package com.telerikacademy.newgenerationpuppies.repos;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.telerikacademy.newgenerationpuppies.dtomodels.DTOUser;
+
 import com.telerikacademy.newgenerationpuppies.models.Authority;
 import com.telerikacademy.newgenerationpuppies.models.Bill;
 import com.telerikacademy.newgenerationpuppies.models.Subscriber;
@@ -11,7 +10,6 @@ import com.telerikacademy.newgenerationpuppies.models.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -45,6 +43,10 @@ public class UserRepositoryImpl implements UserRepository {
     public Object listUser(){
         Session session = sessionFactory.openSession();
         session.beginTransaction();
+        //User user = session.get(User.class, "Ktb-10");
+        //Subscriber subscriber = session.get(Subscriber.class, 878002);
+        //Bill bill = session.get(Bill.class, 6);
+        Authority authority = session.get(Authority.class, "fib");
 
         //List<User> list = session.createQuery("from User u where u.userName='Ktb-10' ").list();
         //List<Subscriber> list = session.createQuery("from Subscriber s where s.phoneNumber = 878002 ").list();
@@ -54,10 +56,10 @@ public class UserRepositoryImpl implements UserRepository {
         //List<User> list = session.createQuery("from User u ").list();
         //List<Subscriber> list = session.createQuery("from Subscriber ").list();
         //List<Bill> list = session.createQuery("from Bill ").list();
-        List<Authority> list = session.createQuery("from Authority ").list();
+        //List<Authority> list = session.createQuery("from Authority ").list();
         session.getTransaction().commit();
         session.close();
-        return list;//.get(0);
+        return authority;//bill;//subscriber;//user;//list;//.get(0);
     }
 
     @Override

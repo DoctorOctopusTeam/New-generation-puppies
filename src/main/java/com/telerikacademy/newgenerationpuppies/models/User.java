@@ -30,8 +30,8 @@ public class User {
     @Column(name = "role")
     private String role;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    @JsonIgnoreProperties({"user"})
+    @OneToMany(mappedBy = "user")
+    @JsonIgnoreProperties({"user", "bills"})
     private List<Subscriber> subscribers;
 
     @OneToOne

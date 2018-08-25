@@ -25,10 +25,11 @@ public class Subscriber {
 
     @ManyToOne
     @JoinColumn(name = "userName")
-    @JsonIgnore
+    //@JsonIgnore
+    @JsonIgnoreProperties({"subscribers"})
     private User user;
 
-    @OneToMany(mappedBy = "subscriber", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "subscriber")
     @JsonIgnoreProperties("subscriber")
     private List<Bill> bills;
 
