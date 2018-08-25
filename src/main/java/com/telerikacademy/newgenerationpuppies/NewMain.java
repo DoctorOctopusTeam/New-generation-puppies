@@ -92,6 +92,8 @@ public class NewMain {
         for (int i = 0; i < testUser2.getSubscribers().size(); i++){
             System.out.println(testUser1.getSubscribers().get(i).getPhoneNumber());
         }
+        User user = ses.get(User.class,"Ktb-20");
+        user.setPassword("novaparola");
 
 //        System.out.println(ses.get(Bill.class, 3).getPayDate().toString());
 //        System.out.println(testUser1.getAuthority().getAuthority() + "----------------");

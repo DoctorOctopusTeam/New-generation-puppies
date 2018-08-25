@@ -6,7 +6,9 @@ public interface AdminRepository {
 
     String saveUser(User user, String role);
 
-    String changePassword();
+    String changePassword(User user, String newPassword);
+
+    User findUser(String nameOfAdmin);
 
 
 

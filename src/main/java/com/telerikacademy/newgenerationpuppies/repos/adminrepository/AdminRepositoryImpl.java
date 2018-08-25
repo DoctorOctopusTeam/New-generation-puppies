@@ -20,10 +20,6 @@ public class AdminRepositoryImpl implements AdminRepository {
             .addAnnotatedClass(Authority.class)
             .buildSessionFactory();
 
-
-
-
-
     @Override
     public String saveUser(User user, String role) {
         Session session = sessionFactory.openSession();
@@ -36,11 +32,25 @@ public class AdminRepositoryImpl implements AdminRepository {
         session.getTransaction().commit();
         session.close();
         return "User " + user.getUserName() + " with authority "
-                + user.getAuthority() + "created!";
+                + authority.getAuthority() + " created!";
     }
 
     @Override
-    public String changePassword() {
+    public String changePassword(User user, String newPassword) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        String oldPass = user.getPassword();
+        user.setPassword(newPassword);
+        session.getTransaction().commit();
+        session.close();
         return null;
+    }
+
+    @Override
+    public User findUser(String nameOfAdmin) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        User user = session.get(User.class, nameOfAdmin);
+        return user;
     }
 }
