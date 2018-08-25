@@ -2,9 +2,6 @@ package com.telerikacademy.newgenerationpuppies.service;
 
 import com.telerikacademy.newgenerationpuppies.models.Bill;
 import com.telerikacademy.newgenerationpuppies.models.Subscriber;
-import com.telerikacademy.newgenerationpuppies.models.User;
-import com.telerikacademy.newgenerationpuppies.repos.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,5 +30,5 @@ public interface UserService {
 
     public HashMap<String, Double> getAveragePayedFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest);
 
-    List<Subscriber> getBiggestAmountsPayedBySubscribers(HttpServletRequest httpServletRequest);
+    HashMap<Subscriber, Double> getBiggestAmountsPayedBySubscribers(HttpServletRequest httpServletRequest);
 }

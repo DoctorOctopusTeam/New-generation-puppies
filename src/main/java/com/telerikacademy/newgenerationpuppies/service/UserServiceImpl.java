@@ -2,7 +2,6 @@ package com.telerikacademy.newgenerationpuppies.service;
 
 import com.telerikacademy.newgenerationpuppies.models.Bill;
 import com.telerikacademy.newgenerationpuppies.models.Subscriber;
-import com.telerikacademy.newgenerationpuppies.models.User;
 import com.telerikacademy.newgenerationpuppies.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,7 +67,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Subscriber> getBiggestAmountsPayedBySubscribers(HttpServletRequest httpServletRequest) {
+    public HashMap<Subscriber, Double> getBiggestAmountsPayedBySubscribers(HttpServletRequest httpServletRequest) {
         return userRepository.getBiggestAmountsPayedBySubscribers(httpServletRequest);
     }
 }

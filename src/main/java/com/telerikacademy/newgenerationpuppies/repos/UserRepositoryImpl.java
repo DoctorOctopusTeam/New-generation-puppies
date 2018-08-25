@@ -131,7 +131,7 @@ public class UserRepositoryImpl implements UserRepository {
         return hash;
     }
 
-    //gets top 10 payed bills from ALL subscribers of the logged in bank, based on the date ot payment in descending order
+    //gets top 10 paid bills from ALL subscribers of the logged in bank, based on the date ot payment in descending order
     // URL - localhost:8080/api/user/payments
     @Override
     public List<Bill> getAllPayments(HttpServletRequest httpServletRequest) {
@@ -154,7 +154,7 @@ public class UserRepositoryImpl implements UserRepository {
         return list;
     }
 
-    //gets the maximum sum payed from a subscriber for e defined period ot time
+    //gets the maximum sum paid from a subscriber for e defined period ot time
     //URL - localhost:8080/api/user/reports/max/{phoneNumber}
     @Override
     public Bill getMaxPayedFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest) {
@@ -182,7 +182,7 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
-    //gets the average sum payed from a customer for a defined period ot time
+    //gets the average sum paid from a customer for a defined period ot time
     //URL - localhost:8080/api/user/reports/average/{phoneNumber}
     @Override
     public HashMap<String, Double> getAveragePayedFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest) {
@@ -209,13 +209,13 @@ public class UserRepositoryImpl implements UserRepository {
         return hash;
     }
 
-    //gets the top ten subscribers based on the payed sums for services
+    //gets the top ten subscribers based on the paid sums for services
     //URL - localhost:8080/api/user/reports/10biggest-amounts
     @Override
-    public List<Subscriber> getBiggestAmountsPayedBySubscribers(HttpServletRequest httpServletRequest) {
+    public HashMap<Subscriber, Double> getBiggestAmountsPayedBySubscribers(HttpServletRequest httpServletRequest) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        List<Subscriber> list = new ArrayList<>();
+        HashMap<Subscriber, Double> list = new HashMap<>();
 
         String token = httpServletRequest.getHeader("Authorization");
         String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
@@ -223,9 +223,9 @@ public class UserRepositoryImpl implements UserRepository {
                 .verify(token.replace("Bearer ", ""))
                 .getSubject();
 
-        Query query = session.createQuery("select from Bill b where b.payDate != null AND " +
-                "b.subscriber.user.userName =:nameOfBank AND b.subscriber.phoneNumber =:phoneNumber")
-                .setParameter("nameOfBank", nameOfBank);
+        Query query = session.createQuery("select sum(b.amount) from Bill b where b.subscriber.phoneNumber");
+        double a = (double)query.getSingleResult();
+        System.out.println(a);
 
 
         session.getTransaction().commit();
