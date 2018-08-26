@@ -2,6 +2,7 @@ package com.telerikacademy.newgenerationpuppies.repos;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.telerikacademy.newgenerationpuppies.DTO.TopTenDTO;
 import com.telerikacademy.newgenerationpuppies.models.Authority;
 import com.telerikacademy.newgenerationpuppies.models.Bill;
 import com.telerikacademy.newgenerationpuppies.models.Subscriber;
@@ -204,19 +205,19 @@ public class UserRepositoryImpl implements UserRepository {
 
     //gets the top ten subscribers based on the paid sums for services
     //URL - localhost:8080/api/user/reports/10biggest-amounts
+    //DONE
     @Override
-    public List<Subscriber> getBiggestAmountsPaidBySubscribers(HttpServletRequest httpServletRequest) {
+    public List<TopTenDTO> getBiggestAmountsPaidBySubscribers(HttpServletRequest httpServletRequest) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        List<Subscriber> list = new ArrayList<>();
-        HashMap<String, Double> hash = new HashMap<>();
+        List<TopTenDTO> topTenDTO = new ArrayList<>();
         String token = httpServletRequest.getHeader("Authorization");
         String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
                 .build()
                 .verify(token.replace("Bearer ", ""))
                 .getSubject();
 
-        list = session.createQuery("select s.firstName, s.lastName, b.subscriber.phoneNumber, sum(b.amount) from Subscriber s" +
+        topTenDTO = session.createQuery("select s.firstName, s.lastName, b.subscriber.phoneNumber, sum(b.amount) from Subscriber s" +
                 " inner join Bill b on s.phoneNumber=b.subscriber.phoneNumber where" +
                 " b.payDate != null AND b.subscriber.user.userName =:nameOfBank" +
                 " group by b.subscriber.phoneNumber, s.firstName, s.lastName" +
@@ -226,7 +227,7 @@ public class UserRepositoryImpl implements UserRepository {
         session.getTransaction().commit();
         session.close();
 
-        return list;
+        return topTenDTO;
     }
     //user pays a particular subscriber's bill chosen by the bill's id
     //URL - localhost:8080/api/user/pay/{id}

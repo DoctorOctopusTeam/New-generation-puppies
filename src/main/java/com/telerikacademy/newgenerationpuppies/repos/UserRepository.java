@@ -1,7 +1,7 @@
 package com.telerikacademy.newgenerationpuppies.repos;
 
+import com.telerikacademy.newgenerationpuppies.DTO.TopTenDTO;
 import com.telerikacademy.newgenerationpuppies.models.Bill;
-import com.telerikacademy.newgenerationpuppies.models.Subscriber;
 import com.telerikacademy.newgenerationpuppies.models.User;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +30,7 @@ public interface UserRepository {
 
     public HashMap<String, Double> getAveragePaidFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest);
 
-    List<Subscriber> getBiggestAmountsPaidBySubscribers(HttpServletRequest httpServletRequest);
+    List<TopTenDTO> getBiggestAmountsPaidBySubscribers(HttpServletRequest httpServletRequest);
 
     Bill payBill(int id, HttpServletRequest httpServletRequest);
 }

@@ -1,5 +1,6 @@
 package com.telerikacademy.newgenerationpuppies.controllers;
 
+import com.telerikacademy.newgenerationpuppies.DTO.TopTenDTO;
 import com.telerikacademy.newgenerationpuppies.models.Bill;
 import com.telerikacademy.newgenerationpuppies.models.Subscriber;
 import com.telerikacademy.newgenerationpuppies.models.User;
@@ -85,8 +86,9 @@ public class UserController {
     }
 
     //Client can see report - Top 10 subscribers with the biggest amount of money paid.
+    //DONE
     @GetMapping("user/reports/10biggest-amounts")
-    public List<Subscriber> getBiggestAmountsPaidBySubscribers(HttpServletRequest httpServletRequest){
+    public List<TopTenDTO> getBiggestAmountsPaidBySubscribers(HttpServletRequest httpServletRequest){
         return userService.getBiggestAmountsPaidBySubscribers(httpServletRequest);
     }
 

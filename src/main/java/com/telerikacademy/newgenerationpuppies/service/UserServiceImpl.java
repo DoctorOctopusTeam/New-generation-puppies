@@ -1,5 +1,6 @@
 package com.telerikacademy.newgenerationpuppies.service;
 
+import com.telerikacademy.newgenerationpuppies.DTO.TopTenDTO;
 import com.telerikacademy.newgenerationpuppies.models.Bill;
 import com.telerikacademy.newgenerationpuppies.models.Subscriber;
 import com.telerikacademy.newgenerationpuppies.repos.UserRepository;
@@ -67,7 +68,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Subscriber> getBiggestAmountsPaidBySubscribers(HttpServletRequest httpServletRequest) {
+    public List<TopTenDTO> getBiggestAmountsPaidBySubscribers(HttpServletRequest httpServletRequest) {
         return userRepository.getBiggestAmountsPaidBySubscribers(httpServletRequest);
     }
 
