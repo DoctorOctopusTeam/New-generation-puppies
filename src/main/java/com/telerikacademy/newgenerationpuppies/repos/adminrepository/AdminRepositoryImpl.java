@@ -9,7 +9,9 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.springframework.stereotype.Repository;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class AdminRepositoryImpl implements AdminRepository {
@@ -64,7 +66,7 @@ public class AdminRepositoryImpl implements AdminRepository {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         String role = "ROLE_" + auth.toUpperCase();
-        List<User>list = session.createQuery("from User u " +
+        List<User>list = session.createQuery("from User u" +
                 "where u.authority.authority= :x")
                 .setParameter("x",role).list();
         session.getTransaction().commit();
@@ -72,5 +74,29 @@ public class AdminRepositoryImpl implements AdminRepository {
         return list;
     }
 
-    
+    @Override
+    public String updateCredentialsForClient(String userName, User user) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        if(!userName.equals(user.getUserName())){
+            session.createQuery("update User u set u.userName= :x " +
+                    "where u.userName= :y")
+                    .setParameter("x", user.getUserName())
+                    .setParameter("y", userName).executeUpdate();
+            session.getTransaction().commit();
+            session.beginTransaction();
+        }
+        User actualUser = session.get(User.class, user.getUserName());
+        actualUser.setPassword(user.getPassword());
+        actualUser.setEnabled(user.getEnabled());
+        actualUser.setDetails(user.getDetails());
+        actualUser.setEIK(user.getEIK());
+        actualUser.setEmail(user.getEmail());
+        session.save(actualUser);
+        session.getTransaction().commit();
+        session.close();
+        return "User updated";
+    }
+
+
 }

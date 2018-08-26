@@ -7,11 +7,13 @@ import com.telerikacademy.newgenerationpuppies.repos.UserRepository;
 import com.telerikacademy.newgenerationpuppies.repos.adminrepository.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/admin")
@@ -71,6 +73,18 @@ public class AdminController {
     @PreAuthorize(value = "hasAnyAuthority('ROLE_ADMIN')")
     public List<User> listAll(@PathVariable String role){
         return adminRepository.listAll(role);
+    }
+
+    @PutMapping("/updatecreds")
+    @PreAuthorize(value = "hasAnyAuthority('ROLE_ADMIN')")
+    public String updateClient(@RequestParam String userName, @RequestBody User user){
+
+        if(userName == null)return "No user specified!";
+        User currentStateOfUser = adminRepository.findUser(userName);
+        if(currentStateOfUser == null) return "No such user!";
+        if(user.getPassword() != null) user.setPassword(bCryptPasswordEncoder
+        .encode(user.getPassword()));
+        return adminRepository.updateCredentialsForClient(userName, user);
     }
 
 }

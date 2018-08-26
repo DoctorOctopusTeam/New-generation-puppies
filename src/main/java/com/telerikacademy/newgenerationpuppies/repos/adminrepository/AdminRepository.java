@@ -3,6 +3,7 @@ package com.telerikacademy.newgenerationpuppies.repos.adminrepository;
 import com.telerikacademy.newgenerationpuppies.models.User;
 
 import java.util.List;
+import java.util.Map;
 
 public interface AdminRepository {
 
@@ -13,6 +14,8 @@ public interface AdminRepository {
     User findUser(String nameOfAdmin);
 
     List<User> listAll(String role);
+
+    String updateCredentialsForClient(String userName, User user);
 
 
 
