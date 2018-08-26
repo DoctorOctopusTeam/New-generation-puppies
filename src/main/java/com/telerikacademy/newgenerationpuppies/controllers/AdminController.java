@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
@@ -57,14 +58,19 @@ public class AdminController {
         String oldOne = user.getPassword();
         boolean isTrue = bCryptPasswordEncoder.matches(oldPassword, oldOne);
         if(!isTrue){
-            return "Your current password is different than what you have entered!";
+            return "Your current password is different than the one you have entered!";
         }
         if(!newPassword.equals(repeatNewPassword)){
-            return "There is a mismatch between the password and the repeat password fields!";
+            return "There is a mismatch between the password and the repeatpassword fields!";
         }
         String newEncryptedPassword = bCryptPasswordEncoder.encode(newPassword);
         return adminRepository.changePassword(newEncryptedPassword, nameOfBank);
+    }
 
+    @GetMapping("/listall/{role}")
+    @PreAuthorize(value = "hasAnyAuthority('ROLE_ADMIN')")
+    public List<User> listAll(@PathVariable String role){
+        return adminRepository.listAll(role);
     }
 
 }

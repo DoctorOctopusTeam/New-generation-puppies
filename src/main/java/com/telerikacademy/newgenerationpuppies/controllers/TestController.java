@@ -8,7 +8,10 @@ import com.telerikacademy.newgenerationpuppies.models.User;
 import com.telerikacademy.newgenerationpuppies.repos.UserRepository;
 import com.telerikacademy.newgenerationpuppies.repos.UserRepositoryImpl;
 import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.BeanUtils;
 
@@ -20,6 +23,9 @@ import java.util.Map;
 @RequestMapping("/test")
 public class TestController {
     private UserRepositoryImpl userRepositoryImpl;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public TestController(UserRepositoryImpl userRepository){
         this.userRepositoryImpl = userRepository;
@@ -57,7 +63,7 @@ public class TestController {
     }
 
     @GetMapping("/h")
-    public List<Map<String, String>> history(HttpServletRequest httpServletRequest){
+    public String history(HttpServletRequest httpServletRequest){
         return userRepositoryImpl.history(httpServletRequest);
     }
 
@@ -68,6 +74,7 @@ public class TestController {
 
     @GetMapping("/listentity")
     public Object listEntity(){
+
         return userRepositoryImpl.listUser();
     }
 

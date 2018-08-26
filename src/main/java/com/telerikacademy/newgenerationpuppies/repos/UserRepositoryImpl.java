@@ -116,28 +116,9 @@ public class UserRepositoryImpl implements UserRepository {
         return nameOfBank + httpServletRequest.isUserInRole("ROLE_ADMIN");
     }
 
-    public List<Map<String, String>> history(HttpServletRequest request){
-        List<Map<String, String>> list = new ArrayList<>();
-        String token = request.getHeader("Authorization");
-        String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
-                .build()
-                .verify(token.replace("Bearer ", ""))
-                .getSubject();
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        List<Bill> payedBills =
-                session.createQuery("from Bill b " +
-                        "where b.payDate != null " +
-                        "and b.subscriber.user.userName = :x ")
-                        .setParameter("x", nameOfBank).list();
-        for (int i = 0; i < payedBills.size(); i++){
-            list.add(new HashMap<String, String>());
-            list.get(i).put("valutata", payedBills.get(i).getCurrency());
-            list.get(i).put("uslugata", payedBills.get(i).getService());
-            list.get(i).put("dali e platena maika mu da eba", payedBills.get(i).getPayDate().toString());
-            list.get(i).put("suma", String.valueOf(payedBills.get(i).getAmount()));
-        }
-        return list;
+    public String history(HttpServletRequest request){
+
+        return "";
     }
 
 

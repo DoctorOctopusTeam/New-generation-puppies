@@ -62,6 +62,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withExpiresAt(new Date(System.currentTimeMillis() + 864_000_000))
                 .sign(HMAC512("SecretKeyToGenJWTs".getBytes()));
         httpServletResponse.addHeader("Authorization", "Bearer " + token);
+        httpServletResponse.addHeader("Warning!", "Change your password often!");
     }
 
 }

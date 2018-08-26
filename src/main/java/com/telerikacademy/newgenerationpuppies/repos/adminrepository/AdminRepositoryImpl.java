@@ -9,6 +9,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class AdminRepositoryImpl implements AdminRepository {
 
@@ -43,14 +45,32 @@ public class AdminRepositoryImpl implements AdminRepository {
         user.setPassword(newPassword);
         session.getTransaction().commit();
         session.close();
-        return "Ok";
+        return "Password has been change!";
     }
 
     @Override
     public User findUser(String nameOfAdmin) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
+        System.out.println();
         User user = session.get(User.class, nameOfAdmin);
+        session.getTransaction().commit();
+        session.close();
         return user;
     }
+
+    @Override
+    public List<User> listAll(String auth) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        String role = "ROLE_" + auth.toUpperCase();
+        List<User>list = session.createQuery("from User u " +
+                "where u.authority.authority= :x")
+                .setParameter("x",role).list();
+        session.getTransaction().commit();
+        session.close();
+        return list;
+    }
+
+    
 }
