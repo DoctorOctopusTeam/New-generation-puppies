@@ -76,4 +76,9 @@ public class UserServiceImpl implements UserService {
     public Bill payBill(int id, HttpServletRequest httpServletRequest) {
         return userRepository.payBill(id, httpServletRequest);
     }
+
+    @Override
+    public List<String> usedServicesFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest) {
+        return userRepository.usedServicesFromSubscriber(phoneNumber, httpServletRequest);
+    }
 }

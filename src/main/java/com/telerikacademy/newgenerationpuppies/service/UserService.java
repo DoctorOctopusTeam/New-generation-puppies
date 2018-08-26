@@ -34,4 +34,6 @@ public interface UserService {
     HashMap<String, TopTenDTO> getBiggestAmountsPaidBySubscribers(HttpServletRequest httpServletRequest);
 
     Bill payBill(int id, HttpServletRequest httpServletRequest);
+
+    List<String> usedServicesFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest);
 }

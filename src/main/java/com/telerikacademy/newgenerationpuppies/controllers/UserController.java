@@ -72,9 +72,10 @@ public class UserController {
     }
 
     //A client should be able to see a list of the services the client( I think subscriber) has paid for
+    //DONE
     @GetMapping("user/services/{phoneNumber}")
     public List<String> usedServicesFromSubscriber(@PathVariable int phoneNumber, HttpServletRequest httpServletRequest){
-        return null;
+        return userService.usedServicesFromSubscriber(phoneNumber, httpServletRequest);
     }
 
     //Clients must have access to bill payment module where they can pay a particular bill (or selected list of bills)

@@ -259,4 +259,28 @@ public class UserRepositoryImpl implements UserRepository {
         session.close();
         return bill;
     }
+
+    //gets info about all the services particular subscriber uses
+    //URL - localhost:8080/api/user/services/{phoneNumber}
+    //DONE
+    @Override
+    public List<String> usedServicesFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        List<String> list = new ArrayList<>();
+
+        String token = httpServletRequest.getHeader("Authorization");
+        String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
+                .build()
+                .verify(token.replace("Bearer ", ""))
+                .getSubject();
+
+        list = session.createQuery("select b.service from Bill b where b.subscriber.user.userName =:nameOfBank " +
+                "AND b.subscriber.phoneNumber =:phoneNumber order by payDate desc ")
+                .setParameter("nameOfBank", nameOfBank)
+                .setParameter("phoneNumber", phoneNumber).list();
+        session.getTransaction().commit();
+        session.close();
+        return list;
+    }
 }

@@ -39,6 +39,8 @@ public class TestController {
 
         return "OK! " + r.getUserPrincipal().getName()+ r.getUserPrincipal();
     }
+
+    
     //--------------------------------------------------
 
 //    @PutMapping("/paybill/{id}")
