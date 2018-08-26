@@ -5,7 +5,7 @@ import com.telerikacademy.newgenerationpuppies.models.Bill;
 import com.telerikacademy.newgenerationpuppies.models.User;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 
@@ -29,7 +29,7 @@ public interface UserRepository {
 
     public Bill getMaxPaidFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest);
 
-    public HashMap<String, Double> getAveragePaidFromSubscriber(int phoneNumber, Date startDate, Date endDate, HttpServletRequest httpServletRequest);
+    public HashMap<String, Double> getAveragePaidFromSubscriber(int phoneNumber, LocalDate startDate, LocalDate endDate, HttpServletRequest httpServletRequest);
 
     HashMap<String, TopTenDTO> getBiggestAmountsPaidBySubscribers(HttpServletRequest httpServletRequest);
 

@@ -3,8 +3,10 @@ package com.telerikacademy.newgenerationpuppies.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Type;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -19,15 +21,13 @@ public class  Bill {
     private String service;
 
     @Column(name = "startDate")
-    @Type(type="date")
-    private Date startDate;
+    private LocalDate startDate;
 
     @Column(name = "endDate")
-    @Type(type="date")
-    private Date endDate;
+    private LocalDate endDate;
 
     @Column(name = "payDate")
-    private Date payDate;
+    private LocalDate payDate;
 
     @Column(name = "amount")
     private double amount;
@@ -56,27 +56,27 @@ public class  Bill {
         this.service = service;
     }
 
-    public Date getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 
-    public Date getPayDate() {
+    public LocalDate getPayDate() {
         return payDate;
     }
 
-    public void setPayDate(Date payDate) {
+    public void setPayDate(LocalDate payDate) {
         this.payDate = payDate;
     }
 

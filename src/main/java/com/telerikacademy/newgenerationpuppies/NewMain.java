@@ -55,17 +55,17 @@ public class NewMain {
         //SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         Subscriber subscriber =ses.get(Subscriber.class,878004);
 
-        for (int i = 1; i <= 5; i++){
-            Bill bill = new Bill();
-            bill.setService("Telefon + " + i);
-            bill.setStartDate(new Date());
-            bill.setEndDate(new Date());
-            bill.setAmount(1000D + i + 200);
-            bill.setCurrency("BGN");
-            bill.setSubscriber(subscriber);
-            ses.save(bill);
-
-        }
+//        for (int i = 1; i <= 5; i++){
+//            Bill bill = new Bill();
+//            bill.setService("Telefon + " + i);
+//            bill.setStartDate(new Date());
+//            bill.setEndDate(new Date());
+//            bill.setAmount(1000D + i + 200);
+//            bill.setCurrency("BGN");
+//            bill.setSubscriber(subscriber);
+//            ses.save(bill);
+//
+//        }
 
 //        Bill bill = ses.get(Bill.class, 3);
 //        Subscriber subscriber = ses.get(Subscriber.class, 878002);

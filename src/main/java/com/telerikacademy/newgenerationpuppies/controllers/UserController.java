@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -65,13 +66,7 @@ public class UserController {
     public Bill getMaxPaidFromSubscriber(@PathVariable int phoneNumber, HttpServletRequest httpServletRequest){
         return userService.getMaxPaidFromSubscriber(phoneNumber, httpServletRequest);
     }
-
-//    //A client should be able to see the AVERAGE and max amount of money payed for a subscriber for a defined period of time
-//    //TODO - define the time period
-//    @GetMapping("user/reports/average/{phoneNumber}")
-//    public HashMap<String, Double> getAveragePaidFromSubscriber(@PathVariable int phoneNumber, HttpServletRequest httpServletRequest){
-//        return userService.getAveragePaidFromSubscriber(phoneNumber, httpServletRequest);
-//    }
+    
 
     //A client should be able to see a list of the services the client( I think subscriber) has paid for
     //DONE
@@ -96,10 +91,11 @@ public class UserController {
     }
 
     //A client should be able to see the AVERAGE and max amount of money payed for a subscriber for a defined period of time
+    //DONE
     @GetMapping("user/reports/average/{phoneNumber}/{startDate}/{endDate}")
     public HashMap<String, Double> getAveragePaidFromSubscriber(@PathVariable int phoneNumber,
-                                                                @PathVariable("startDate") @DateTimeFormat(pattern = "yyyy-mm-dd") Date startDate,
-                                                                @PathVariable ("endDate") @DateTimeFormat(pattern = "yyyy-mm-dd") Date endDate,
+                                                                @PathVariable("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                                                                @PathVariable ("endDate")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
                                                                 HttpServletRequest httpServletRequest){
         return userService.getAveragePaidFromSubscriber(phoneNumber, startDate, endDate, httpServletRequest);
     }

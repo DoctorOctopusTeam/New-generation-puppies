@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.Timestamp;
 import java.util.List;
 
 @RestController
@@ -40,7 +41,14 @@ public class TestController {
         return "OK! " + r.getUserPrincipal().getName()+ r.getUserPrincipal();
     }
 
-    
+    @GetMapping("/four")
+    public String testFour(HttpServletRequest r){
+        Timestamp time = new Timestamp(7);
+        String a = time.toString();
+        return a;
+    }
+
+
     //--------------------------------------------------
 
 //    @PutMapping("/paybill/{id}")

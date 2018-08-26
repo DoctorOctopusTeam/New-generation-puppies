@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 
@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public HashMap<String, Double> getAveragePaidFromSubscriber(int phoneNumber, Date startDate, Date endDate, HttpServletRequest httpServletRequest) {
+    public HashMap<String, Double> getAveragePaidFromSubscriber(int phoneNumber, LocalDate startDate, LocalDate endDate, HttpServletRequest httpServletRequest) {
         return userRepository.getAveragePaidFromSubscriber(phoneNumber, startDate, endDate, httpServletRequest);
     }
 
