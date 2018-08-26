@@ -27,7 +27,7 @@ public interface UserRepository {
 
     List<Bill> getAllPayments(HttpServletRequest httpServletRequest);
 
-    public Bill getMaxPaidFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest);
+    public Bill getMaxPaidFromSubscriber(int phoneNumber, LocalDate startDate, LocalDate endDate, HttpServletRequest httpServletRequest);
 
     public HashMap<String, Double> getAveragePaidFromSubscriber(int phoneNumber, LocalDate startDate, LocalDate endDate, HttpServletRequest httpServletRequest);
 

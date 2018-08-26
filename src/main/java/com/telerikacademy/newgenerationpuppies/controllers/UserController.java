@@ -61,12 +61,15 @@ public class UserController {
     }
 
     //A client should be able to see the average and MAX amount of money paid for a subscriber for a defined period of time
-    //TODO - define the time period
-    @GetMapping("user/reports/max/{phoneNumber}")
-    public Bill getMaxPaidFromSubscriber(@PathVariable int phoneNumber, HttpServletRequest httpServletRequest){
-        return userService.getMaxPaidFromSubscriber(phoneNumber, httpServletRequest);
+    //DONE
+    @GetMapping("user/reports/max/{phoneNumber}/{startDate}/{endDate}")
+    public Bill getMaxPaidFromSubscriber(@PathVariable int phoneNumber,
+                                         @PathVariable("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                                         @PathVariable ("endDate")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+                                         HttpServletRequest httpServletRequest){
+        return userService.getMaxPaidFromSubscriber(phoneNumber, startDate, endDate, httpServletRequest);
     }
-    
+
 
     //A client should be able to see a list of the services the client( I think subscriber) has paid for
     //DONE

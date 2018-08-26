@@ -32,17 +32,6 @@ public class UserRepositoryImpl implements UserRepository {
             .addAnnotatedClass(Authority.class)
             .buildSessionFactory();
 
-
-    //    @Override
-//    public List<User> returnUsers(){
-//        Session session = sessionFactory.openSession();
-//        session.beginTransaction();
-//        List<User> list = session.createQuery("from User ").list();
-//        session.getTransaction().commit();
-//        session.close();
-//        return list;
-//    }
-//
     @Override
     public User findByUsername(String username) {
         Session session = sessionFactory.openSession();
@@ -52,45 +41,6 @@ public class UserRepositoryImpl implements UserRepository {
         session.close();
         return user;
     }
-//
-//    @Override
-//    public void saveUser(User user){
-//        Session session = sessionFactory.openSession();
-//        session.beginTransaction();
-//        session.save(user);
-//
-//        Authority authority = new Authority();
-//        authority.setAuthority(user.getRole());
-//        authority.setUserName(user.getUserName());
-//        session.save(authority);
-//
-//        session.getTransaction().commit();
-//        session.close();
-//    }
-//
-//    @Override
-//    public User giveUserKtb10(){
-//        Session session = sessionFactory.openSession();
-//        session.beginTransaction();
-//        User u = session.get(User.class, "IvanBank");
-//        session.getTransaction().commit();
-//        session.close();
-//        return u;
-//    }
-//
-//
-//    @Override
-//    public User test(){
-//        Session session = sessionFactory.openSession();
-//        session.beginTransaction();
-//        //List<Authority> authority = session.createQuery("from Authority where user='IvanBank'").list();
-//        User user = session.get(User.class, "Ktb-10");
-//        session.getTransaction().commit();
-//        session.close();
-//        return user;
-//    }
-
-    //START
 
     //gets info about a particular subscriber - client of the logged in bank, based on his phone number passed in the URL
     //the parameter int phoneNumber is passed via PostMan as parameter, not as JS object
@@ -150,8 +100,9 @@ public class UserRepositoryImpl implements UserRepository {
 
     //gets the maximum sum paid from a subscriber for e defined period ot time
     //URL - localhost:8080/api/user/reports/max/{phoneNumber}
+    //DONE
     @Override
-    public Bill getMaxPaidFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest) {
+    public Bill getMaxPaidFromSubscriber(int phoneNumber, LocalDate startDate, LocalDate endDate, HttpServletRequest httpServletRequest) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         List<Bill> bills = new ArrayList<>();
@@ -163,9 +114,13 @@ public class UserRepositoryImpl implements UserRepository {
                 .getSubject();
 
         bills = session.createQuery("from Bill b where b.payDate != null AND " +
-                "b.subscriber.user.userName =:nameOfBank AND b.subscriber.phoneNumber =:phoneNumber order by b.amount desc")
+                ("b.subscriber.user.userName =:nameOfBank AND " +
+                        "b.subscriber.phoneNumber =:phoneNumber AND " +
+                        "b.payDate >:startDate AND b.payDate <:endDate order by b.amount desc " ))
                 .setParameter("nameOfBank", nameOfBank)
-                .setParameter("phoneNumber", phoneNumber).list();
+                .setParameter("phoneNumber", phoneNumber)
+                .setParameter("startDate", startDate)
+                .setParameter("endDate", endDate).list();
         session.getTransaction().commit();
         session.close();
         if (bills.size() == 0) {
@@ -273,9 +228,6 @@ public class UserRepositoryImpl implements UserRepository {
                 .build()
                 .verify(token.replace("Bearer ", ""))
                 .getSubject();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-
-        System.out.println(startDate.toString());
 
         Query query = session.createQuery("select round(avg(b.amount), 2) from Bill b where b.payDate != null AND " +
                 ("b.subscriber.user.userName =:nameOfBank AND " +

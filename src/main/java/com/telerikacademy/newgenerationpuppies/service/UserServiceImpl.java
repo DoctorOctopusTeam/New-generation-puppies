@@ -58,8 +58,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Bill getMaxPaidFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest) {
-        return userRepository.getMaxPaidFromSubscriber(phoneNumber, httpServletRequest);
+    public Bill getMaxPaidFromSubscriber(int phoneNumber, LocalDate startDate, LocalDate endDate, HttpServletRequest httpServletRequest) {
+        return userRepository.getMaxPaidFromSubscriber(phoneNumber, startDate, endDate, httpServletRequest);
     }
 
     @Override
