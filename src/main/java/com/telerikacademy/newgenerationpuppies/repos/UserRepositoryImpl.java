@@ -14,8 +14,10 @@ import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -148,7 +150,6 @@ public class UserRepositoryImpl implements UserRepository {
 
     //gets the maximum sum paid from a subscriber for e defined period ot time
     //URL - localhost:8080/api/user/reports/max/{phoneNumber}
-    //DONE
     @Override
     public Bill getMaxPaidFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest) {
         Session session = sessionFactory.openSession();
@@ -175,33 +176,34 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
-    //gets the average sum paid from a customer for a defined period ot time
-    //URL - localhost:8080/api/user/reports/average/{phoneNumber}
-    //DONE
-    @Override
-    public HashMap<String, Double> getAveragePaidFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        Double averageSum = 0d;
-        HashMap<String, Double> hash = new HashMap<>();
 
-        String token = httpServletRequest.getHeader("Authorization");
-        String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
-                .build()
-                .verify(token.replace("Bearer ", ""))
-                .getSubject();
 
-        Query query = session.createQuery("select round(avg(b.amount), 2) from Bill b where b.payDate != null AND " +
-                "b.subscriber.user.userName =:nameOfBank AND b.subscriber.phoneNumber =:phoneNumber")
-                .setParameter("nameOfBank", nameOfBank)
-                .setParameter("phoneNumber", phoneNumber);
-
-        averageSum = (Double) query.getSingleResult();
-        session.getTransaction().commit();
-        session.close();
-        hash.put("Average sum", averageSum);
-        return hash;
-    }
+//    //gets the average sum paid from a customer for a defined period ot time
+//    //URL - localhost:8080/api/user/reports/average/{phoneNumber}
+//    @Override
+//    public HashMap<String, Double> getAveragePaidFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest) {
+//        Session session = sessionFactory.openSession();
+//        session.beginTransaction();
+//        Double averageSum = 0d;
+//        HashMap<String, Double> hash = new HashMap<>();
+//
+//        String token = httpServletRequest.getHeader("Authorization");
+//        String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
+//                .build()
+//                .verify(token.replace("Bearer ", ""))
+//                .getSubject();
+//
+//        Query query = session.createQuery("select round(avg(b.amount), 2) from Bill b where b.payDate != null AND " +
+//                "b.subscriber.user.userName =:nameOfBank AND b.subscriber.phoneNumber =:phoneNumber")
+//                .setParameter("nameOfBank", nameOfBank)
+//                .setParameter("phoneNumber", phoneNumber);
+//
+//        averageSum = (Double) query.getSingleResult();
+//        session.getTransaction().commit();
+//        session.close();
+//        hash.put("Average sum", averageSum);
+//        return hash;
+//    }
 
     //gets the top ten subscribers based on the paid sums for services
     //URL - localhost:8080/api/user/reports/10biggest-amounts
@@ -253,7 +255,7 @@ public class UserRepositoryImpl implements UserRepository {
 
         bill = (Bill)query.getSingleResult();
 
-        bill.setPayDate(new Date());
+        bill.setPayDate(new java.util.Date());
         session.update(bill);
         session.getTransaction().commit();
         session.close();
@@ -282,5 +284,39 @@ public class UserRepositoryImpl implements UserRepository {
         session.getTransaction().commit();
         session.close();
         return list;
+    }
+
+    //gets the average sum paid from a customer for a defined period ot time
+    //URL - localhost:8080/api/user/reports/average/{phoneNumber}
+    @Override
+    public HashMap<String, Double> getAveragePaidFromSubscriber(int phoneNumber, Date startDate, Date endDate, HttpServletRequest httpServletRequest) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Double averageSum = 0d;
+        HashMap<String, Double> hash = new HashMap<>();
+
+        String token = httpServletRequest.getHeader("Authorization");
+        String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
+                .build()
+                .verify(token.replace("Bearer ", ""))
+                .getSubject();
+        //System.out.println(startDate.toString());
+
+        Query query = session.createQuery("select round(avg(b.amount), 2) from Bill b where b.payDate != null AND " +
+                ("b.subscriber.user.userName =:nameOfBank AND b.subscriber.phoneNumber =:phoneNumber AND" +
+                        " b.payDate BETWEEN startDate and endDate"))
+                .setParameter("nameOfBank", nameOfBank)
+                .setParameter("phoneNumber", phoneNumber);
+
+//        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+//
+//        String dateString = format.format( startDate );
+//        System.out.println(dateString);
+
+        averageSum = (Double) query.getSingleResult();
+        session.getTransaction().commit();
+        session.close();
+        hash.put("Average sum", averageSum);
+        return hash;
     }
 }

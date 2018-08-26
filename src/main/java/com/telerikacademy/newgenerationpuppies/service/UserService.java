@@ -2,10 +2,10 @@ package com.telerikacademy.newgenerationpuppies.service;
 
 import com.telerikacademy.newgenerationpuppies.DTO.TopTenDTO;
 import com.telerikacademy.newgenerationpuppies.models.Bill;
-import com.telerikacademy.newgenerationpuppies.models.Subscriber;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -29,7 +29,7 @@ public interface UserService {
 
     public Bill getMaxPaidFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest);
 
-    public HashMap<String, Double> getAveragePaidFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest);
+    public HashMap<String, Double> getAveragePaidFromSubscriber(int phoneNumber, Date startDate, Date endDate, HttpServletRequest httpServletRequest);
 
     HashMap<String, TopTenDTO> getBiggestAmountsPaidBySubscribers(HttpServletRequest httpServletRequest);
 

@@ -2,6 +2,7 @@ package com.telerikacademy.newgenerationpuppies.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -18,9 +19,11 @@ public class  Bill {
     private String service;
 
     @Column(name = "startDate")
+    @Type(type="date")
     private Date startDate;
 
     @Column(name = "endDate")
+    @Type(type="date")
     private Date endDate;
 
     @Column(name = "payDate")

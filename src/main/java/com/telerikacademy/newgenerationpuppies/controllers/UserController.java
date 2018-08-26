@@ -7,11 +7,13 @@ import com.telerikacademy.newgenerationpuppies.models.User;
 import com.telerikacademy.newgenerationpuppies.repos.UserRepository;
 import com.telerikacademy.newgenerationpuppies.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -64,12 +66,12 @@ public class UserController {
         return userService.getMaxPaidFromSubscriber(phoneNumber, httpServletRequest);
     }
 
-    //A client should be able to see the AVERAGE and max amount of money payed for a subscriber for a defined period of time
-    //TODO - define the time period
-    @GetMapping("user/reports/average/{phoneNumber}")
-    public HashMap<String, Double> getAveragePaidFromSubscriber(@PathVariable int phoneNumber, HttpServletRequest httpServletRequest){
-        return userService.getAveragePaidFromSubscriber(phoneNumber, httpServletRequest);
-    }
+//    //A client should be able to see the AVERAGE and max amount of money payed for a subscriber for a defined period of time
+//    //TODO - define the time period
+//    @GetMapping("user/reports/average/{phoneNumber}")
+//    public HashMap<String, Double> getAveragePaidFromSubscriber(@PathVariable int phoneNumber, HttpServletRequest httpServletRequest){
+//        return userService.getAveragePaidFromSubscriber(phoneNumber, httpServletRequest);
+//    }
 
     //A client should be able to see a list of the services the client( I think subscriber) has paid for
     //DONE
@@ -91,6 +93,15 @@ public class UserController {
     @GetMapping("user/reports/10biggest-amounts")
     public HashMap<String, TopTenDTO> getBiggestAmountsPaidBySubscribers(HttpServletRequest httpServletRequest){
         return userService.getBiggestAmountsPaidBySubscribers(httpServletRequest);
+    }
+
+    //A client should be able to see the AVERAGE and max amount of money payed for a subscriber for a defined period of time
+    @GetMapping("user/reports/average/{phoneNumber}/{startDate}/{endDate}")
+    public HashMap<String, Double> getAveragePaidFromSubscriber(@PathVariable int phoneNumber,
+                                                                @PathVariable("startDate") @DateTimeFormat(pattern = "yyyy-mm-dd") Date startDate,
+                                                                @PathVariable ("endDate") @DateTimeFormat(pattern = "yyyy-mm-dd") Date endDate,
+                                                                HttpServletRequest httpServletRequest){
+        return userService.getAveragePaidFromSubscriber(phoneNumber, startDate, endDate, httpServletRequest);
     }
 
 }
