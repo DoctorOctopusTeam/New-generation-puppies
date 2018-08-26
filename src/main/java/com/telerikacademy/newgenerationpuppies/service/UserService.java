@@ -31,7 +31,7 @@ public interface UserService {
 
     public HashMap<String, Double> getAveragePaidFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest);
 
-    List<TopTenDTO> getBiggestAmountsPaidBySubscribers(HttpServletRequest httpServletRequest);
+    HashMap<String, TopTenDTO> getBiggestAmountsPaidBySubscribers(HttpServletRequest httpServletRequest);
 
     Bill payBill(int id, HttpServletRequest httpServletRequest);
 }

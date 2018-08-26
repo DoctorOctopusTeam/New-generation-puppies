@@ -207,9 +207,10 @@ public class UserRepositoryImpl implements UserRepository {
     //URL - localhost:8080/api/user/reports/10biggest-amounts
     //DONE
     @Override
-    public List<TopTenDTO> getBiggestAmountsPaidBySubscribers(HttpServletRequest httpServletRequest) {
+    public HashMap<String, TopTenDTO> getBiggestAmountsPaidBySubscribers(HttpServletRequest httpServletRequest) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
+        HashMap<String, TopTenDTO> hash = new HashMap<>();
         List<TopTenDTO> topTenDTO = new ArrayList<>();
         String token = httpServletRequest.getHeader("Authorization");
         String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
@@ -223,12 +224,16 @@ public class UserRepositoryImpl implements UserRepository {
                 " group by b.subscriber.phoneNumber, s.firstName, s.lastName" +
                 " order by sum(b.amount) desc ").setParameter("nameOfBank", nameOfBank).setMaxResults(10).list();
 
+        for (int i = 0; i < topTenDTO.size(); i++) {
+            hash.put(" Number " + (i+1), topTenDTO.get(i) );
+        }
 
         session.getTransaction().commit();
         session.close();
 
-        return topTenDTO;
+        return hash;
     }
+
     //user pays a particular subscriber's bill chosen by the bill's id
     //URL - localhost:8080/api/user/pay/{id}
     //DONE
