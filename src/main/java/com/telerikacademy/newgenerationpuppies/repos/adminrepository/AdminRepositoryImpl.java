@@ -10,6 +10,7 @@ import org.hibernate.cfg.Configuration;
 import org.springframework.stereotype.Repository;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -66,8 +67,7 @@ public class AdminRepositoryImpl implements AdminRepository {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         String role = "ROLE_" + auth.toUpperCase();
-        List<User>list = session.createQuery("from User u" +
-                "where u.authority.authority= :x")
+        List<User>list = session.createQuery("from User u where u.authority.authority= :x")
                 .setParameter("x",role).list();
         session.getTransaction().commit();
         session.close();
@@ -96,6 +96,17 @@ public class AdminRepositoryImpl implements AdminRepository {
         session.getTransaction().commit();
         session.close();
         return "User updated";
+    }
+
+    @Override
+    public String deleteUser(String userName) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        User user = session.get(User.class, userName);
+        session.delete(user);
+        session.getTransaction().commit();
+        session.close();
+        return null;
     }
 
 

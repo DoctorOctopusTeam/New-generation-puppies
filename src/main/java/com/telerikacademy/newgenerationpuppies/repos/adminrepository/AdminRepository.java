@@ -17,6 +17,8 @@ public interface AdminRepository {
 
     String updateCredentialsForClient(String userName, User user);
 
+    String deleteUser(String userName);
+
 
 
 
