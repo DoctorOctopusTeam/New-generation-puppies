@@ -51,10 +51,10 @@ public class TestController {
     }
     //--------------------------------------------------
 
-    @PutMapping("/paybill/{id}")
-    public Bill payBill(@PathVariable int id){
-        return userRepositoryImpl.payBill(id);
-    }
+//    @PutMapping("/paybill/{id}")
+//    public Bill payBill(@PathVariable int id){
+//        return userRepositoryImpl.payBill(id);
+//    }
 
     @GetMapping
     public String returnModel(HttpServletRequest httpServletRequest){

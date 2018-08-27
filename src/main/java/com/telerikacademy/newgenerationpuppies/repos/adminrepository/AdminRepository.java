@@ -1,5 +1,6 @@
 package com.telerikacademy.newgenerationpuppies.repos.adminrepository;
 
+import com.telerikacademy.newgenerationpuppies.models.Bill;
 import com.telerikacademy.newgenerationpuppies.models.User;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public interface AdminRepository {
 
     String deleteUser(String userName);
 
-
+    Bill issueBill(int ubscriber, Bill bill);
 
 
 

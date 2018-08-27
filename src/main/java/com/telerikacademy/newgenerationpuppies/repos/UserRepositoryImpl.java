@@ -87,18 +87,18 @@ public class UserRepositoryImpl implements UserRepository {
         return u;
     }
 
-    @Override
-    public Bill payBill(int id) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        Bill bill = session.get(Bill.class, id);
-        //bill.setPayDate(null);
-        bill.setPayDate(new Date());
-        session.update(bill);
-        session.getTransaction().commit();
-        session.close();
-        return bill;
-    }
+//    @Override
+//    public Bill payBill(int id) {
+//        Session session = sessionFactory.openSession();
+//        session.beginTransaction();
+//        Bill bill = session.get(Bill.class, id);
+//        //bill.setPayDate(null);
+//        bill.setPayDate(new Date());
+//        session.update(bill);
+//        session.getTransaction().commit();
+//        session.close();
+//        return bill;
+//    }
 
     public String test(HttpServletRequest httpServletRequest) {
         Session session = sessionFactory.openSession();

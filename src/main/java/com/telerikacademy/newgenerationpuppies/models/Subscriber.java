@@ -54,6 +54,10 @@ public class Subscriber {
         return firstName;
     }
 
+    public void setPhoneNumber(int phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     public String getLastName() {
         return lastName;
     }

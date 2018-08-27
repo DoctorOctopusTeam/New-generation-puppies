@@ -13,5 +13,5 @@ public interface UserRepository {
 
     User giveUserKtb10();
 
-    Bill payBill(int id);
+    //Bill payBill(int id);
 }

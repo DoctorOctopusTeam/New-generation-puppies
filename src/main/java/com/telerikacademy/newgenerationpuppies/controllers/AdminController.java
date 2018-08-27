@@ -2,6 +2,7 @@ package com.telerikacademy.newgenerationpuppies.controllers;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.telerikacademy.newgenerationpuppies.models.Bill;
 import com.telerikacademy.newgenerationpuppies.models.User;
 import com.telerikacademy.newgenerationpuppies.repos.UserRepository;
 import com.telerikacademy.newgenerationpuppies.repos.adminrepository.AdminRepository;
@@ -91,6 +92,13 @@ public class AdminController {
     @PreAuthorize(value = "hasAnyAuthority('ROLE_ADMIN')")
     public String deleteUser(@PathVariable String nameofbank){
         return adminRepository.deleteUser(nameofbank);
+    }
+
+    @PostMapping("/issuebill")
+    @PreAuthorize(value = "hasAnyAuthority('ROLE_ADMIN')")
+    public Bill issueNewBill(@RequestParam int subscriber, @RequestBody Bill bill){
+
+        return adminRepository.issueBill(subscriber, bill);
     }
 
 }

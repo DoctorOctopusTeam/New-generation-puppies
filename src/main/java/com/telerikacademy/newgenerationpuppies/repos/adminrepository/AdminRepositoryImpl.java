@@ -106,7 +106,18 @@ public class AdminRepositoryImpl implements AdminRepository {
         session.delete(user);
         session.getTransaction().commit();
         session.close();
-        return null;
+        return "User " + user.getUserName() + " deleted";
+    }
+
+    @Override
+    public Bill issueBill(int subscriber, Bill bill) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        bill.setSubscriber(session.get(Subscriber.class, subscriber));
+        session.save(bill);
+        session.getTransaction().commit();
+        session.close();
+        return bill;
     }
 
 
