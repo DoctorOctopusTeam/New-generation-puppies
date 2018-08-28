@@ -91,6 +91,7 @@ public class AdminController {
     @DeleteMapping("/delete/{nameofbank}")
     @PreAuthorize(value = "hasAnyAuthority('ROLE_ADMIN')")
     public String deleteUser(@PathVariable String nameofbank){
+
         return adminRepository.deleteUser(nameofbank);
     }
 
