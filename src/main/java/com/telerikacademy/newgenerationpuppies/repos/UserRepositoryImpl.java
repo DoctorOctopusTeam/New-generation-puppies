@@ -147,7 +147,15 @@ public class UserRepositoryImpl implements UserRepository {
                 .verify(token.replace("Bearer ", ""))
                 .getSubject();
 
-        topTenDTO = session.createQuery("select s.firstName, s.lastName, b.subscriber.phoneNumber, sum(b.amount) from Subscriber s" +
+//        topTenDTO = session.createQuery("select s.firstName, s.lastName, b.subscriber.phoneNumber, sum(b.amount) from Subscriber s" +
+//                " inner join Bill b on s.phoneNumber=b.subscriber.phoneNumber where" +
+//                " b.payDate != null AND b.subscriber.user.userName =:nameOfBank" +
+//                " group by b.subscriber.phoneNumber, s.firstName, s.lastName" +
+//                " order by sum(b.amount) desc ").setParameter("nameOfBank", nameOfBank).setMaxResults(10).list();
+
+
+        topTenDTO = session.createQuery("select s.firstName, s.lastName, b.subscriber.phoneNumber, sum((b.amount) * " +
+                "CASE b.currency when 'USD' THEN 1.5 WHEN 'EUR' THEN 2.0 ELSE 1.0 END) from Subscriber s" +
                 " inner join Bill b on s.phoneNumber=b.subscriber.phoneNumber where" +
                 " b.payDate != null AND b.subscriber.user.userName =:nameOfBank" +
                 " group by b.subscriber.phoneNumber, s.firstName, s.lastName" +

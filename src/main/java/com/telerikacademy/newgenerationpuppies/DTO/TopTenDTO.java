@@ -1,11 +1,15 @@
 package com.telerikacademy.newgenerationpuppies.DTO;
 
+import java.util.List;
+
 public class TopTenDTO {
     private String firstName;
 
     private String lastName;
 
     private double amount;
+
+    private String currency;
 
     private int phoneNumber;
 
@@ -50,5 +54,13 @@ public class TopTenDTO {
 
     public void setPhoneNumber(int phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 }
