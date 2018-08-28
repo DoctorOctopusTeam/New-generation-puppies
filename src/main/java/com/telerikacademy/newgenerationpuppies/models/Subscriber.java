@@ -1,6 +1,5 @@
 package com.telerikacademy.newgenerationpuppies.models;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -23,13 +22,12 @@ public class Subscriber {
     @Column(name = "EGN")
     private int egn;
 
-
     @ManyToOne
     @JoinColumn(name = "userName")
-    @JsonIgnoreProperties
+    @JsonIgnoreProperties({"subscribers"})
     private User user;
 
-    @OneToMany(mappedBy = "subscriber", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "subscriber")
     @JsonIgnoreProperties("subscriber")
     private List<Bill> bills;
 
@@ -37,12 +35,13 @@ public class Subscriber {
 
     }
 
-    public Subscriber(int phoneNumber, String firstName, String lastName, int egn, User user) {
+    public Subscriber(int phoneNumber, String firstName, String lastName, int egn, User user, List<Bill>bills) {
         this.phoneNumber = phoneNumber;
         this.firstName = firstName;
         this.lastName = lastName;
         this.egn = egn;
         this.user = user;
+        this.bills = bills;
     }
 
     public int getPhoneNumber() {
@@ -51,6 +50,10 @@ public class Subscriber {
 
     public String getFirstName() {
         return firstName;
+    }
+
+    public void setPhoneNumber(int phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getLastName() {
