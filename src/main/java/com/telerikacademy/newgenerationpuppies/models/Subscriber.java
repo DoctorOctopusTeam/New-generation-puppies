@@ -2,7 +2,6 @@ package com.telerikacademy.newgenerationpuppies.models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import javax.persistence.*;
 import java.util.List;
 
@@ -29,7 +28,7 @@ public class Subscriber {
     @JsonIgnoreProperties
     private User user;
 
-    @OneToMany(mappedBy = "subscriber", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "subscriber")
     @JsonIgnoreProperties("subscriber")
     private List<Bill> bills;
 
