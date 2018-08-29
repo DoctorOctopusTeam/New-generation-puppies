@@ -41,7 +41,7 @@ public class User {
     @OneToOne
     @JoinColumn(name = "userName")
     private Authority authority;
-    
+
     public User(){
 
     }
