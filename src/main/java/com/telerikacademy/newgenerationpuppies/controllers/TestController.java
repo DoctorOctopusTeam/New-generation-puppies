@@ -1,18 +1,14 @@
 package com.telerikacademy.newgenerationpuppies.controllers;
 
-import com.telerikacademy.newgenerationpuppies.models.Authority;
-import com.telerikacademy.newgenerationpuppies.models.Bill;
-import com.telerikacademy.newgenerationpuppies.models.Subscriber;
-import com.telerikacademy.newgenerationpuppies.models.User;
+
 import com.telerikacademy.newgenerationpuppies.repos.UserRepository;
-import com.telerikacademy.newgenerationpuppies.repos.UserRepositoryImpl;
-import org.hibernate.Session;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
-import java.util.List;
+
+
 
 @RestController
 @RequestMapping("/test")
@@ -47,18 +43,5 @@ public class TestController {
         String a = time.toString();
         return a;
     }
-
-
-    //--------------------------------------------------
-
-//    @PutMapping("/paybill/{id}")
-//    public Bill payBill(@PathVariable int id){
-//        return userRepository.payBill(id);
-//    }
-//
-//    @GetMapping
-//    public User returnModel(){
-//        return userRepository.test();
-//    }
 
 }

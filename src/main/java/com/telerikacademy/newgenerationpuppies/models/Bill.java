@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Type;
 import org.springframework.format.annotation.DateTimeFormat;
 
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Date;
@@ -35,9 +36,10 @@ public class  Bill {
     @Column(name = "currency")
     private String currency;
 
+
     @ManyToOne
     @JoinColumn(name = "phoneNumber")
-    @JsonIgnoreProperties({"bills", "user"})
+    @JsonIgnoreProperties({"user", "bills"})
     private Subscriber subscriber;
 
     public Bill(){

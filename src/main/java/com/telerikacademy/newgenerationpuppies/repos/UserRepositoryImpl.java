@@ -205,13 +205,11 @@ public class UserRepositoryImpl implements UserRepository {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         List<String> list = new ArrayList<>();
-
         String token = httpServletRequest.getHeader("Authorization");
         String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
                 .build()
                 .verify(token.replace("Bearer ", ""))
                 .getSubject();
-
         list = session.createQuery("select b.service from Bill b where b.subscriber.user.userName =:nameOfBank " +
                 "AND b.subscriber.phoneNumber =:phoneNumber order by payDate desc ")
                 .setParameter("nameOfBank", nameOfBank)
@@ -254,4 +252,5 @@ public class UserRepositoryImpl implements UserRepository {
         hash.put("Average sum", averageSum);
         return hash;
     }
+
 }

@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface UserRepository {
-
     //    public List<User> returnUsers();
 //
     public User findByUsername(String username);
@@ -36,4 +35,5 @@ public interface UserRepository {
     Bill payBill(int id, HttpServletRequest httpServletRequest);
 
     List<String> usedServicesFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest);
+
 }

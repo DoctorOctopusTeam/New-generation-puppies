@@ -29,17 +29,19 @@ public class User {
     @Column(name = "role")
     private String role;
 
+
     @Column(name = "email")
     private String email;
 
+
     @OneToMany(mappedBy = "user")
-    @JsonIgnoreProperties({"user"})
+    @JsonIgnoreProperties({"user", "bills"})
     private List<Subscriber> subscribers;
 
     @OneToOne
     @JoinColumn(name = "userName")
     private Authority authority;
-
+    
     public User(){
 
     }
