@@ -14,7 +14,6 @@ import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.servlet.http.HttpServletRequest;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
