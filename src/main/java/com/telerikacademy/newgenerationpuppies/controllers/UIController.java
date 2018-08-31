@@ -10,9 +10,4 @@ public class UIController {
         return "login";
     }
 
-
-    @GetMapping("/home")
-    public String srhowHomepage(){
-        return "home";
-    }
 }

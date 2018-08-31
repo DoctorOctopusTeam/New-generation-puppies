@@ -2,9 +2,10 @@ var auth = null;
 var role = null;
 $('#login-button').click(function (ev) {
     ev.preventDefault();
-    var username = $('#username').val();
+    var userName = $('#username').val();
     var password = $('#password').val();
-
+    console.log(userName);
+    console.log(password);
     $.ajax({
         type: 'POST',
         url: 'http://localhost:8080/login',
@@ -12,14 +13,15 @@ $('#login-button').click(function (ev) {
             "Content-Type": "application/json"
         },
         data: JSON.stringify({
-            "username": username,
+            "userName": userName,
             "password": password
         })
     }).done(function (body) {
-        auth = body["Authorization"];
+        auth = body['Authorization'];
         localStorage.setItem("token", auth);
         role = body["Role"];
         console.log(role);
+        console.log(auth);
         if(role === "ROLE_USER") {
             window.location.href = "/home.html";
             test();
