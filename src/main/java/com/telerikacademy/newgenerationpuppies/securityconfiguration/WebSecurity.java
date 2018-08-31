@@ -33,13 +33,16 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception{
 
-        httpSecurity.cors().and().csrf().disable().authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/api/register")
-                .permitAll()
+        httpSecurity
+                .cors().and().csrf().disable().authorizeRequests()
+                .antMatchers("/login").permitAll()
                 .anyRequest().authenticated().and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()))
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+
+
     }
 
     private void configureDatabaseAuth(AuthenticationManagerBuilder auth) throws Exception {

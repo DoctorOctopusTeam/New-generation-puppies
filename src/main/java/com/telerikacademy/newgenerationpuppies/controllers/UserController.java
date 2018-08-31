@@ -98,7 +98,7 @@ public class UserController {
     //DONE
     @GetMapping("user/reports/10biggest-amounts")
     @PreAuthorize(value = "hasAnyAuthority('ROLE_USER')")
-    public HashMap<String, TopTenDTO> getBiggestAmountsPaidBySubscribers(HttpServletRequest httpServletRequest){
+    public List<TopTenDTO> getBiggestAmountsPaidBySubscribers(HttpServletRequest httpServletRequest){
         return userService.getBiggestAmountsPaidBySubscribers(httpServletRequest);
     }
 

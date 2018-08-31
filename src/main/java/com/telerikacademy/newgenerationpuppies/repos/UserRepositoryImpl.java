@@ -11,6 +11,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
+import org.hibernate.transform.Transformers;
 import org.springframework.stereotype.Repository;
 
 import javax.servlet.http.HttpServletRequest;
@@ -136,10 +137,9 @@ public class UserRepositoryImpl implements UserRepository {
     //URL - localhost:8080/api/user/reports/10biggest-amounts
     //DONE
     @Override
-    public HashMap<String, TopTenDTO> getBiggestAmountsPaidBySubscribers(HttpServletRequest httpServletRequest) {
+    public List<TopTenDTO> getBiggestAmountsPaidBySubscribers(HttpServletRequest httpServletRequest) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        HashMap<String, TopTenDTO> hash = new HashMap<>();
         List<TopTenDTO> topTenDTO = new ArrayList<>();
         String token = httpServletRequest.getHeader("Authorization");
         String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
@@ -154,21 +154,22 @@ public class UserRepositoryImpl implements UserRepository {
 //                " order by sum(b.amount) desc ").setParameter("nameOfBank", nameOfBank).setMaxResults(10).list();
 
 
-        topTenDTO = session.createQuery("select s.firstName, s.lastName, b.subscriber.phoneNumber, sum((b.amount) * " +
-                "CASE b.currency when 'USD' THEN 1.5 WHEN 'EUR' THEN 2.0 ELSE 1.0 END) from Subscriber s" +
+        topTenDTO = session.createQuery("select s.firstName as firstName, s.lastName as lastName, " +
+                "b.subscriber.phoneNumber as phoneNumber, sum((b.amount)  * " +
+                "CASE b.currency when 'USD' THEN 1.5 WHEN 'EUR' THEN 2.0 ELSE 1.0 END) as amount from Subscriber s" +
                 " inner join Bill b on s.phoneNumber=b.subscriber.phoneNumber where" +
                 " b.payDate != null AND b.subscriber.user.userName =:nameOfBank" +
-                " group by b.subscriber.phoneNumber, s.firstName, s.lastName" +
-                " order by sum(b.amount) desc ").setParameter("nameOfBank", nameOfBank).setMaxResults(10).list();
+                " group by b.subscriber" +
+                " order by amount desc ")
+                .setParameter("nameOfBank", nameOfBank)
+                .setMaxResults(10)
+                .setResultTransformer(Transformers.aliasToBean(TopTenDTO.class)).list();
 
-        for (int i = 0; i < topTenDTO.size(); i++) {
-            hash.put(" Number " + (i+1), topTenDTO.get(i) );
-        }
 
         session.getTransaction().commit();
         session.close();
 
-        return hash;
+        return topTenDTO;
     }
 
     //user pays a particular subscriber's bill chosen by the bill's id
