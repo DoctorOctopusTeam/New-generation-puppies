@@ -17,7 +17,7 @@ $('#login-button').click(function (ev) {
             "password": password
         })
     }).done(function (body) {
-        auth = body['Authorization'];
+        auth = body["Authorization"];
         localStorage.setItem("token", auth);
         role = body["Role"];
         console.log(role);

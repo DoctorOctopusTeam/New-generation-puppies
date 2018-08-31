@@ -60,7 +60,18 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .sign(HMAC512("SecretKeyToGenJWTs".getBytes()));
         httpServletResponse.addHeader("Authorization", "Bearer " + token);
         httpServletResponse.addHeader("Warning!", "Change your password often!");
+        // setting the token in the response body!
+        httpServletResponse.setContentType("application/json");
+        httpServletResponse.setCharacterEncoding("UTF-8");
+        httpServletResponse.getWriter().write(
+                "{\"Authorization" + "\":\"" + "Bearer " + token + "\"}");
 
+        //setting the role in the response body
+        String role = authentication.getAuthorities().toString();
+        httpServletResponse.getWriter().write(
+                "{\"Role" + "\":\"" + role + "\"}");
+        System.out.println(token);
+        System.out.println(role);
     }
 
 }
