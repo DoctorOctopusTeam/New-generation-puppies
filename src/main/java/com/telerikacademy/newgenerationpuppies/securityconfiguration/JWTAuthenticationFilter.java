@@ -62,14 +62,13 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         httpServletResponse.addHeader("Warning!", "Change your password often!");
         // setting the token in the response body!
         httpServletResponse.setContentType("application/json");
-        httpServletResponse.setCharacterEncoding("UTF-8");
-        httpServletResponse.getWriter().write(
-                "{\"Authorization" + "\":\"" + "Bearer " + token + "\"}");
+        httpServletResponse.getOutputStream().println(
+                "{\"Authorization\": \"Bearer " + token + "\", \n");
 
         //setting the role in the response body
         String role = authentication.getAuthorities().toString();
-        httpServletResponse.getWriter().write(
-                "{\"Role" + "\":\"" + role + "\"}");
+        httpServletResponse.getOutputStream().println(
+                "\"Role\": "  + "\"" + role + "\" }");
         System.out.println(token);
         System.out.println(role);
     }
