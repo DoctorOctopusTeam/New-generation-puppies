@@ -35,11 +35,15 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User findByUsername(String username) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        User user = session.get(User.class, username);
-        session.getTransaction().commit();
-        session.close();
+        User user = new User();
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            user = session.get(User.class, username);
+            session.getTransaction().commit();
+            session.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         return user;
     }
 
@@ -49,29 +53,31 @@ public class UserRepositoryImpl implements UserRepository {
     //DONE
     @Override
     public HashMap<String, String> getSubscriberInfo(int phoneNumber, HttpServletRequest httpServletRequest) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
         HashMap<String, String> hash = new HashMap<>();
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            String token = httpServletRequest.getHeader("Authorization");
+            String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
+                    .build()
+                    .verify(token.replace("Bearer ", ""))
+                    .getSubject();
 
-        String token = httpServletRequest.getHeader("Authorization");
-        String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
-                .build()
-                .verify(token.replace("Bearer ", ""))
-                .getSubject();
-
-        Subscriber subscriber = session.get(Subscriber.class, phoneNumber);
-        if (!subscriber.getUser().getUserName().equals(nameOfBank)) {
+            Subscriber subscriber = session.get(Subscriber.class, phoneNumber);
+            if (!subscriber.getUser().getUserName().equals(nameOfBank)) {
+                session.getTransaction().commit();
+                session.close();
+                return null;
+            } else {
+                hash.put("First name", subscriber.getFirstName());
+                hash.put("Last name", subscriber.getLastName());
+                hash.put("EGN", String.valueOf(subscriber.getEgn()));
+                hash.put("Phone number", String.valueOf(subscriber.getPhoneNumber()));
+            }
             session.getTransaction().commit();
             session.close();
-            return null;
-        } else {
-            hash.put("First name", subscriber.getFirstName());
-            hash.put("Last name", subscriber.getLastName());
-            hash.put("EGN", String.valueOf(subscriber.getEgn()));
-            hash.put("Phone number", String.valueOf(subscriber.getPhoneNumber()));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
-        session.getTransaction().commit();
-        session.close();
         return hash;
     }
 
@@ -80,22 +86,24 @@ public class UserRepositoryImpl implements UserRepository {
     //DONE
     @Override
     public List<Bill> getAllPayments(HttpServletRequest httpServletRequest) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
         List<Bill> list = new ArrayList<>();
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            String token = httpServletRequest.getHeader("Authorization");
+            String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
+                    .build()
+                    .verify(token.replace("Bearer ", ""))
+                    .getSubject();
 
-        String token = httpServletRequest.getHeader("Authorization");
-        String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
-                .build()
-                .verify(token.replace("Bearer ", ""))
-                .getSubject();
-
-        list = session.createQuery("from Bill b where b.payDate != null AND " +
-                "b.subscriber.user.userName =:nameOfBank order by payDate asc ")
-                .setParameter("nameOfBank", nameOfBank)
-                .setMaxResults(10).list();
-        session.getTransaction().commit();
-        session.close();
+            list = session.createQuery("from Bill b where b.payDate != null AND " +
+                    "b.subscriber.user.userName =:nameOfBank order by payDate asc ")
+                    .setParameter("nameOfBank", nameOfBank)
+                    .setMaxResults(10).list();
+            session.getTransaction().commit();
+            session.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         return list;
     }
 
@@ -104,26 +112,28 @@ public class UserRepositoryImpl implements UserRepository {
     //DONE
     @Override
     public Bill getMaxPaidFromSubscriber(int phoneNumber, LocalDate startDate, LocalDate endDate, HttpServletRequest httpServletRequest) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
         List<Bill> bills = new ArrayList<>();
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            String token = httpServletRequest.getHeader("Authorization");
+            String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
+                    .build()
+                    .verify(token.replace("Bearer ", ""))
+                    .getSubject();
 
-        String token = httpServletRequest.getHeader("Authorization");
-        String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
-                .build()
-                .verify(token.replace("Bearer ", ""))
-                .getSubject();
-
-        bills = session.createQuery("from Bill b where b.payDate != null AND " +
-                ("b.subscriber.user.userName =:nameOfBank AND " +
-                        "b.subscriber.phoneNumber =:phoneNumber AND " +
-                        "b.payDate >:startDate AND b.payDate <:endDate order by b.amount desc " ))
-                .setParameter("nameOfBank", nameOfBank)
-                .setParameter("phoneNumber", phoneNumber)
-                .setParameter("startDate", startDate)
-                .setParameter("endDate", endDate).list();
-        session.getTransaction().commit();
-        session.close();
+            bills = session.createQuery("from Bill b where b.payDate != null AND " +
+                    ("b.subscriber.user.userName =:nameOfBank AND " +
+                            "b.subscriber.phoneNumber =:phoneNumber AND " +
+                            "b.payDate >:startDate AND b.payDate <:endDate order by b.amount desc "))
+                    .setParameter("nameOfBank", nameOfBank)
+                    .setParameter("phoneNumber", phoneNumber)
+                    .setParameter("startDate", startDate)
+                    .setParameter("endDate", endDate).list();
+            session.getTransaction().commit();
+            session.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         if (bills.size() == 0) {
             return null;
         } else {
@@ -138,36 +148,31 @@ public class UserRepositoryImpl implements UserRepository {
     //DONE
     @Override
     public List<TopTenDTO> getBiggestAmountsPaidBySubscribers(HttpServletRequest httpServletRequest) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
         List<TopTenDTO> topTenDTO = new ArrayList<>();
-        String token = httpServletRequest.getHeader("Authorization");
-        String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
-                .build()
-                .verify(token.replace("Bearer ", ""))
-                .getSubject();
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            String token = httpServletRequest.getHeader("Authorization");
+            String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
+                    .build()
+                    .verify(token.replace("Bearer ", ""))
+                    .getSubject();
 
-//        topTenDTO = session.createQuery("select s.firstName, s.lastName, b.subscriber.phoneNumber, sum(b.amount) from Subscriber s" +
-//                " inner join Bill b on s.phoneNumber=b.subscriber.phoneNumber where" +
-//                " b.payDate != null AND b.subscriber.user.userName =:nameOfBank" +
-//                " group by b.subscriber.phoneNumber, s.firstName, s.lastName" +
-//                " order by sum(b.amount) desc ").setParameter("nameOfBank", nameOfBank).setMaxResults(10).list();
+            topTenDTO = session.createQuery("select s.firstName as firstName, s.lastName as lastName, " +
+                    "b.subscriber.phoneNumber as phoneNumber, sum((b.amount)  * " +
+                    "CASE b.currency when 'USD' THEN 1.5 WHEN 'EUR' THEN 2.0 ELSE 1.0 END) as amount from Subscriber s" +
+                    " inner join Bill b on s.phoneNumber=b.subscriber.phoneNumber where" +
+                    " b.payDate != null AND b.subscriber.user.userName =:nameOfBank" +
+                    " group by b.subscriber" +
+                    " order by amount desc ")
+                    .setParameter("nameOfBank", nameOfBank)
+                    .setMaxResults(10)
+                    .setResultTransformer(Transformers.aliasToBean(TopTenDTO.class)).list();
 
-
-        topTenDTO = session.createQuery("select s.firstName as firstName, s.lastName as lastName, " +
-                "b.subscriber.phoneNumber as phoneNumber, sum((b.amount)  * " +
-                "CASE b.currency when 'USD' THEN 1.5 WHEN 'EUR' THEN 2.0 ELSE 1.0 END) as amount from Subscriber s" +
-                " inner join Bill b on s.phoneNumber=b.subscriber.phoneNumber where" +
-                " b.payDate != null AND b.subscriber.user.userName =:nameOfBank" +
-                " group by b.subscriber" +
-                " order by amount desc ")
-                .setParameter("nameOfBank", nameOfBank)
-                .setMaxResults(10)
-                .setResultTransformer(Transformers.aliasToBean(TopTenDTO.class)).list();
-
-
-        session.getTransaction().commit();
-        session.close();
+            session.getTransaction().commit();
+            session.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
         return topTenDTO;
     }
@@ -177,24 +182,27 @@ public class UserRepositoryImpl implements UserRepository {
     //DONE
     @Override
     public Bill payBill(int id, HttpServletRequest httpServletRequest) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
         Bill bill = new Bill();
-        String token = httpServletRequest.getHeader("Authorization");
-        String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
-                .build()
-                .verify(token.replace("Bearer ", ""))
-                .getSubject();
-        Query query = session.createQuery("from Bill b where b.id=:id AND b.subscriber.user.userName =:nameOfBank")
-                .setParameter("id", id)
-                .setParameter("nameOfBank", nameOfBank);
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            String token = httpServletRequest.getHeader("Authorization");
+            String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
+                    .build()
+                    .verify(token.replace("Bearer ", ""))
+                    .getSubject();
+            Query query = session.createQuery("from Bill b where b.id=:id AND b.subscriber.user.userName =:nameOfBank")
+                    .setParameter("id", id)
+                    .setParameter("nameOfBank", nameOfBank);
 
-        bill = (Bill)query.getSingleResult();
+            bill = (Bill) query.getSingleResult();
 
-        bill.setPayDate(LocalDate.now());
-        session.update(bill);
-        session.getTransaction().commit();
-        session.close();
+            bill.setPayDate(LocalDate.now());
+            session.update(bill);
+            session.getTransaction().commit();
+            session.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         return bill;
     }
 
@@ -203,20 +211,23 @@ public class UserRepositoryImpl implements UserRepository {
     //DONE
     @Override
     public List<String> usedServicesFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
         List<String> list = new ArrayList<>();
-        String token = httpServletRequest.getHeader("Authorization");
-        String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
-                .build()
-                .verify(token.replace("Bearer ", ""))
-                .getSubject();
-        list = session.createQuery("select b.service from Bill b where b.subscriber.user.userName =:nameOfBank " +
-                "AND b.subscriber.phoneNumber =:phoneNumber order by payDate desc ")
-                .setParameter("nameOfBank", nameOfBank)
-                .setParameter("phoneNumber", phoneNumber).list();
-        session.getTransaction().commit();
-        session.close();
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            String token = httpServletRequest.getHeader("Authorization");
+            String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
+                    .build()
+                    .verify(token.replace("Bearer ", ""))
+                    .getSubject();
+            list = session.createQuery("select b.service from Bill b where b.subscriber.user.userName =:nameOfBank " +
+                    "AND b.subscriber.phoneNumber =:phoneNumber order by payDate desc ")
+                    .setParameter("nameOfBank", nameOfBank)
+                    .setParameter("phoneNumber", phoneNumber).list();
+            session.getTransaction().commit();
+            session.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         return list;
     }
 
@@ -225,31 +236,32 @@ public class UserRepositoryImpl implements UserRepository {
     //DONE
     @Override
     public HashMap<String, Double> getAveragePaidFromSubscriber(int phoneNumber, LocalDate startDate, LocalDate endDate, HttpServletRequest httpServletRequest) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
         Double averageSum = 0d;
         HashMap<String, Double> hash = new HashMap<>();
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            String token = httpServletRequest.getHeader("Authorization");
+            String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
+                    .build()
+                    .verify(token.replace("Bearer ", ""))
+                    .getSubject();
 
-        String token = httpServletRequest.getHeader("Authorization");
-        String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
-                .build()
-                .verify(token.replace("Bearer ", ""))
-                .getSubject();
-
-        Query query = session.createQuery("select round(avg(b.amount), 2) from Bill b where b.payDate != null AND " +
-                ("b.subscriber.user.userName =:nameOfBank AND " +
-                        "b.subscriber.phoneNumber =:phoneNumber AND " +
-                        "b.payDate >:startDate AND b.payDate <:endDate"))
-                .setParameter("nameOfBank", nameOfBank)
-                .setParameter("phoneNumber", phoneNumber)
-                .setParameter("startDate", startDate)
-                .setParameter("endDate", endDate);
+            Query query = session.createQuery("select round(avg(b.amount), 2) from Bill b where b.payDate != null AND " +
+                    ("b.subscriber.user.userName =:nameOfBank AND " +
+                            "b.subscriber.phoneNumber =:phoneNumber AND " +
+                            "b.payDate >:startDate AND b.payDate <:endDate"))
+                    .setParameter("nameOfBank", nameOfBank)
+                    .setParameter("phoneNumber", phoneNumber)
+                    .setParameter("startDate", startDate)
+                    .setParameter("endDate", endDate);
 
 
-
-        averageSum = (Double) query.getSingleResult();
-        session.getTransaction().commit();
-        session.close();
+            averageSum = (Double) query.getSingleResult();
+            session.getTransaction().commit();
+            session.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         hash.put("Average sum", averageSum);
         return hash;
     }
