@@ -64,12 +64,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         httpServletResponse.addHeader("Warning!", "Change your password often!");
         httpServletResponse.addHeader("Access-Control-Expose-Headers", "Authorization");
         httpServletResponse.addHeader("Access-Control-Expose-Headers", "Role");
-//        httpServletResponse.setContentType("application/json");
-//        httpServletResponse.getOutputStream().println(
-//                "{\"Authorization\": \"Bearer " + token + "\",");
-//        httpServletResponse.getOutputStream().println(
-//                "\"Role\":\"" + role + "\"}\n");
-
     }
 
 }
