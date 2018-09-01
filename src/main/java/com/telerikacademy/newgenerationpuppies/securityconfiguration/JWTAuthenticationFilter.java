@@ -58,14 +58,17 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withSubject(((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + 864_000_000))
                 .sign(HMAC512("SecretKeyToGenJWTs".getBytes()));
-        httpServletResponse.addHeader("Authorization", "Bearer " + token);
-        httpServletResponse.addHeader("Warning!", "Change your password often!");
-        httpServletResponse.setContentType("application/json");
-        httpServletResponse.getOutputStream().println(
-                "{\"Authorization\": \"Bearer " + token + "\",");
         String role = authentication.getAuthorities().stream().findAny().get().getAuthority();
-        httpServletResponse.getOutputStream().println(
-                "\"Role\":\"" + role + "\"}\n");
+        httpServletResponse.addHeader("Authorization", "Bearer " + token);
+        httpServletResponse.addHeader("Role", role);
+        httpServletResponse.addHeader("Warning!", "Change your password often!");
+        httpServletResponse.addHeader("Access-Control-Expose-Headers", "Authorization");
+        httpServletResponse.addHeader("Access-Control-Expose-Headers", "Role");
+//        httpServletResponse.setContentType("application/json");
+//        httpServletResponse.getOutputStream().println(
+//                "{\"Authorization\": \"Bearer " + token + "\",");
+//        httpServletResponse.getOutputStream().println(
+//                "\"Role\":\"" + role + "\"}\n");
 
     }
 
