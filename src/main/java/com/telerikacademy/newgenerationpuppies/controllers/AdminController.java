@@ -32,7 +32,7 @@ public class AdminController {
 
     @PostMapping("/registeruser")
     @PreAuthorize(value = "hasAuthority('ROLE_ADMIN')")
-    public String registerUser(@RequestBody User user){
+    public User registerUser(@RequestBody User user){
         String role = "ROLE_USER";
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         return adminRepository.saveUser(user, role);
@@ -40,7 +40,7 @@ public class AdminController {
 
     @PostMapping("/registeradmin")
     @PreAuthorize(value = "hasAuthority('ROLE_ADMIN')")
-    public String registerAdmin(@RequestBody User user){
+    public User registerAdmin(@RequestBody User user){
         String role = "ROLE_ADMIN";
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         return adminRepository.saveUser(user, role);

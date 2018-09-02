@@ -8,7 +8,7 @@ import java.util.Map;
 
 public interface AdminRepository {
 
-    String saveUser(User user, String role);
+    User saveUser(User user, String role);
 
     String changePassword(String newPassword, String name);
 

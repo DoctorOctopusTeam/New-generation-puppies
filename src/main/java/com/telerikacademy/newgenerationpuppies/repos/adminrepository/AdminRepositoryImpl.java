@@ -26,7 +26,7 @@ public class AdminRepositoryImpl implements AdminRepository {
             .buildSessionFactory();
 
     @Override
-    public String saveUser(User user, String role) {
+    public User saveUser(User user, String role) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         session.save(user);
@@ -36,8 +36,9 @@ public class AdminRepositoryImpl implements AdminRepository {
         session.save(authority);
         session.getTransaction().commit();
         session.close();
-        return "User " + user.getUserName() + " with authority "
-                + authority.getAuthority() + " created!";
+        return user;
+//        return "User " + user.getUserName() + " with authority "
+//                + authority.getAuthority() + " created!";
     }
 
     @Override
