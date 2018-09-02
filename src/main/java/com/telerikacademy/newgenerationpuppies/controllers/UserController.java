@@ -34,7 +34,7 @@ public class UserController {
 
     //DONE
     //The client must be able to see personal details of a subscriber
-    @GetMapping("/user/info/{phoneNumber}")
+    @GetMapping("/info/{phoneNumber}")
     @PreAuthorize(value = "hasAnyAuthority('ROLE_USER')")
     public HashMap<String, String> getInfoSubscriber(@PathVariable int phoneNumber, HttpServletRequest httpServletRequest) {
         return userService.getSubscriberInfo(phoneNumber, httpServletRequest);
