@@ -71,10 +71,10 @@ public class UserController {
     //Clients must have access to bill payment module where they can pay a particular bill (or selected list of bills)
     // for their subscribers
     //DONE
-    @PutMapping("/pay/{id}")
+    @PostMapping("/pay/{id}")
     @PreAuthorize(value = "hasAnyAuthority('ROLE_USER')")
-    public Bill payBill(@PathVariable int id, HttpServletRequest httpServletRequest){
-        return userService.payBill(id, httpServletRequest);
+    public String payBill(@PathVariable int id, HttpServletRequest httpServletRequest){
+         return userService.payBill(id, httpServletRequest);
     }
 
     //Client can see report - Top 10 subscribers with the biggest amount of money paid.
@@ -94,6 +94,12 @@ public class UserController {
                                                                 @PathVariable ("endDate")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
                                                                 HttpServletRequest httpServletRequest){
         return userService.getAveragePaidFromSubscriber(phoneNumber, startDate, endDate, httpServletRequest);
+    }
+
+    @GetMapping("/unpaid/{phoneNumber}")
+    @PreAuthorize(value = "hasAnyAuthority('ROLE_USER')")
+    public List<Bill> getUnpaidBillsBySubscriber(@PathVariable int phoneNumber, HttpServletRequest httpServletRequest){
+        return userService.getUnpaidBillsBySubscriber(phoneNumber, httpServletRequest);
     }
 
 }

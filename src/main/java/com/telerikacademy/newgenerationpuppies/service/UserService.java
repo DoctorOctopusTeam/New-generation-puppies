@@ -33,7 +33,9 @@ public interface UserService {
 
     List<TopTenDTO> getBiggestAmountsPaidBySubscribers(HttpServletRequest httpServletRequest);
 
-    Bill payBill(int id, HttpServletRequest httpServletRequest);
+    String payBill(int id, HttpServletRequest httpServletRequest);
 
     List<String> usedServicesFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest);
+
+    List<Bill> getUnpaidBillsBySubscriber(int phoneNumber, HttpServletRequest httpServletRequest);
 }

@@ -15,7 +15,6 @@ import org.hibernate.transform.Transformers;
 import org.springframework.stereotype.Repository;
 
 import javax.servlet.http.HttpServletRequest;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -47,10 +46,8 @@ public class UserRepositoryImpl implements UserRepository {
         return user;
     }
 
-    //gets info about a particular subscriber - client of the logged in bank, based on his phone number passed in the URL
-    //the parameter int phoneNumber is passed via PostMan as parameter, not as JS object
-    //URL - localhost:8080/api/user/info/{phoneNumber}
-    //DONE
+    //gets info about a particular subscriber
+    //URL - localhost:8080/user/info/{phoneNumber}
     @Override
     public HashMap<String, String> getSubscriberInfo(int phoneNumber, HttpServletRequest httpServletRequest) {
         HashMap<String, String> hash = new HashMap<>();
@@ -82,8 +79,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     //gets top 10 paid bills from ALL subscribers of the logged in bank, based on the date ot payment in descending order
-    // URL - localhost:8080/api/user/payments
-    //DONE
+    // URL - localhost:8080/user/payments
     @Override
     public List<Bill> getAllPayments(HttpServletRequest httpServletRequest) {
         List<Bill> list = new ArrayList<>();
@@ -108,8 +104,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     //gets the maximum sum paid from a subscriber for e defined period ot time
-    //URL - localhost:8080/api/user/reports/max/{phoneNumber}
-    //DONE
+    //URL - localhost:8080/user/reports/max/{phoneNumber}
     @Override
     public Bill getMaxPaidFromSubscriber(int phoneNumber, LocalDate startDate, LocalDate endDate, HttpServletRequest httpServletRequest) {
         List<Bill> bills = new ArrayList<>();
@@ -144,8 +139,7 @@ public class UserRepositoryImpl implements UserRepository {
 
 
     //gets the top ten subscribers based on the paid sums for services
-    //URL - localhost:8080/api/user/reports/10biggest-amounts
-    //DONE
+    //URL - localhost:8080/user/reports/10biggest-amounts
     @Override
     public List<TopTenDTO> getBiggestAmountsPaidBySubscribers(HttpServletRequest httpServletRequest) {
         List<TopTenDTO> topTenDTO = new ArrayList<>();
@@ -178,11 +172,11 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     //user pays a particular subscriber's bill chosen by the bill's id
-    //URL - localhost:8080/api/user/pay/{id}
-    //DONE
+    //URL - localhost:8080/user/pay/{id}
     @Override
-    public Bill payBill(int id, HttpServletRequest httpServletRequest) {
+    public String payBill(int id, HttpServletRequest httpServletRequest) {
         Bill bill = new Bill();
+        String result = "";
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             String token = httpServletRequest.getHeader("Authorization");
@@ -195,20 +189,26 @@ public class UserRepositoryImpl implements UserRepository {
                     .setParameter("nameOfBank", nameOfBank);
 
             bill = (Bill) query.getSingleResult();
+            if(bill.getPayDate() == null){
+                bill.setPayDate(LocalDate.now());
+                session.update(bill);
+                session.getTransaction().commit();
+                session.close();
+                result = "Paid";
+            } else{
+                session.getTransaction().commit();
+                session.close();
+                return "Already paid";
+            }
 
-            bill.setPayDate(LocalDate.now());
-            session.update(bill);
-            session.getTransaction().commit();
-            session.close();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        return bill;
+        return result;
     }
 
     //gets info about all the services particular subscriber uses
-    //URL - localhost:8080/api/user/services/{phoneNumber}
-    //DONE
+    //URL - localhost:8080/user/services/{phoneNumber}
     @Override
     public List<String> usedServicesFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest) {
         List<String> list = new ArrayList<>();
@@ -231,11 +231,11 @@ public class UserRepositoryImpl implements UserRepository {
         return list;
     }
 
+
     //gets the average sum paid from a customer for a defined period ot time
-    //URL - localhost:8080/api/user/reports/average/{phoneNumber}
-    //DONE
+    //URL - localhost:8080/user/reports/average/{phoneNumber}/{startDate}/{endDate}
     @Override
-    public HashMap<String, Double> getAveragePaidFromSubscriber(int phoneNumber, LocalDate startDate, LocalDate endDate, HttpServletRequest httpServletRequest) {
+    public HashMap<String, Double> getAveragePaidFromSubscriber(int phoneNumber, LocalDate startDate, LocalDate endDate, HttpServletRequest httpServletRequest)  {
         Double averageSum = 0d;
         HashMap<String, Double> hash = new HashMap<>();
         try (Session session = sessionFactory.openSession()) {
@@ -262,8 +262,36 @@ public class UserRepositoryImpl implements UserRepository {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        hash.put("Average sum", averageSum);
+        if(averageSum != 0){
+            hash.put("Average sum", averageSum);
+        } else {
+            hash.put("Average sum", 0D);
+        }
+
         return hash;
     }
 
+    //gets list of all unpaid bills of particular subscriber
+    //URL - localhost:8080/user/unpaid/{phoneNumber}
+    @Override
+    public List<Bill> getUnpaidBillsBySubscriber(int phoneNumber, HttpServletRequest httpServletRequest) {
+        List<Bill> list = new ArrayList<>();
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            String token = httpServletRequest.getHeader("Authorization");
+            String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
+                    .build()
+                    .verify(token.replace("Bearer ", ""))
+                    .getSubject();
+            list = session.createQuery("from Bill b where b.subscriber.user.userName =:nameOfBank " +
+                    "AND b.subscriber.phoneNumber =:phoneNumber AND b.payDate=NULL order by b.endDate desc ")
+                    .setParameter("nameOfBank", nameOfBank)
+                    .setParameter("phoneNumber", phoneNumber).list();
+            session.getTransaction().commit();
+            session.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return list;
+    }
 }
