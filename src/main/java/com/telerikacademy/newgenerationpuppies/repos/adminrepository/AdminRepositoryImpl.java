@@ -7,6 +7,8 @@ import com.telerikacademy.newgenerationpuppies.models.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,9 +28,10 @@ public class AdminRepositoryImpl implements AdminRepository {
             .buildSessionFactory();
 
     @Override
-    public User saveUser(User user, String role) {
+    public ResponseEntity<User> saveUser(User user, String role, String repeatedPassword) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
+        user.setEnabled(1);
         session.save(user);
         Authority authority = new Authority();
         authority.setAuthority(role);
@@ -36,9 +39,7 @@ public class AdminRepositoryImpl implements AdminRepository {
         session.save(authority);
         session.getTransaction().commit();
         session.close();
-        return user;
-//        return "User " + user.getUserName() + " with authority "
-//                + authority.getAuthority() + " created!";
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @Override
@@ -76,10 +77,10 @@ public class AdminRepositoryImpl implements AdminRepository {
     }
 
     @Override
-    public String updateCredentialsForClient(String userName, User user) {
+    public ResponseEntity<User> updateCredentialsForClient(String userName, User user) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        if(!userName.equals(user.getUserName())){
+        if(!userName.equals(user.getUserName()) && !user.getUserName().equals("")){
             session.createQuery("update User u set u.userName= :x " +
                     "where u.userName= :y")
                     .setParameter("x", user.getUserName())
@@ -87,16 +88,25 @@ public class AdminRepositoryImpl implements AdminRepository {
             session.getTransaction().commit();
             session.beginTransaction();
         }
-        User actualUser = session.get(User.class, user.getUserName());
-        actualUser.setPassword(user.getPassword());
-        actualUser.setEnabled(user.getEnabled());
-        actualUser.setDetails(user.getDetails());
-        actualUser.setEIK(user.getEIK());
-        actualUser.setEmail(user.getEmail());
+        String nameForSearch = user.getUserName().equals("")? userName : user.getUserName();
+        User actualUser = session.get(User.class, nameForSearch);
+        if(!user.getPassword().equals("")){
+            actualUser.setPassword(user.getPassword());
+        }
+        if(!user.getDetails().equals("")){
+            actualUser.setDetails(user.getDetails());
+        }
+            actualUser.setEIK(user.getEIK());
+        if(!user.getEmail().equals("")){
+            actualUser.setEmail(user.getEmail());
+        }
+        if(user.getEnabled() != 5){
+            actualUser.setEnabled(user.getEnabled());
+        }
         session.save(actualUser);
         session.getTransaction().commit();
         session.close();
-        return "User updated";
+        return new ResponseEntity<>(actualUser, HttpStatus.OK);
     }
 
     @Override

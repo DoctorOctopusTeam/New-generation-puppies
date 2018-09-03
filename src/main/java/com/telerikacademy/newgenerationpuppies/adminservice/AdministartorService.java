@@ -2,20 +2,19 @@ package com.telerikacademy.newgenerationpuppies.adminservice;
 
 import com.telerikacademy.newgenerationpuppies.models.Bill;
 import com.telerikacademy.newgenerationpuppies.models.User;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface AdministartorService {
 
-    String registerUser(User user, String role);
-
-    String registerAdmin(User user, String role);
+    ResponseEntity saveUser(User user, String role, String repeatedPassword);
 
     String changePassword(String newPassword, String nameOfBank);
 
     List<User> listAll(String role);
 
-    String updateClient(String userName, User user);
+    ResponseEntity updateClient(String userName, User user);
 
     String deleteUser(String nameOfBank);
 

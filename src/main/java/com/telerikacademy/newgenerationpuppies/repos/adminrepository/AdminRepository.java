@@ -2,13 +2,14 @@ package com.telerikacademy.newgenerationpuppies.repos.adminrepository;
 
 import com.telerikacademy.newgenerationpuppies.models.Bill;
 import com.telerikacademy.newgenerationpuppies.models.User;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Map;
 
 public interface AdminRepository {
 
-    User saveUser(User user, String role);
+    ResponseEntity saveUser(User user, String role, String repeatedPassword);
 
     String changePassword(String newPassword, String name);
 
@@ -16,7 +17,7 @@ public interface AdminRepository {
 
     List<User> listAll(String role);
 
-    String updateCredentialsForClient(String userName, User user);
+    ResponseEntity updateCredentialsForClient(String userName, User user);
 
     String deleteUser(String userName);
 
