@@ -2,6 +2,7 @@ package com.telerikacademy.newgenerationpuppies.repos;
 
 import com.telerikacademy.newgenerationpuppies.DTO.TopTenDTO;
 import com.telerikacademy.newgenerationpuppies.models.Bill;
+import com.telerikacademy.newgenerationpuppies.models.Subscriber;
 import com.telerikacademy.newgenerationpuppies.models.User;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +23,7 @@ public interface UserRepository {
 //
 //    public User test();
 
-    HashMap<String, String> getSubscriberInfo(int phoneNumber, HttpServletRequest httpServletRequest);
+    Subscriber getSubscriberInfo(int phoneNumber, HttpServletRequest httpServletRequest);
 
     List<Bill> getAllPayments(HttpServletRequest httpServletRequest);
 

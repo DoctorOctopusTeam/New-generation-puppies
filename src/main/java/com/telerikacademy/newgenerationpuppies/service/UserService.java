@@ -2,6 +2,7 @@ package com.telerikacademy.newgenerationpuppies.service;
 
 import com.telerikacademy.newgenerationpuppies.DTO.TopTenDTO;
 import com.telerikacademy.newgenerationpuppies.models.Bill;
+import com.telerikacademy.newgenerationpuppies.models.Subscriber;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +24,7 @@ public interface UserService {
 //
 //    public User test();
 
-    public HashMap<String, String> getSubscriberInfo(int phoneNumber, HttpServletRequest httpServletRequest);
+    public Subscriber getSubscriberInfo(int phoneNumber, HttpServletRequest httpServletRequest);
 
     public List<Bill> getAllPayments(HttpServletRequest httpServletRequest);
 

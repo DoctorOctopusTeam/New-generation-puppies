@@ -2,6 +2,7 @@ package com.telerikacademy.newgenerationpuppies.service;
 
 import com.telerikacademy.newgenerationpuppies.DTO.TopTenDTO;
 import com.telerikacademy.newgenerationpuppies.models.Bill;
+import com.telerikacademy.newgenerationpuppies.models.Subscriber;
 import com.telerikacademy.newgenerationpuppies.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,7 +49,7 @@ public class UserServiceImpl implements UserService {
 //    }
 
     @Override
-    public HashMap<String, String> getSubscriberInfo(int phoneNumber, HttpServletRequest httpServletRequest) {
+    public Subscriber getSubscriberInfo(int phoneNumber, HttpServletRequest httpServletRequest) {
         return userRepository.getSubscriberInfo(phoneNumber, httpServletRequest);
     }
 

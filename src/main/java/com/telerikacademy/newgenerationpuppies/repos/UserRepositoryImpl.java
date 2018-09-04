@@ -49,8 +49,8 @@ public class UserRepositoryImpl implements UserRepository {
     //gets info about a particular subscriber
     //URL - localhost:8080/user/info/{phoneNumber}
     @Override
-    public HashMap<String, String> getSubscriberInfo(int phoneNumber, HttpServletRequest httpServletRequest) {
-        HashMap<String, String> hash = new HashMap<>();
+    public Subscriber getSubscriberInfo(int phoneNumber, HttpServletRequest httpServletRequest) {
+        Subscriber subscriber = new Subscriber();
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             String token = httpServletRequest.getHeader("Authorization");
@@ -59,23 +59,18 @@ public class UserRepositoryImpl implements UserRepository {
                     .verify(token.replace("Bearer ", ""))
                     .getSubject();
 
-            Subscriber subscriber = session.get(Subscriber.class, phoneNumber);
-            if (!subscriber.getUser().getUserName().equals(nameOfBank)) {
-                session.getTransaction().commit();
-                session.close();
-                return null;
-            } else {
-                hash.put("First name", subscriber.getFirstName());
-                hash.put("Last name", subscriber.getLastName());
-                hash.put("EGN", String.valueOf(subscriber.getEgn()));
-                hash.put("Phone number", String.valueOf(subscriber.getPhoneNumber()));
-            }
+            Query query = session.createQuery("from Subscriber s where s.user.userName =:nameOfBank " +
+                    "AND s.phoneNumber =:phoneNumber")
+                    .setParameter("nameOfBank", nameOfBank)
+                    .setParameter("phoneNumber", phoneNumber);
+            subscriber = (Subscriber) query.getSingleResult();
             session.getTransaction().commit();
             session.close();
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        return hash;
+        return subscriber;
     }
 
     //gets top 10 paid bills from ALL subscribers of the logged in bank, based on the date ot payment in descending order
@@ -189,16 +184,16 @@ public class UserRepositoryImpl implements UserRepository {
                     .setParameter("nameOfBank", nameOfBank);
 
             bill = (Bill) query.getSingleResult();
-            if(bill.getPayDate() == null){
+            if (bill.getPayDate() == null) {
                 bill.setPayDate(LocalDate.now());
                 session.update(bill);
                 session.getTransaction().commit();
                 session.close();
                 result = "Paid";
-            } else{
+            } else {
                 session.getTransaction().commit();
                 session.close();
-                return "Already paid";
+                result =  "Already paid";
             }
 
         } catch (Exception e) {
@@ -235,7 +230,7 @@ public class UserRepositoryImpl implements UserRepository {
     //gets the average sum paid from a customer for a defined period ot time
     //URL - localhost:8080/user/reports/average/{phoneNumber}/{startDate}/{endDate}
     @Override
-    public HashMap<String, Double> getAveragePaidFromSubscriber(int phoneNumber, LocalDate startDate, LocalDate endDate, HttpServletRequest httpServletRequest)  {
+    public HashMap<String, Double> getAveragePaidFromSubscriber(int phoneNumber, LocalDate startDate, LocalDate endDate, HttpServletRequest httpServletRequest) {
         Double averageSum = 0d;
         HashMap<String, Double> hash = new HashMap<>();
         try (Session session = sessionFactory.openSession()) {
@@ -262,7 +257,7 @@ public class UserRepositoryImpl implements UserRepository {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        if(averageSum != 0){
+        if (averageSum != 0) {
             hash.put("Average sum", averageSum);
         } else {
             hash.put("Average sum", 0D);
@@ -291,6 +286,7 @@ public class UserRepositoryImpl implements UserRepository {
             session.close();
         } catch (Exception e) {
             System.out.println(e.getMessage());
+            return null;
         }
         return list;
     }
