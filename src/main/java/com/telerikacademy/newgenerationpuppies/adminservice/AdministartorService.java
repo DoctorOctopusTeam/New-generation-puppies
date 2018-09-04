@@ -11,11 +11,12 @@ public interface AdministartorService {
 
     ResponseEntity saveUser(User user, String role, String repeatedPassword);
 
-    String changePassword(String newPassword, String nameOfBank);
+    ResponseEntity updateClient(String userName, User user, HttpServletRequest httpServletRequest);
+
+
+    ResponseEntity changePassword(String newPassword, String nameOfBank, HttpServletRequest httpServletRequest);
 
     List<User> listAll(String role);
-
-    ResponseEntity updateClient(String userName, User user, HttpServletRequest httpServletRequest);
 
     String deleteUser(String nameOfBank);
 

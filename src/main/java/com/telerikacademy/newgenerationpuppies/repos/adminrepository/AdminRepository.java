@@ -11,7 +11,7 @@ public interface AdminRepository {
 
     ResponseEntity saveUser(User user, String role, String repeatedPassword);
 
-    String changePassword(String newPassword, String name);
+    ResponseEntity changePassword(String newPassword, String name);
 
     User findUser(String nameOfAdmin);
 

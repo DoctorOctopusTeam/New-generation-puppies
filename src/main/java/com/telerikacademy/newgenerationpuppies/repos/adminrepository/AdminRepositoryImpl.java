@@ -43,14 +43,16 @@ public class AdminRepositoryImpl implements AdminRepository {
     }
 
     @Override
-    public String changePassword(String newPassword, String name) {
+    public ResponseEntity changePassword(String newPassword, String name) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         User user = session.get(User.class, name);
+        Authority authority = session.get(Authority.class, name);
+        authority.setAuthority("ROLE_ADMIN");
         user.setPassword(newPassword);
         session.getTransaction().commit();
         session.close();
-        return "Password has been change!";
+        return new ResponseEntity(user, HttpStatus.OK);
     }
 
     @Override

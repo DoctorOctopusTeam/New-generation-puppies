@@ -45,16 +45,6 @@ public class AdminServiceImpl implements AdministartorService {
     }
 
     @Override
-    public String changePassword(String newPassword, String nameOfBank) {
-        return null;
-    }
-
-    @Override
-    public List<User> listAll(String role) {
-        return null;
-    }
-
-    @Override
     public ResponseEntity updateClient(String userName, User user, HttpServletRequest httpServletRequest) {
         if(userName.equals("")){
             return returnResponseEntity("No user specified!", user);
@@ -81,6 +71,28 @@ public class AdminServiceImpl implements AdministartorService {
 
         return adminRepository.updateCredentialsForClient(userName, user);
     }
+
+
+    @Override
+    public ResponseEntity changePassword(String newPassword, String repeatPassword, HttpServletRequest httpServletRequest) {
+        String token = httpServletRequest.getHeader("Authorization");
+        String nameOfAdmin = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
+                .build()
+                .verify(token.replace("Bearer ", ""))
+                .getSubject();
+        User user = adminRepository.findUser(nameOfAdmin);
+        if(!newPassword.equals(repeatPassword)){
+            return returnResponseEntity("Both fields must have identical entries!", user);
+        }
+        String newEncryptedPassword = bCryptPasswordEncoder.encode(newPassword);
+        return adminRepository.changePassword(newEncryptedPassword, nameOfAdmin);
+    }
+
+    @Override
+    public List<User> listAll(String role) {
+        return null;
+    }
+
 
     @Override
     public String deleteUser(String nameOfBank) {

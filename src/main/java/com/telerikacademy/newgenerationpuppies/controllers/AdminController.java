@@ -42,38 +42,8 @@ public class AdminController {
     @PostMapping("/registeradmin")
     @PreAuthorize(value = "hasAuthority('ROLE_ADMIN')")
     public ResponseEntity registerAdmin(@RequestBody User user, @RequestParam String repeatedPassword){
-        String role = "ROLE_ADMIN";
+        String role = "ROLE_UNAUTHORIZEDADMIN";
         return administartorService.saveUser(user, role, repeatedPassword);
-    }
-
-    @PutMapping("/changepassword")
-    @PreAuthorize(value = "hasAnyAuthority('ROLE_ADMIN')")
-    public String changePassword(@RequestParam String oldPassword,
-                                 @RequestParam String newPassword,
-                                 @RequestParam String repeatNewPassword,
-                                 HttpServletRequest httpServletRequest){
-        String token = httpServletRequest.getHeader("Authorization");
-        String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
-                .build()
-                .verify(token.replace("Bearer ", ""))
-                .getSubject();
-        User user = adminRepository.findUser(nameOfBank);
-        String oldOne = user.getPassword();
-        boolean isTrue = bCryptPasswordEncoder.matches(oldPassword, oldOne);
-        if(!isTrue){
-            return "Your current password is different than the one you have entered!";
-        }
-        if(!newPassword.equals(repeatNewPassword)){
-            return "There is a mismatch between the password and the repeatpassword fields!";
-        }
-        String newEncryptedPassword = bCryptPasswordEncoder.encode(newPassword);
-        return adminRepository.changePassword(newEncryptedPassword, nameOfBank);
-    }
-
-    @GetMapping("/listall/{role}")
-    @PreAuthorize(value = "hasAnyAuthority('ROLE_ADMIN')")
-    public List<User> listAll(@PathVariable String role){
-        return adminRepository.listAll(role);
     }
 
     @PostMapping("/updatecreds")
@@ -82,6 +52,21 @@ public class AdminController {
                                        HttpServletRequest httpServletRequest){
         return administartorService.updateClient(currentuserName, user, httpServletRequest);
     }
+//---------------------------
+    @PutMapping("/changepassword")
+    @PreAuthorize(value = "hasAnyAuthority('ROLE_UNAUTHORIZEDADMIN')")
+    public ResponseEntity changePassword(@RequestParam String newPassword,
+                                 @RequestParam String repeatNewPassword,
+                                 HttpServletRequest httpServletRequest){
+        return administartorService.changePassword(newPassword, repeatNewPassword, httpServletRequest);
+    }
+//--------------------------------------------
+    @GetMapping("/listall/{role}")
+    @PreAuthorize(value = "hasAnyAuthority('ROLE_ADMIN')")
+    public List<User> listAll(@PathVariable String role){
+        return adminRepository.listAll(role);
+    }
+
 
     @DeleteMapping("/delete/{nameofbank}")
     @PreAuthorize(value = "hasAnyAuthority('ROLE_ADMIN')")

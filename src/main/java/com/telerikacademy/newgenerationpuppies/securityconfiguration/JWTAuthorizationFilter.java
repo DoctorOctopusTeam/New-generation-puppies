@@ -67,6 +67,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                 //------------------------------------------------------------------------
                 //LOADS THE CURRENT STATUS OF THE USER IN THE DB
                 UserDetails up = udsi.loadUserByUsername(user);
+
                 //------------------------------------------------------------------------
 
                 return new UsernamePasswordAuthenticationToken(up, null, up.getAuthorities());//user, null, new ArrayList<>();
