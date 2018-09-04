@@ -4,6 +4,7 @@ import com.telerikacademy.newgenerationpuppies.models.Bill;
 import com.telerikacademy.newgenerationpuppies.models.User;
 import org.springframework.http.ResponseEntity;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface AdministartorService {
@@ -14,7 +15,7 @@ public interface AdministartorService {
 
     List<User> listAll(String role);
 
-    ResponseEntity updateClient(String userName, User user);
+    ResponseEntity updateClient(String userName, User user, HttpServletRequest httpServletRequest);
 
     String deleteUser(String nameOfBank);
 

@@ -78,8 +78,9 @@ public class AdminController {
 
     @PostMapping("/updatecreds")
     @PreAuthorize(value = "hasAnyAuthority('ROLE_ADMIN')")
-    public ResponseEntity updateClient(@RequestBody User user, @RequestParam String currentuserName){
-        return administartorService.updateClient(currentuserName, user);
+    public ResponseEntity updateClient(@RequestBody User user, @RequestParam String currentuserName,
+                                       HttpServletRequest httpServletRequest){
+        return administartorService.updateClient(currentuserName, user, httpServletRequest);
     }
 
     @DeleteMapping("/delete/{nameofbank}")
