@@ -114,7 +114,7 @@ public class UserRepositoryImpl implements UserRepository {
             bills = session.createQuery("from Bill b where b.payDate != null AND " +
                     ("b.subscriber.user.userName =:nameOfBank AND " +
                             "b.subscriber.phoneNumber =:phoneNumber AND " +
-                            "b.payDate >:startDate AND b.payDate <:endDate order by b.amount desc "))
+                            "b.payDate >=:startDate AND b.payDate <=:endDate order by b.amount desc "))
                     .setParameter("nameOfBank", nameOfBank)
                     .setParameter("phoneNumber", phoneNumber)
                     .setParameter("startDate", startDate)
@@ -241,10 +241,12 @@ public class UserRepositoryImpl implements UserRepository {
                     .verify(token.replace("Bearer ", ""))
                     .getSubject();
 
-            Query query = session.createQuery("select round(avg(b.amount), 2) from Bill b where b.payDate != null AND " +
+            Query query = session.createQuery("select round(avg(b.amount * " +
+                    "CASE b.currency when 'USD' THEN 1.5 WHEN 'EUR' THEN 2.0 ELSE 1.0 END),2) " +
+                    "from Bill b where b.payDate != null AND " +
                     ("b.subscriber.user.userName =:nameOfBank AND " +
                             "b.subscriber.phoneNumber =:phoneNumber AND " +
-                            "b.payDate >:startDate AND b.payDate <:endDate"))
+                            "b.payDate >=:startDate AND b.payDate <=:endDate"))
                     .setParameter("nameOfBank", nameOfBank)
                     .setParameter("phoneNumber", phoneNumber)
                     .setParameter("startDate", startDate)
@@ -257,10 +259,10 @@ public class UserRepositoryImpl implements UserRepository {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        if (averageSum != 0) {
+        if (averageSum != null) {
             hash.put("Average sum", averageSum);
         } else {
-            hash.put("Average sum", 0D);
+            return null;
         }
 
         return hash;
