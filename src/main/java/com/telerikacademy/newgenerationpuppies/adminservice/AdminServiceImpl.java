@@ -75,36 +75,43 @@ public class AdminServiceImpl implements AdministartorService {
 
     @Override
     public ResponseEntity changePassword(String newPassword, String repeatPassword, HttpServletRequest httpServletRequest) {
+        if(!newPassword.equals(repeatPassword)){
+            return returnResponseEntity("Both fields must have identical entries!", null);
+        }
+        if(newPassword.equals("")){
+            return returnResponseEntity("Password can not be empty string", null);
+        }
         String token = httpServletRequest.getHeader("Authorization");
         String nameOfAdmin = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
                 .build()
                 .verify(token.replace("Bearer ", ""))
                 .getSubject();
         User user = adminRepository.findUser(nameOfAdmin);
-        if(!newPassword.equals(repeatPassword)){
-            return returnResponseEntity("Both fields must have identical entries!", user);
+        if(bCryptPasswordEncoder.matches(newPassword, user.getPassword())){
+            return returnResponseEntity("New password same as the initial one!", null);
         }
         String newEncryptedPassword = bCryptPasswordEncoder.encode(newPassword);
         return adminRepository.changePassword(newEncryptedPassword, nameOfAdmin);
     }
 
     @Override
+    public ResponseEntity deleteUser(String nameOfBank) {
+        User user = adminRepository.findUser(nameOfBank);
+        if(user == null){
+            return returnResponseEntity("No such user in tha database!", null);
+        }
+        return adminRepository.deleteUser(nameOfBank);
+    }
+
+    @Override
+    public ResponseEntity issueNewBill(int subscriber, Bill bill) {
+        return adminRepository.issueBill(subscriber, bill);
+    }
+
+    @Override
     public List<User> listAll(String role) {
         return null;
     }
-
-
-    @Override
-    public String deleteUser(String nameOfBank) {
-        return null;
-    }
-
-    @Override
-    public Bill issueNewBill(int subscriber, Bill bill) {
-        return null;
-    }
-
-
 
     public ResponseEntity returnResponseEntity(String message, User user){
         return ResponseEntity.badRequest()

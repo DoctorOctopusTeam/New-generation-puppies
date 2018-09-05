@@ -16,9 +16,13 @@ public interface AdministartorService {
 
     ResponseEntity changePassword(String newPassword, String nameOfBank, HttpServletRequest httpServletRequest);
 
+    ResponseEntity deleteUser(String nameOfBank);
+
+    ResponseEntity issueNewBill(int subscriber, Bill bill);
+
     List<User> listAll(String role);
 
-    String deleteUser(String nameOfBank);
 
-    Bill issueNewBill(int subscriber, Bill bill);
+
+
 }

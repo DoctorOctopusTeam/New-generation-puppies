@@ -1,5 +1,6 @@
 package com.telerikacademy.newgenerationpuppies.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -34,7 +35,8 @@ public class User {
 
 
     @OneToMany(mappedBy = "user")
-    @JsonIgnoreProperties({"user", "bills"})
+    //@JsonIgnoreProperties({"user", "bills"})
+    @JsonIgnore
     private List<Subscriber> subscribers;
 
     @OneToOne

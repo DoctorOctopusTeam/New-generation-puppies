@@ -53,7 +53,7 @@ public class AdminController {
         return administartorService.updateClient(currentuserName, user, httpServletRequest);
     }
 //---------------------------
-    @PutMapping("/changepassword")
+    @PostMapping("/changepassword")
     @PreAuthorize(value = "hasAnyAuthority('ROLE_UNAUTHORIZEDADMIN')")
     public ResponseEntity changePassword(@RequestParam String newPassword,
                                  @RequestParam String repeatNewPassword,
@@ -61,6 +61,22 @@ public class AdminController {
         return administartorService.changePassword(newPassword, repeatNewPassword, httpServletRequest);
     }
 //--------------------------------------------
+
+    @PostMapping("/delete")
+    @PreAuthorize(value = "hasAnyAuthority('ROLE_ADMIN')")
+    public ResponseEntity deleteUser(@RequestParam String nameOfBank){
+
+        return administartorService.deleteUser(nameOfBank);
+    }
+
+    //--------
+    @PostMapping("/issuebill")
+    @PreAuthorize(value = "hasAnyAuthority('ROLE_ADMIN')")
+    public ResponseEntity issueNewBill(@RequestParam int subscriber, @RequestBody Bill bill){
+
+        return administartorService.issueNewBill(subscriber, bill);
+    }
+
     @GetMapping("/listall/{role}")
     @PreAuthorize(value = "hasAnyAuthority('ROLE_ADMIN')")
     public List<User> listAll(@PathVariable String role){
@@ -68,17 +84,5 @@ public class AdminController {
     }
 
 
-    @DeleteMapping("/delete/{nameofbank}")
-    @PreAuthorize(value = "hasAnyAuthority('ROLE_ADMIN')")
-    public String deleteUser(@PathVariable String nameofbank){
-        return adminRepository.deleteUser(nameofbank);
-    }
-
-    @PostMapping("/issuebill")
-    @PreAuthorize(value = "hasAnyAuthority('ROLE_ADMIN')")
-    public Bill issueNewBill(@RequestParam int subscriber, @RequestBody Bill bill){
-
-        return adminRepository.issueBill(subscriber, bill);
-    }
 
 }

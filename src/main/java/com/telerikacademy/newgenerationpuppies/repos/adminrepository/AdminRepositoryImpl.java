@@ -43,42 +43,6 @@ public class AdminRepositoryImpl implements AdminRepository {
     }
 
     @Override
-    public ResponseEntity changePassword(String newPassword, String name) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        User user = session.get(User.class, name);
-        Authority authority = session.get(Authority.class, name);
-        authority.setAuthority("ROLE_ADMIN");
-        user.setPassword(newPassword);
-        session.getTransaction().commit();
-        session.close();
-        return new ResponseEntity(user, HttpStatus.OK);
-    }
-
-    @Override
-    public User findUser(String nameOfAdmin) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        System.out.println();
-        User user = session.get(User.class, nameOfAdmin);
-        session.getTransaction().commit();
-        session.close();
-        return user;
-    }
-
-    @Override
-    public List<User> listAll(String auth) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        String role = "ROLE_" + auth.toUpperCase();
-        List<User>list = session.createQuery("from User u where u.authority.authority= :x")
-                .setParameter("x",role).list();
-        session.getTransaction().commit();
-        session.close();
-        return list;
-    }
-
-    @Override
     public ResponseEntity<User> updateCredentialsForClient(String userName, User user) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
@@ -98,7 +62,7 @@ public class AdminRepositoryImpl implements AdminRepository {
         if(!user.getDetails().equals("")){
             actualUser.setDetails(user.getDetails());
         }
-            actualUser.setEIK(user.getEIK());
+        actualUser.setEIK(user.getEIK());
         if(!user.getEmail().equals("")){
             actualUser.setEmail(user.getEmail());
         }
@@ -112,26 +76,66 @@ public class AdminRepositoryImpl implements AdminRepository {
     }
 
     @Override
-    public String deleteUser(String userName) {
+    public ResponseEntity changePassword(String newPassword, String name) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        User user = session.get(User.class, userName);
-        session.delete(user);
+        User user = session.get(User.class, name);
+        Authority authority = session.get(Authority.class, name);
+        authority.setAuthority("ROLE_ADMIN");
+        user.setPassword(newPassword);
         session.getTransaction().commit();
         session.close();
-        return "User " + user.getUserName() + " deleted";
+        return new ResponseEntity(user, HttpStatus.OK);
     }
 
     @Override
-    public Bill issueBill(int subscriber, Bill bill) {
+    public ResponseEntity deleteUser(String userName) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        User user = session.get(User.class, userName);
+//        Authority authority = session.get(Authority.class, userName);
+//        session.delete(authority);
+        session.delete(user);
+        session.getTransaction().commit();
+        session.close();
+        return new ResponseEntity(user, HttpStatus.OK);
+    }
+
+    @Override
+    public User findUser(String nameOfAdmin) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        System.out.println();
+        User user = session.get(User.class, nameOfAdmin);
+        session.getTransaction().commit();
+        session.close();
+        return user;
+    }
+
+    @Override
+    public ResponseEntity issueBill(int subscriber, Bill bill) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         bill.setSubscriber(session.get(Subscriber.class, subscriber));
         session.save(bill);
         session.getTransaction().commit();
         session.close();
-        return bill;
+        return new ResponseEntity(bill, HttpStatus.OK);
     }
+
+    @Override
+    public List<User> listAll(String auth) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        String role = "ROLE_" + auth.toUpperCase();
+        List<User>list = session.createQuery("from User u where u.authority.authority= :x")
+                .setParameter("x",role).list();
+        session.getTransaction().commit();
+        session.close();
+        return list;
+    }
+
+
 
 
 }

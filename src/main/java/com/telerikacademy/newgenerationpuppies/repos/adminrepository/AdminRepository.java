@@ -11,17 +11,25 @@ public interface AdminRepository {
 
     ResponseEntity saveUser(User user, String role, String repeatedPassword);
 
+    ResponseEntity updateCredentialsForClient(String userName, User user);
+
     ResponseEntity changePassword(String newPassword, String name);
 
-    User findUser(String nameOfAdmin);
+    ResponseEntity deleteUser(String userName);
+
+    ResponseEntity issueBill(int ubscriber, Bill bill);
 
     List<User> listAll(String role);
 
-    ResponseEntity updateCredentialsForClient(String userName, User user);
+    User findUser(String nameOfAdmin);
 
-    String deleteUser(String userName);
 
-    Bill issueBill(int ubscriber, Bill bill);
+
+
+
+
+
+
 
 
 
