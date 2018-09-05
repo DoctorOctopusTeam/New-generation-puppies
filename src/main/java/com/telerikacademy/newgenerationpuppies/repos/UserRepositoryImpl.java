@@ -89,7 +89,7 @@ public class UserRepositoryImpl implements UserRepository {
             list = session.createQuery("from Bill b where b.payDate != null AND " +
                     "b.subscriber.user.userName =:nameOfBank order by payDate asc ")
                     .setParameter("nameOfBank", nameOfBank)
-                    .setMaxResults(10).list();
+                    .list();
             session.getTransaction().commit();
             session.close();
         } catch (Exception e) {
