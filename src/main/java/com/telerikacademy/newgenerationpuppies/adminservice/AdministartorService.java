@@ -22,6 +22,8 @@ public interface AdministartorService {
 
     List<User> listAll(String role);
 
+    ResponseEntity listAllSubscribers();
+
 
 
 

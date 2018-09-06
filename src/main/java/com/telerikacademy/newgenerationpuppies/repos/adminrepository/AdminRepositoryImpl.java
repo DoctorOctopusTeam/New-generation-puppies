@@ -113,6 +113,16 @@ public class AdminRepositoryImpl implements AdminRepository {
     }
 
     @Override
+    public ResponseEntity listAllSubscribers() {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        List<Subscriber>list = session.createQuery("from Subscriber ").list();
+        session.getTransaction().commit();
+        session.close();
+        return new ResponseEntity(list, HttpStatus.OK);
+    }
+
+    @Override
     public ResponseEntity issueBill(int subscriber, Bill bill) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();

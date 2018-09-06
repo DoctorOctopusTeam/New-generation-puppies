@@ -23,6 +23,8 @@ public interface AdminRepository {
 
     User findUser(String nameOfAdmin);
 
+    ResponseEntity listAllSubscribers();
+
 
 
 

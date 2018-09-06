@@ -83,6 +83,13 @@ public class AdminController {
         return adminRepository.listAll(role);
     }
 
+    @GetMapping("/subscribers")
+    @PreAuthorize(value = "hasAnyAuthority('ROLE_ADMIN')")
+    public ResponseEntity listAllSubscribers(){
+        return administartorService.listAllSubscribers();
+    }
+
+
 
 
 }

@@ -113,6 +113,11 @@ public class AdminServiceImpl implements AdministartorService {
         return null;
     }
 
+    @Override
+    public ResponseEntity listAllSubscribers() {
+        return adminRepository.listAllSubscribers();
+    }
+
     public ResponseEntity returnResponseEntity(String message, User user){
         return ResponseEntity.badRequest()
                 .header("Access-Control-Expose-Headers","Error")
