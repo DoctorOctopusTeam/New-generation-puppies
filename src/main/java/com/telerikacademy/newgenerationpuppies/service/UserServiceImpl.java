@@ -84,7 +84,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Bill> getUnpaidBillsBySubscriber(int phoneNumber, HttpServletRequest httpServletRequest) {
+    public ResponseEntity getUnpaidBillsBySubscriber(int phoneNumber, HttpServletRequest httpServletRequest) {
         return userRepository.getUnpaidBillsBySubscriber(phoneNumber, httpServletRequest);
     }
 

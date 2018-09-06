@@ -38,5 +38,5 @@ public interface UserService {
 
     List<String> usedServicesFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest);
 
-    List<Bill> getUnpaidBillsBySubscriber(int phoneNumber, HttpServletRequest httpServletRequest);
+    ResponseEntity getUnpaidBillsBySubscriber(int phoneNumber, HttpServletRequest httpServletRequest);
 }

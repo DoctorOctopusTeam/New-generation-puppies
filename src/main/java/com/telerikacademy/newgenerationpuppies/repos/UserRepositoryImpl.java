@@ -12,7 +12,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 import org.hibernate.transform.Transformers;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
@@ -143,7 +142,6 @@ public class UserRepositoryImpl implements UserRepository {
 
         return new ResponseEntity(bills.get(0), HttpStatus.OK);
     }
-
 
     //gets the top ten subscribers based on the paid sums for services
     //URL - localhost:8080/user/reports/10biggest-amounts
@@ -287,7 +285,7 @@ public class UserRepositoryImpl implements UserRepository {
     //gets list of all unpaid bills of particular subscriber
     //URL - localhost:8080/user/unpaid/{phoneNumber}
     @Override
-    public List<Bill> getUnpaidBillsBySubscriber(int phoneNumber, HttpServletRequest httpServletRequest) {
+    public ResponseEntity getUnpaidBillsBySubscriber(int phoneNumber, HttpServletRequest httpServletRequest) {
         List<Bill> list = new ArrayList<>();
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
@@ -296,6 +294,10 @@ public class UserRepositoryImpl implements UserRepository {
                     .build()
                     .verify(token.replace("Bearer ", ""))
                     .getSubject();
+            Subscriber subscriber = session.get(Subscriber.class, phoneNumber);
+            if (subscriber == null){
+                return returnResponseEntity("Not valid phone number", null);
+            }
             list = session.createQuery("from Bill b where b.subscriber.user.userName =:nameOfBank " +
                     "AND b.subscriber.phoneNumber =:phoneNumber AND b.payDate=NULL order by b.endDate desc ")
                     .setParameter("nameOfBank", nameOfBank)
@@ -304,9 +306,8 @@ public class UserRepositoryImpl implements UserRepository {
             session.close();
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return null;
         }
-        return list;
+        return new ResponseEntity(list, HttpStatus.OK);
     }
 
     public ResponseEntity returnResponseEntity(String message, Object object){

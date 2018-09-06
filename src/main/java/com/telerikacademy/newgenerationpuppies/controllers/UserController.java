@@ -99,7 +99,7 @@ public class UserController {
 
     @GetMapping("/unpaid/{phoneNumber}")
     @PreAuthorize(value = "hasAnyAuthority('ROLE_USER')")
-    public List<Bill> getUnpaidBillsBySubscriber(@PathVariable int phoneNumber, HttpServletRequest httpServletRequest){
+    public ResponseEntity getUnpaidBillsBySubscriber(@PathVariable int phoneNumber, HttpServletRequest httpServletRequest){
         return userService.getUnpaidBillsBySubscriber(phoneNumber, httpServletRequest);
     }
 
