@@ -5,11 +5,11 @@ import com.telerikacademy.newgenerationpuppies.models.Bill;
 import com.telerikacademy.newgenerationpuppies.models.Subscriber;
 import com.telerikacademy.newgenerationpuppies.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -59,12 +59,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Bill getMaxPaidFromSubscriber(int phoneNumber, LocalDate startDate, LocalDate endDate, HttpServletRequest httpServletRequest) {
+    public ResponseEntity getMaxPaidFromSubscriber(int phoneNumber, LocalDate startDate, LocalDate endDate, HttpServletRequest httpServletRequest) {
         return userRepository.getMaxPaidFromSubscriber(phoneNumber, startDate, endDate, httpServletRequest);
     }
 
     @Override
-    public HashMap<String, Double> getAveragePaidFromSubscriber(int phoneNumber, LocalDate startDate, LocalDate endDate, HttpServletRequest httpServletRequest) {
+    public ResponseEntity getAveragePaidFromSubscriber(int phoneNumber, LocalDate startDate, LocalDate endDate, HttpServletRequest httpServletRequest) {
         return userRepository.getAveragePaidFromSubscriber(phoneNumber, startDate, endDate, httpServletRequest);
     }
 
@@ -86,5 +86,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<Bill> getUnpaidBillsBySubscriber(int phoneNumber, HttpServletRequest httpServletRequest) {
         return userRepository.getUnpaidBillsBySubscriber(phoneNumber, httpServletRequest);
+    }
+
+
+    public ResponseEntity returnResponseEntity(String message, Object object){
+        return ResponseEntity.badRequest()
+                .header("Access-Control-Expose-Headers","Error")
+                .header("Error", message)
+                .body(object);
     }
 }

@@ -12,6 +12,9 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 import org.hibernate.transform.Transformers;
+import org.springframework.http.HttpRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 import javax.servlet.http.HttpServletRequest;
@@ -101,7 +104,7 @@ public class UserRepositoryImpl implements UserRepository {
     //gets the maximum sum paid from a subscriber for e defined period ot time
     //URL - localhost:8080/user/reports/max/{phoneNumber}
     @Override
-    public Bill getMaxPaidFromSubscriber(int phoneNumber, LocalDate startDate, LocalDate endDate, HttpServletRequest httpServletRequest) {
+    public ResponseEntity getMaxPaidFromSubscriber(int phoneNumber, LocalDate startDate, LocalDate endDate, HttpServletRequest httpServletRequest) {
         List<Bill> bills = new ArrayList<>();
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
@@ -110,6 +113,11 @@ public class UserRepositoryImpl implements UserRepository {
                     .build()
                     .verify(token.replace("Bearer ", ""))
                     .getSubject();
+
+            Subscriber subscriber = session.get(Subscriber.class, phoneNumber);
+            if (subscriber == null){
+                return returnResponseEntity("Not valid phone number", null);
+            }
 
             bills = session.createQuery("from Bill b where b.payDate != null AND " +
                             "b.subscriber.user.userName =:nameOfBank AND " +
@@ -126,13 +134,14 @@ public class UserRepositoryImpl implements UserRepository {
 
             session.getTransaction().commit();
             session.close();
+            if (bills.size() == 0){
+                return returnResponseEntity("No payment records for this period", null);
+            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        if (bills.size() == 0){
-            return null;
-        }
-        return bills.get(0);
+
+        return new ResponseEntity(bills.get(0), HttpStatus.OK);
     }
 
 
@@ -233,7 +242,7 @@ public class UserRepositoryImpl implements UserRepository {
     //gets the average sum paid from a customer for a defined period ot time
     //URL - localhost:8080/user/reports/average/{phoneNumber}/{startDate}/{endDate}
     @Override
-    public HashMap<String, Double> getAveragePaidFromSubscriber(int phoneNumber, LocalDate startDate, LocalDate endDate, HttpServletRequest httpServletRequest) {
+    public ResponseEntity getAveragePaidFromSubscriber(int phoneNumber, LocalDate startDate, LocalDate endDate, HttpServletRequest httpServletRequest) {
         Double averageSum = 0d;
         HashMap<String, Double> hash = new HashMap<>();
         try (Session session = sessionFactory.openSession()) {
@@ -243,6 +252,11 @@ public class UserRepositoryImpl implements UserRepository {
                     .build()
                     .verify(token.replace("Bearer ", ""))
                     .getSubject();
+
+            Subscriber subscriber = session.get(Subscriber.class, phoneNumber);
+            if (subscriber == null){
+                return returnResponseEntity("Not valid phone number", null);
+            }
 
             Query query = session.createQuery("select round(avg(b.amount * " +
                     "CASE b.currency when 'USD' THEN 1.5 WHEN 'EUR' THEN 2.0 ELSE 1.0 END),2) " +
@@ -255,20 +269,19 @@ public class UserRepositoryImpl implements UserRepository {
                     .setParameter("startDate", startDate)
                     .setParameter("endDate", endDate);
 
-
             averageSum = (Double) query.getSingleResult();
             session.getTransaction().commit();
             session.close();
+            if (averageSum == null){
+                return returnResponseEntity("No payment records for this period", null);
+            } else {
+                hash.put("Average sum", averageSum);
+            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        if (averageSum != null) {
-            hash.put("Average sum", averageSum);
-        } else {
-            return null;
-        }
 
-        return hash;
+        return new ResponseEntity(hash, HttpStatus.OK);
     }
 
     //gets list of all unpaid bills of particular subscriber
@@ -294,5 +307,12 @@ public class UserRepositoryImpl implements UserRepository {
             return null;
         }
         return list;
+    }
+
+    public ResponseEntity returnResponseEntity(String message, Object object){
+        return ResponseEntity.badRequest()
+                .header("Access-Control-Expose-Headers","Error")
+                .header("Error", message)
+                .body(object);
     }
 }

@@ -9,6 +9,7 @@ import com.telerikacademy.newgenerationpuppies.repos.UserRepository;
 import com.telerikacademy.newgenerationpuppies.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -52,7 +53,7 @@ public class UserController {
     //DONE
     @GetMapping("/reports/max/{phoneNumber}/{startDate}/{endDate}")
     @PreAuthorize(value = "hasAnyAuthority('ROLE_USER')")
-    public Bill getMaxPaidFromSubscriber(@PathVariable int phoneNumber,
+    public ResponseEntity getMaxPaidFromSubscriber(@PathVariable int phoneNumber,
                                          @PathVariable("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
                                          @PathVariable ("endDate")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
                                          HttpServletRequest httpServletRequest){
@@ -89,10 +90,10 @@ public class UserController {
     //DONE
     @GetMapping("/reports/average/{phoneNumber}/{startDate}/{endDate}")
     @PreAuthorize(value = "hasAnyAuthority('ROLE_USER')")
-    public HashMap<String, Double> getAveragePaidFromSubscriber(@PathVariable int phoneNumber,
-                                                                @PathVariable("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-                                                                @PathVariable ("endDate")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-                                                                HttpServletRequest httpServletRequest){
+    public ResponseEntity getAveragePaidFromSubscriber(@PathVariable int phoneNumber,
+                                                       @PathVariable("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                                                       @PathVariable ("endDate")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+                                                       HttpServletRequest httpServletRequest){
         return userService.getAveragePaidFromSubscriber(phoneNumber, startDate, endDate, httpServletRequest);
     }
 
