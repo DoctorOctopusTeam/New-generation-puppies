@@ -112,24 +112,27 @@ public class UserRepositoryImpl implements UserRepository {
                     .getSubject();
 
             bills = session.createQuery("from Bill b where b.payDate != null AND " +
-                    ("b.subscriber.user.userName =:nameOfBank AND " +
+                            "b.subscriber.user.userName =:nameOfBank AND " +
                             "b.subscriber.phoneNumber =:phoneNumber AND " +
-                            "b.payDate >=:startDate AND b.payDate <=:endDate order by b.amount desc "))
+                            "b.payDate >=:startDate AND b.payDate <=:endDate " +
+                    "order by (b.amount * CASE b.currency when 'USD' THEN 1.5 WHEN 'EUR' THEN 2.0 ELSE 1.0 END) desc ")
                     .setParameter("nameOfBank", nameOfBank)
                     .setParameter("phoneNumber", phoneNumber)
                     .setParameter("startDate", startDate)
-                    .setParameter("endDate", endDate).list();
+                    .setParameter("endDate", endDate)
+                    .setMaxResults(1).list();
+
+
+
             session.getTransaction().commit();
             session.close();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        if (bills.size() == 0) {
+        if (bills.size() == 0){
             return null;
-        } else {
-
-            return bills.get(0);
         }
+        return bills.get(0);
     }
 
 
@@ -193,7 +196,7 @@ public class UserRepositoryImpl implements UserRepository {
             } else {
                 session.getTransaction().commit();
                 session.close();
-                result =  "Already paid";
+                result = "Already paid";
             }
 
         } catch (Exception e) {
