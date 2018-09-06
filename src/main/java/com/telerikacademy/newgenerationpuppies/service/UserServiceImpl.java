@@ -2,6 +2,7 @@ package com.telerikacademy.newgenerationpuppies.service;
 
 import com.telerikacademy.newgenerationpuppies.DTO.TopTenDTO;
 import com.telerikacademy.newgenerationpuppies.models.Bill;
+import com.telerikacademy.newgenerationpuppies.models.Subscriber;
 import com.telerikacademy.newgenerationpuppies.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,7 +49,7 @@ public class UserServiceImpl implements UserService {
 //    }
 
     @Override
-    public HashMap<String, String> getSubscriberInfo(int phoneNumber, HttpServletRequest httpServletRequest) {
+    public Subscriber getSubscriberInfo(int phoneNumber, HttpServletRequest httpServletRequest) {
         return userRepository.getSubscriberInfo(phoneNumber, httpServletRequest);
     }
 
@@ -68,17 +69,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public HashMap<String, TopTenDTO> getBiggestAmountsPaidBySubscribers(HttpServletRequest httpServletRequest) {
+    public List<TopTenDTO> getBiggestAmountsPaidBySubscribers(HttpServletRequest httpServletRequest) {
         return userRepository.getBiggestAmountsPaidBySubscribers(httpServletRequest);
     }
 
     @Override
-    public Bill payBill(int id, HttpServletRequest httpServletRequest) {
-        return userRepository.payBill(id, httpServletRequest);
+    public String payBill(int id, HttpServletRequest httpServletRequest) {
+         return userRepository.payBill(id, httpServletRequest);
     }
 
     @Override
     public List<String> usedServicesFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest) {
         return userRepository.usedServicesFromSubscriber(phoneNumber, httpServletRequest);
+    }
+
+    @Override
+    public List<Bill> getUnpaidBillsBySubscriber(int phoneNumber, HttpServletRequest httpServletRequest) {
+        return userRepository.getUnpaidBillsBySubscriber(phoneNumber, httpServletRequest);
     }
 }
