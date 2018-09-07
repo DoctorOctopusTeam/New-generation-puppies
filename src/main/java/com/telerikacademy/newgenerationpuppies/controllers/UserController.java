@@ -74,7 +74,7 @@ public class UserController {
     //DONE
     @PostMapping("/pay/{id}")
     @PreAuthorize(value = "hasAnyAuthority('ROLE_USER')")
-    public String payBill(@PathVariable int id, HttpServletRequest httpServletRequest){
+    public Bill payBill(@PathVariable int id, HttpServletRequest httpServletRequest){
          return userService.payBill(id, httpServletRequest);
     }
 

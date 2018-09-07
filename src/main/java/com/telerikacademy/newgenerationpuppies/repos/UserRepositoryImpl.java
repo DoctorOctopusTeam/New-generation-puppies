@@ -179,11 +179,13 @@ public class UserRepositoryImpl implements UserRepository {
     //user pays a particular subscriber's bill chosen by the bill's id
     //URL - localhost:8080/user/pay/{id}
     @Override
-    public String payBill(int id, HttpServletRequest httpServletRequest) {
+    public Bill payBill(int id, HttpServletRequest httpServletRequest) {
         Bill bill = new Bill();
         String result = "";
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
+
+
             String token = httpServletRequest.getHeader("Authorization");
             String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
                     .build()
@@ -199,17 +201,16 @@ public class UserRepositoryImpl implements UserRepository {
                 session.update(bill);
                 session.getTransaction().commit();
                 session.close();
-                result = "Paid";
             } else {
                 session.getTransaction().commit();
                 session.close();
-                result = "Already paid";
+                return null;
             }
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        return result;
+       return bill;
     }
 
     //gets info about all the services particular subscriber uses

@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String payBill(int id, HttpServletRequest httpServletRequest) {
+    public Bill payBill(int id, HttpServletRequest httpServletRequest) {
          return userRepository.payBill(id, httpServletRequest);
     }
 

@@ -33,7 +33,7 @@ public interface UserRepository {
 
     List<TopTenDTO> getBiggestAmountsPaidBySubscribers(HttpServletRequest httpServletRequest);
 
-    String payBill(int id, HttpServletRequest httpServletRequest);
+    Bill payBill(int id, HttpServletRequest httpServletRequest);
 
     List<String> usedServicesFromSubscriber(int phoneNumber, HttpServletRequest httpServletRequest);
 
