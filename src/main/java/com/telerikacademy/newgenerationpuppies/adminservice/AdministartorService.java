@@ -20,7 +20,7 @@ public interface AdministartorService {
 
     ResponseEntity issueNewBill(int subscriber, Bill bill);
 
-    List<User> listAll(String role);
+    ResponseEntity listAll(String role);
 
     ResponseEntity listAllSubscribers();
 

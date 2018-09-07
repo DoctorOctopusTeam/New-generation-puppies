@@ -19,7 +19,11 @@ public interface AdminRepository {
 
     ResponseEntity issueBill(int ubscriber, Bill bill);
 
-    List<User> listAll(String role);
+    ResponseEntity listAll(String role);
+
+
+
+
 
     User findUser(String nameOfAdmin);
 

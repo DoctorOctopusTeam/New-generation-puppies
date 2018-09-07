@@ -15,12 +15,13 @@ import java.util.List;
 @Service
 public class AdminServiceImpl implements AdministartorService {
 
-    @Autowired
+    //@Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     private AdminRepository adminRepository;
 
-    public AdminServiceImpl(AdminRepository adminRepository){
+    public AdminServiceImpl(AdminRepository adminRepository, BCryptPasswordEncoder bCryptPasswordEncoder){
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.adminRepository = adminRepository;
     }
 
@@ -58,8 +59,9 @@ public class AdminServiceImpl implements AdministartorService {
                 .build()
                 .verify(token.replace("Bearer ", ""))
                 .getSubject();
-        if(!nameOfAdmin.equals(userName) && currentStateOfUser.getAuthority().getAuthority().equals("ROLE_ADMIN")){
-            return returnResponseEntity("Can not update other admin credentials!", currentStateOfUser);
+        if(!nameOfAdmin.equals(userName) && (currentStateOfUser.getAuthority().getAuthority().equals("ROLE_ADMIN")||
+                currentStateOfUser.getAuthority().getAuthority().equals("ROLE_UNAUTHORIZEDADMIN"))){
+            return returnResponseEntity("Can not update other admins credentials!", currentStateOfUser);
         }
         if(!user.getPassword().equals("") ){
             if(!nameOfAdmin.equals(userName)){
@@ -109,8 +111,9 @@ public class AdminServiceImpl implements AdministartorService {
     }
 
     @Override
-    public List<User> listAll(String role) {
-        return null;
+    public ResponseEntity listAll(String role) {
+
+        return adminRepository.listAll(role);
     }
 
     @Override

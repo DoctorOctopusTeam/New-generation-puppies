@@ -26,7 +26,9 @@ public class AdminController {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     private AdminRepository adminRepository;
+
     private AdministartorService administartorService;
+
     public AdminController(AdministartorService administartorService){
         this.administartorService = administartorService;
         this.adminRepository = adminRepository;
@@ -79,8 +81,8 @@ public class AdminController {
 
     @GetMapping("/listall/{role}")
     @PreAuthorize(value = "hasAnyAuthority('ROLE_ADMIN')")
-    public List<User> listAll(@PathVariable String role){
-        return adminRepository.listAll(role);
+    public ResponseEntity listAll(@PathVariable String role){
+        return administartorService.listAll(role);
     }
 
     @GetMapping("/subscribers")
