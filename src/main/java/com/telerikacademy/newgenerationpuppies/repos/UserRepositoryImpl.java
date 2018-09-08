@@ -55,11 +55,8 @@ public class UserRepositoryImpl implements UserRepository {
         Subscriber subscriber = new Subscriber();
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            String token = httpServletRequest.getHeader("Authorization");
-            String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
-                    .build()
-                    .verify(token.replace("Bearer ", ""))
-                    .getSubject();
+
+            String nameOfBank = getToken(httpServletRequest);
 
             Query query = session.createQuery("from Subscriber s where s.user.userName =:nameOfBank " +
                     "AND s.phoneNumber =:phoneNumber")
@@ -82,11 +79,8 @@ public class UserRepositoryImpl implements UserRepository {
         List<Bill> list = new ArrayList<>();
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            String token = httpServletRequest.getHeader("Authorization");
-            String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
-                    .build()
-                    .verify(token.replace("Bearer ", ""))
-                    .getSubject();
+
+            String nameOfBank = getToken(httpServletRequest);
 
             list = session.createQuery("from Bill b where b.payDate != null AND " +
                     "b.subscriber.user.userName =:nameOfBank order by payDate asc ")
@@ -107,11 +101,8 @@ public class UserRepositoryImpl implements UserRepository {
         List<Bill> bills = new ArrayList<>();
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            String token = httpServletRequest.getHeader("Authorization");
-            String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
-                    .build()
-                    .verify(token.replace("Bearer ", ""))
-                    .getSubject();
+
+            String nameOfBank = getToken(httpServletRequest);
 
             Subscriber subscriber = session.get(Subscriber.class, phoneNumber);
             if (subscriber == null){
@@ -150,11 +141,8 @@ public class UserRepositoryImpl implements UserRepository {
         List<TopTenDTO> topTenDTO = new ArrayList<>();
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            String token = httpServletRequest.getHeader("Authorization");
-            String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
-                    .build()
-                    .verify(token.replace("Bearer ", ""))
-                    .getSubject();
+
+            String nameOfBank = getToken(httpServletRequest);
 
             topTenDTO = session.createQuery("select s.firstName as firstName, s.lastName as lastName, " +
                     "b.subscriber.phoneNumber as phoneNumber, sum((b.amount)  * " +
@@ -185,12 +173,7 @@ public class UserRepositoryImpl implements UserRepository {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
 
-
-            String token = httpServletRequest.getHeader("Authorization");
-            String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
-                    .build()
-                    .verify(token.replace("Bearer ", ""))
-                    .getSubject();
+            String nameOfBank = getToken(httpServletRequest);
             Query query = session.createQuery("from Bill b where b.id=:id AND b.subscriber.user.userName =:nameOfBank")
                     .setParameter("id", id)
                     .setParameter("nameOfBank", nameOfBank);
@@ -220,11 +203,8 @@ public class UserRepositoryImpl implements UserRepository {
         List<String> list = new ArrayList<>();
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            String token = httpServletRequest.getHeader("Authorization");
-            String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
-                    .build()
-                    .verify(token.replace("Bearer ", ""))
-                    .getSubject();
+
+            String nameOfBank = getToken(httpServletRequest);
             list = session.createQuery("select b.service from Bill b where b.subscriber.user.userName =:nameOfBank " +
                     "AND b.subscriber.phoneNumber =:phoneNumber order by payDate desc ")
                     .setParameter("nameOfBank", nameOfBank)
@@ -246,11 +226,8 @@ public class UserRepositoryImpl implements UserRepository {
         HashMap<String, Double> hash = new HashMap<>();
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            String token = httpServletRequest.getHeader("Authorization");
-            String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
-                    .build()
-                    .verify(token.replace("Bearer ", ""))
-                    .getSubject();
+
+            String nameOfBank = getToken(httpServletRequest);
 
             Subscriber subscriber = session.get(Subscriber.class, phoneNumber);
             if (subscriber == null){
@@ -290,11 +267,8 @@ public class UserRepositoryImpl implements UserRepository {
         List<Bill> list = new ArrayList<>();
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            String token = httpServletRequest.getHeader("Authorization");
-            String nameOfBank = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
-                    .build()
-                    .verify(token.replace("Bearer ", ""))
-                    .getSubject();
+
+            String nameOfBank = getToken(httpServletRequest);
             Subscriber subscriber = session.get(Subscriber.class, phoneNumber);
             if (subscriber == null){
                 return returnResponseEntity("Not valid phone number", null);
@@ -316,5 +290,15 @@ public class UserRepositoryImpl implements UserRepository {
                 .header("Access-Control-Expose-Headers","Error")
                 .header("Error", message)
                 .body(object);
+    }
+
+    public String getToken(HttpServletRequest httpServletRequest){
+        String token = httpServletRequest.getHeader("Authorization");
+        String result =
+        JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
+                .build()
+                .verify(token.replace("Bearer ", ""))
+                .getSubject();
+        return result;
     }
 }
