@@ -52,7 +52,7 @@ public class AdminServiceImpl implements AdministartorService {
         }
         User currentStateOfUser = adminRepository.findUser(userName);
         if(currentStateOfUser == null){
-            return returnResponseEntity("No such user in the database!", user);
+            return returnResponseEntity("No such user in the database!", currentStateOfUser);
         }
         String token = httpServletRequest.getHeader("Authorization");
         String nameOfAdmin = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
@@ -81,7 +81,7 @@ public class AdminServiceImpl implements AdministartorService {
             return returnResponseEntity("Both fields must have identical entries!", null);
         }
         if(newPassword.equals("")){
-            return returnResponseEntity("Password can not be empty string", null);
+            return returnResponseEntity("Password can not be empty string!", null);
         }
         String token = httpServletRequest.getHeader("Authorization");
         String nameOfAdmin = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
@@ -118,6 +118,7 @@ public class AdminServiceImpl implements AdministartorService {
 
     @Override
     public ResponseEntity listAllSubscribers() {
+
         return adminRepository.listAllSubscribers();
     }
 
@@ -127,4 +128,6 @@ public class AdminServiceImpl implements AdministartorService {
                 .header("Error", message)
                 .body(user);
     }
+
+
 }
