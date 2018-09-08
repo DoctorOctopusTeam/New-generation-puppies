@@ -20,7 +20,7 @@ As a logged in administrator, the user will be able to process several other act
 -	deleting user accounts;
 -	issuing particular bill for a subscriber;
 
-For security reasons, the app is developed using the JTW technology for managing all processes with authentication and authorization. 
+For security reasons, the app is developed using the JTW technology for managing all processes with authentication and authorization issues. 
 
 2.	The UI of the projects is implemented as an independent part of the app in such a way that it could be deployed on separate server. 
 It is communicating with the Business module through a REST API with JSON responses.
