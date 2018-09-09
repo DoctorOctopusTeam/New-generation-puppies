@@ -4,8 +4,8 @@
 
 NGP Payment System is a software product, build for the needs of large Bulgarian telecom. It allows banks and other financial institutions to pay the monthly bills of their customers. Connecting with the app is possible through GUI or through REST interface so that the clients of that application could make use of its APIs and generate automatic payments through their own systems without any human interactions.
 	The project is the final assignment at Telerik Academy Alpha – Java course. It is a result of collaboration between two Telerik trainees – Atanas Velev and Deyan Georgiev, a.k.a. Doctor Octopus Team.
-
 	In details, the project is divided in two modules – backend implementation and GUI.
+	
 1.	The backend logic of the app is developed as a REST API, using the Spring MVC framework. It is designed in 3 parts:
 -	Public part (login panel) – accessible without authentications;
 -	Private part (user panel) – accessible only for registered users;
