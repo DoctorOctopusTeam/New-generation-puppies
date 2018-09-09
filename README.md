@@ -34,8 +34,8 @@ DOCUMENTATION for NGP REST API:
 | Methods        | HTTP Request | Description  |
 | ------------- |:-------------:| -----:|
 | getSubscriberInfo      | GET  /user/info/{phoneNumber} | Gets information about a user – phone number, name, EGN  |
-| getAllPayments      | GET /user/payments      |   $12 |
-
+| getAllPayments      | GET /user/payments      |   Gets a list of all payments made by client’s subscribers ordered by the pay date in descending order  |
+| getSubscriberInfo      | GET  /user/info/{phoneNumber} | Gets information about a user – phone number, name, EGN  |
 
 
  
