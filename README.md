@@ -30,11 +30,19 @@ The two pannels /user’s and admin’s/ are developed as a single-page app.
 
 DOCUMENTATION for NGP REST API:
 
+ User Module
 | Methods        | HTTP Request | Description  |
 | ------------- |:-------------:| -----:|
 | getSubscriberInfo      | GET  /user/info/{phoneNumber} | Gets information about a user – phone number, name, EGN  |
-| col 2 is      | centered      |   $12 |
-| zebra stripes | are neat      |    $1 |
+| getAllPayments      | GET /user/payments      |   $12 |
+| zgetMaxPaidFromSubscriber | GET /user/reports/max/
+{phoneNumber}/{startDate}/{endDate} |    $1 |
+| getAveragePaidFromSubscriber | are neat      |    $1 |
+| getBiggestAmountsPaidBySubscribers | are neat      |    $1 |
+| usedServicesFromSubscriber | are neat      |    $1 |
+| getUnpaidBillsBySubscriber | are neat      |    $1 |
+| payBill | are neat      |    $1 |
+
 
  
 
