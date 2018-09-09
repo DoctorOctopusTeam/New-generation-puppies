@@ -29,6 +29,7 @@ The two pannels /user’s and admin’s/ are developed as a single-page app.
 
 
 DOCUMENTATION for NGP REST API:
+User Module
 
  
 | Methods        | HTTP Request | Description  |
