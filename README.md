@@ -35,8 +35,7 @@ DOCUMENTATION for NGP REST API:
 | ------------- |:-------------:| -----:|
 | getSubscriberInfo      | GET  /user/info/{phoneNumber} | Gets information about a user – phone number, name, EGN  |
 | getAllPayments      | GET /user/payments      |   $12 |
-| zgetMaxPaidFromSubscriber | GET /user/reports/max/
-{phoneNumber}/{startDate}/{endDate} |    $1 |
+| zgetMaxPaidFromSubscriber | sdsd |    $1 |
 | getAveragePaidFromSubscriber | are neat      |    $1 |
 | getBiggestAmountsPaidBySubscribers | are neat      |    $1 |
 | usedServicesFromSubscriber | are neat      |    $1 |
