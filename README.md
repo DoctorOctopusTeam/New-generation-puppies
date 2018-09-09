@@ -30,7 +30,7 @@ The two pannels /user’s and admin’s/ are developed as a single-page app.
 
 DOCUMENTATION for NGP REST API:
 
- User Module
+ 
 | Methods        | HTTP Request | Description  |
 | ------------- |:-------------:| -----:|
 | getSubscriberInfo      | GET  /user/info/{phoneNumber} | Gets information about a user – phone number, name, EGN  |
