@@ -52,9 +52,11 @@ Snapshots:
  | getUnpaidBillsBySubscriber      | GET /user/unpaid/ {phoneNumber} | Gets a list of all unpaid bills from a subscriber  |
  | payBill      | POST /user/pay/{id} | Pay a particular bill for a subscribers  |
  
+ *******
  
  ### Admin Module:
  
+ *********
  
 | Methods        | HTTP Request | Description  |
 | :------------- |:-------------:| :-----:|
