@@ -1,7 +1,7 @@
 # New-generation-puppies
 Telerik academy final project assignment - Bright Consulting
 
-NGP Payment System is a software product, build for the needs of large Bulgarian telecom. It allows banks and other financial institutions to pay the monthly bills of their customers, using that application. Connecting with the app is possible through GUI or through REST interface so that the clients of that application could make use of its APIs and generate automatic payments through their own systems without any human interactions.
+NGP Payment System is a software product, build for the needs of large Bulgarian telecom. It allows banks and other financial institutions to pay the monthly bills of their customers. Connecting with the app is possible through GUI or through REST interface so that the clients of that application could make use of its APIs and generate automatic payments through their own systems without any human interactions.
 	The project is the final assignment at Telerik Academy Alpha – Java course. It is a result of collaboration between two Telerik trainees – Atanas Velev and Deyan Georgiev, a.k.a. Doctor Octopus Team.
 
 	In details, the project is divided in two modules – backend implementation and GUI.
@@ -20,7 +20,7 @@ As a logged in administrator, the user will be able to process several other act
 -	deleting user accounts;
 -	issuing particular bill for a subscriber;
 
-For security reasons, the app is developed using the JTW technology for managing all processes with authentication and authorization issues. 
+For security reasons, the app is developed using the JWT technology for managing all processes with authentication and authorization issues. 
 
 2.	The UI of the projects is implemented as an independent part of the app in such a way that it could be deployed on separate server. 
 It is communicating with the Business module through a REST API with JSON responses.
