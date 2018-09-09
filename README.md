@@ -1,6 +1,6 @@
 # New-generation-puppies
 Telerik academy final project assignment - Bright Consulting
-*****8
+*****
 
 NGP Payment System is a software product, build for the needs of large Bulgarian telecom. It allows banks and other financial institutions to pay the monthly bills of their customers. Connecting with the app is possible through GUI or through REST interface so that the clients of that application could make use of its APIs and generate automatic payments through their own systems without any human interactions.
 	The project is the final assignment at Telerik Academy Alpha – Java course. It is a result of collaboration between two Telerik trainees – Atanas Velev and Deyan Georgiev, a.k.a. Doctor Octopus Team.
