@@ -1,5 +1,5 @@
 # New-generation-puppies
-Telerik academy final project assignment - Bright Consulting
+## Telerik Academy final project assignment - Bright Consulting
 *****
 
 NGP Payment System is a software product, build for the needs of large Bulgarian telecom. It allows banks and other financial institutions to pay the monthly bills of their customers. Connecting with the app is possible through GUI or through REST interface so that the clients of that application could make use of its APIs and generate automatic payments through their own systems without any human interactions.
@@ -34,9 +34,12 @@ Snapshots:
 ![alt text](https://github.com/DoctorOctopusTeam/New-generation-puppies/blob/master/snap2.jpg "Admin module")
 ![alt text](https://github.com/DoctorOctopusTeam/New-generation-puppies/blob/master/snap3.png "User module")
 
+******
+
 ## DOCUMENTATION for NGP REST API:
 ### User Module
 
+ ******
  
 | Methods        | HTTP Request | Description  |
 | :------------- |:-------------:| :-----:|
