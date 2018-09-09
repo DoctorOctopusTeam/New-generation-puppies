@@ -35,9 +35,7 @@ DOCUMENTATION for NGP REST API:
 | ------------- |:-------------:| -----:|
 | getSubscriberInfo      | GET  /user/info/{phoneNumber} | Gets information about a user – phone number, name, EGN  |
 | getAllPayments      | GET /user/payments      |   Gets a list of all payments made by client’s subscribers ordered by the pay date in descending order  |
-| getMaxPaidFromSubscriber      | GET /user/reports/max/
-{phoneNumber}/{startDate}/{endDate}
- | Gets the biggest amount paid by a subscriber for service for defined period  |
+| getMaxPaidFromSubscriber      | GET /user/reports/max/{phoneNumber}/{startDate}/{endDate} | Gets the biggest amount paid by a subscriber for service for defined period  |
 
 
  
