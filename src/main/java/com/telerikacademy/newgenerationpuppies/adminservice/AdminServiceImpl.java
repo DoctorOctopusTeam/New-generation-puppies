@@ -15,12 +15,13 @@ import java.util.List;
 @Service
 public class AdminServiceImpl implements AdministartorService {
 
-    @Autowired
+    //@Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     private AdminRepository adminRepository;
 
-    public AdminServiceImpl(AdminRepository adminRepository){
+    public AdminServiceImpl(AdminRepository adminRepository, BCryptPasswordEncoder bCryptPasswordEncoder){
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.adminRepository = adminRepository;
     }
 
@@ -51,15 +52,16 @@ public class AdminServiceImpl implements AdministartorService {
         }
         User currentStateOfUser = adminRepository.findUser(userName);
         if(currentStateOfUser == null){
-            return returnResponseEntity("No such user in the database!", user);
+            return returnResponseEntity("No such user in the database!", currentStateOfUser);
         }
         String token = httpServletRequest.getHeader("Authorization");
         String nameOfAdmin = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
                 .build()
                 .verify(token.replace("Bearer ", ""))
                 .getSubject();
-        if(!nameOfAdmin.equals(userName) && currentStateOfUser.getAuthority().getAuthority().equals("ROLE_ADMIN")){
-            return returnResponseEntity("Can not update other admin credentials!", currentStateOfUser);
+        if(!nameOfAdmin.equals(userName) && (currentStateOfUser.getAuthority().getAuthority().equals("ROLE_ADMIN")||
+                currentStateOfUser.getAuthority().getAuthority().equals("ROLE_UNAUTHORIZEDADMIN"))){
+            return returnResponseEntity("Can not update other admins credentials!", currentStateOfUser);
         }
         if(!user.getPassword().equals("") ){
             if(!nameOfAdmin.equals(userName)){
@@ -79,7 +81,7 @@ public class AdminServiceImpl implements AdministartorService {
             return returnResponseEntity("Both fields must have identical entries!", null);
         }
         if(newPassword.equals("")){
-            return returnResponseEntity("Password can not be empty string", null);
+            return returnResponseEntity("Password can not be empty string!", null);
         }
         String token = httpServletRequest.getHeader("Authorization");
         String nameOfAdmin = JWT.require(Algorithm.HMAC512("SecretKeyToGenJWTs".getBytes()))
@@ -109,12 +111,14 @@ public class AdminServiceImpl implements AdministartorService {
     }
 
     @Override
-    public List<User> listAll(String role) {
-        return null;
+    public ResponseEntity listAll(String role) {
+
+        return adminRepository.listAll(role);
     }
 
     @Override
     public ResponseEntity listAllSubscribers() {
+
         return adminRepository.listAllSubscribers();
     }
 
@@ -124,4 +128,6 @@ public class AdminServiceImpl implements AdministartorService {
                 .header("Error", message)
                 .body(user);
     }
+
+
 }

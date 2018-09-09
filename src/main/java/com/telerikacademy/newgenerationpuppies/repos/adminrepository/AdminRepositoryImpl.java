@@ -85,7 +85,7 @@ public class AdminRepositoryImpl implements AdminRepository {
         user.setPassword(newPassword);
         session.getTransaction().commit();
         session.close();
-        return new ResponseEntity(user, HttpStatus.OK);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @Override
@@ -98,7 +98,7 @@ public class AdminRepositoryImpl implements AdminRepository {
         session.delete(user);
         session.getTransaction().commit();
         session.close();
-        return new ResponseEntity(user, HttpStatus.OK);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @Override
@@ -119,7 +119,7 @@ public class AdminRepositoryImpl implements AdminRepository {
         List<Subscriber>list = session.createQuery("from Subscriber ").list();
         session.getTransaction().commit();
         session.close();
-        return new ResponseEntity(list, HttpStatus.OK);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @Override
@@ -130,11 +130,11 @@ public class AdminRepositoryImpl implements AdminRepository {
         session.save(bill);
         session.getTransaction().commit();
         session.close();
-        return new ResponseEntity(bill, HttpStatus.OK);
+        return new ResponseEntity<>(bill, HttpStatus.OK);
     }
 
     @Override
-    public List<User> listAll(String auth) {
+    public ResponseEntity listAll(String auth) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         String role = "ROLE_" + auth.toUpperCase();
@@ -142,7 +142,7 @@ public class AdminRepositoryImpl implements AdminRepository {
                 .setParameter("x",role).list();
         session.getTransaction().commit();
         session.close();
-        return list;
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
 
