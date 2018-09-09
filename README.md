@@ -33,8 +33,8 @@ Snapshots:
 ![alt text](https://github.com/DoctorOctopusTeam/New-generation-puppies/blob/master/snap2.jpg "Admin module")
 ![alt text](https://github.com/DoctorOctopusTeam/New-generation-puppies/blob/master/snap3.png "User module")
 
-DOCUMENTATION for NGP REST API:
-User Module
+## DOCUMENTATION for NGP REST API:
+### User Module
 
  
 | Methods        | HTTP Request | Description  |
@@ -49,7 +49,7 @@ User Module
  | payBill      | POST /user/pay/{id} | Pay a particular bill for a subscribers  |
  
  
- Admin Module:
+ ### Admin Module:
  
  
 | Methods        | HTTP Request | Description  |
