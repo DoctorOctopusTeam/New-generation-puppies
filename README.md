@@ -49,6 +49,15 @@ User Module
  
 | Methods        | HTTP Request | Description  |
 | :------------- |:-------------:| :-----:|
-| getSubscriberInfo      | GET  /user/info/{phoneNumber} | Gets information about a user – phone number, name, EGN  |
+| registerUser      | POST  /admin/registeruser | Creates an account for a client – user with all needed info  |
+| registerAdmin      | POST /admin/registeradmin | Creates an account for other admin user – with all needed info  |
+| updateClient      | POST /admin/updatecreds | Updates data about a particular user /without password/  |
+| changePassword      | POST /admin/changepassword | Changes own password on first logging in  |
+| deleteUser      | POST /admin/delete | Deletes a user  |
+| issueNewBill      | POST /admin/issuebill | Creates a new bill for a client  |
+| listAll      | GET /admin/listAll/{role} |Gets a list of all users, based on the role they have  |
+| listAllSubscribers      | GET /admin/subscribers | Gets a list of all subscribers  |
+
+
 
 
