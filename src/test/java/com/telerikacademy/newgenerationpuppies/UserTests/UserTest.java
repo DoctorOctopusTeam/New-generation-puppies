@@ -27,7 +27,7 @@ public class UserTest {
     UserServiceImpl service;
 
     @Test
-    public void testGetTopTenSubscribers(){
+    public void test_GetTopTenSubscribers_with_values(){
         TopTenDTO test =  new TopTenDTO();
         TopTenDTO test1 = new TopTenDTO();
         List<TopTenDTO> list = new ArrayList<>();
@@ -39,7 +39,7 @@ public class UserTest {
     }
 
     @Test
-    public void testGetAllPayments(){
+    public void test_GetAllPayments_with_values(){
         Bill test =  new Bill();
         Bill test1 =  new Bill();
         Bill test2 =  new Bill();
@@ -62,5 +62,6 @@ public class UserTest {
         List<Bill> result = service.getAllPayments(null);
         Assert.assertEquals(0, result.size());
     }
+
 
 }

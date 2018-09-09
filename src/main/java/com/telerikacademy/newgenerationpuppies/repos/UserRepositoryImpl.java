@@ -55,7 +55,6 @@ public class UserRepositoryImpl implements UserRepository {
         Subscriber subscriber = new Subscriber();
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-
             String nameOfBank = getToken(httpServletRequest);
 
             Query query = session.createQuery("from Subscriber s where s.user.userName =:nameOfBank " +
