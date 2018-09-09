@@ -27,6 +27,10 @@ It is communicating with the Business module through a REST API with JSON respon
 For serving the UI, he team had used HTML, CSS, Java Script and jQuery.
 The two pannels /user’s and admin’s/ are developed as a single-page app.
 
+Snapshots:
+
+![alt text](https://github.com/DoctorOctopusTeam/New-generation-puppies/blob/master/snap1.jpg)
+
 
 DOCUMENTATION for NGP REST API:
 User Module
