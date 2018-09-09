@@ -88,7 +88,7 @@ public class UserController {
                                                        HttpServletRequest httpServletRequest){
         return userService.getAveragePaidFromSubscriber(phoneNumber, startDate, endDate, httpServletRequest);
     }
-
+    //Client can see all unpaid bill for particular subscriber
     @GetMapping("/unpaid/{phoneNumber}")
     @PreAuthorize(value = "hasAnyAuthority('ROLE_USER')")
     public ResponseEntity getUnpaidBillsBySubscriber(@PathVariable int phoneNumber, HttpServletRequest httpServletRequest){
