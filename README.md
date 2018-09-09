@@ -32,7 +32,7 @@ DOCUMENTATION for NGP REST API:
 
 | Methods        | HTTP Request | Description  |
 | ------------- |:-------------:| -----:|
-| col 3 is      | right-aligned | $1600 |
+| getSubscriberInfo      | GET  /user/info/{phoneNumber} | Gets information about a user – phone number, name, EGN  |
 | col 2 is      | centered      |   $12 |
 | zebra stripes | are neat      |    $1 |
 
