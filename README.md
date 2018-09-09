@@ -32,11 +32,11 @@ DOCUMENTATION for NGP REST API:
 
  
 | Methods        | HTTP Request | Description  |
-| ------------- |:-------------:| -----:|
+| ------------- |:-------------:| :-----:|
 | getSubscriberInfo      | GET  /user/info/{phoneNumber} | Gets information about a user – phone number, name, EGN  |
 | getAllPayments      | GET /user/payments      |   Gets a list of all payments made by client’s subscribers ordered by the pay date in descending order  |
 | getMaxPaidFromSubscriber      | GET /user/reports/max/{phoneNumber}/{startDate}/{endDate} | Gets the biggest amount paid by a subscriber for service for defined period  |
-
+| getAveragePaidFromSubscriber      | GET /user/reports/average/{phoneNumber}/{startDate}/{endDate} | Gets the average sum paid from a subscriber for services for defined period  |
 
  
 
