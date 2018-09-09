@@ -25,7 +25,7 @@ public class User {
     private String details;
 
     @Column(name = "EIK")
-    private int EIK;
+    private long EIK;
 
     @Column(name = "role")
     private String role;
@@ -59,7 +59,7 @@ public class User {
         return details;
     }
 
-    public int getEIK() {
+    public long getEIK() {
         return EIK;
     }
 
@@ -83,7 +83,7 @@ public class User {
         this.details = details;
     }
 
-    public void setEIK(int EIK) {
+    public void setEIK(long EIK) {
         this.EIK = EIK;
     }
 

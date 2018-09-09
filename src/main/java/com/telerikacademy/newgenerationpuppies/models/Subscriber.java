@@ -19,7 +19,7 @@ public class Subscriber {
     private String lastName;
 
     @Column(name = "EGN")
-    private int egn;
+    private long egn;
 
     @ManyToOne
     @JoinColumn(name = "userName")
@@ -34,7 +34,7 @@ public class Subscriber {
 
     }
 
-    public Subscriber(int phoneNumber, String firstName, String lastName, int egn, User user, List<Bill>bills) {
+    public Subscriber(int phoneNumber, String firstName, String lastName, long egn, User user, List<Bill>bills) {
         this.phoneNumber = phoneNumber;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -59,8 +59,12 @@ public class Subscriber {
         return lastName;
     }
 
-    public int getEgn() {
+    public long getEgn() {
         return egn;
+    }
+
+    public void setEgn(long egn) {
+        this.egn = egn;
     }
 
     public User getUser() {
