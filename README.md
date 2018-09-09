@@ -29,8 +29,9 @@ The two pannels /user’s and admin’s/ are developed as a single-page app.
 
 Snapshots:
 
-![alt text](https://github.com/DoctorOctopusTeam/New-generation-puppies/blob/master/snap1.jpg)
-
+![alt text](https://github.com/DoctorOctopusTeam/New-generation-puppies/blob/master/snap1.jpg "Login page")
+![alt text](https://github.com/DoctorOctopusTeam/New-generation-puppies/blob/master/snap2.jpg "Admin module")
+![alt text](https://github.com/DoctorOctopusTeam/New-generation-puppies/blob/master/snap3.png "User module")
 
 DOCUMENTATION for NGP REST API:
 User Module
