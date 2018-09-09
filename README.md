@@ -30,7 +30,7 @@ The two pannels /user’s and admin’s/ are developed as a single-page app.
 
 DOCUMENTATION for NGP REST API:
 
-| Tables        | Are           | Cool  |
+| Methods        | Are           | Cool  |
 | ------------- |:-------------:| -----:|
 | col 3 is      | right-aligned | $1600 |
 | col 2 is      | centered      |   $12 |
